@@ -1,0 +1,22 @@
+<table class="table table-striped table-bordered" id="TableReporteCobros">
+	<thead>
+		<tr>
+			<th>Folio</th>
+			<th>Cliente</th>
+			<th>Fecha Cobro</th>
+			<th>Total</th>
+			<th>Folio Factura</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for Cobro in Cobros %}
+		<tr>
+			<td>{{Cobro.IDCobro.Folio}}</td>
+			<td>{{Cobro.IDCobro.NombreCortoCliente}}</td>
+			<td>{{Cobro.IDCobro.FechaCobro|date:'Y/m/d'}}</td>
+			<td>{{Cobro.IDCobro.Total|floatformat:"2"}}</td>
+			<td>{{Cobro.IDFactura.Folio}}</td>
+		</tr>
+		{%endfor%}
+	</tbody>
+</table>

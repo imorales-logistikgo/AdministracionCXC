@@ -1,0 +1,50 @@
+{% load static %}
+<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+		<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+			<div class="kt-portlet kt-portlet--fit kt-portlet--head-noborder" id="TbPading">
+				<div class="kt-subheader__wrapper">
+					<button type="button" id="BtnSubirCobros" class="btn btn-brand btn-elevate btn-pill btn-elevate-air btn-sm float-right" data-toggle="modal" data-target="#modalSubirCobro" data-backdrop="static" data-keyboard="false" disabled>Subir Cobro</button>
+				</div></br>
+			<table class="table table-striped table-bordered nowrap" id="TableEstadosdeCuenta" style="width: 100%">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Folio</th>
+						<th>Cliente</th>
+						<th>Fecha Factura</th>
+						<th>Subtotal</th>
+						<th>IVA</th>
+						<th>Retencion</th>
+						<th>Total</th>
+						<th>Balance</th>
+						<th>Moneda</th>
+						<th>Estatus</th>
+						<th>Cobros</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for Factura in Facturas %}
+					<tr data-IDFactura="{{Factura.IDFactura}}">
+						<td></td>
+						<td style="font-weight: bold;">{{Factura.Folio}}</td>
+						<td>{{Factura.Cliente}}</td>
+						<td>{{Factura.FechaFactura|date:'Y/m/d'}}</td>
+						<td>{{Factura.Subtotal|floatformat:"2"}}</td>
+						<td>{{Factura.IVA|floatformat:"2"}}</td>
+						<td>{{Factura.Retencion|floatformat:"2"}}</td>
+						<td>{{Factura.Total|floatformat:"2"}}</td>
+						<td>{{Factura.Saldo|floatformat:"2"}}</td>
+						<td>{{Factura.Moneda}}</td>
+						<td>{{Factura.Status}}</td>
+						<td>folio001, folio002, folio001, folio002</td>
+						<td><input name="EvidenciaXML" type="hidden" data-facturaid="{{Factura.IDFactura}}"  data-evidenciaxml="{{Factura.RutaXML}}"></td>
+						<td></td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>

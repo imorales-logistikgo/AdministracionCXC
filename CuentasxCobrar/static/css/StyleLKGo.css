@@ -1,0 +1,84 @@
+#TbPading{
+  padding: 12px 20px 15px 20px;
+}
+
+footer{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #757376;
+}
+
+.modal-header {
+    background-color: #d9dce65c;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    /*height: 40px;*/
+ }
+ .modal-content
+ {
+   border-radius: 20px;
+ }
+
+#exampleModalLabel{
+  color: white;
+}
+#BtnCancelarFiltro{
+  margin: auto;
+}
+#BtnAplicarFiltro{
+  margin: auto;
+}
+.daterangepicker {
+    z-index: 1051;
+}
+#folio{
+    font-weight: bold;
+}
+
+.buttons-excel {
+    background: #51A762;
+    color: white;
+    border-radius: 15px;
+    top: -10px;
+}
+
+#estiloCheckbox {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	margin: -1px 4px 0 0;
+	vertical-align: middle;
+	background-size: cover;
+	cursor: pointer;
+}
+#see
+{
+  display: none;
+}
+#seeAlert
+{
+  display: none;
+}
+#seeFolioAndComen
+{
+  display: none;
+}
+#fragmentada{
+  padding-left: 400px;
+}
+
+@media only screen and (min-width: 1300px) {
+#conEvidencias{
+  width: 400px;
+  height: 350px;
+}
+#sinEvidencias{
+  width: 400px;
+  height: 350px;
+}
+#kt-scroll
+{
+  height: 440px;
+}
+}

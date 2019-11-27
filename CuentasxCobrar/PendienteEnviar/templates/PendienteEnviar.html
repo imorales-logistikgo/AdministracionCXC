@@ -1,0 +1,419 @@
+{% extends "base.html" %}
+{% load static %}
+{% block activatePendientesEnviar %}
+kt-menu__item--active
+{% endblock %}
+{% block ContadoresPendientesEnviar %}
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+	<div class="kt-container  kt-container--fluid ">
+
+		<div>
+			<span class="badge badge-pill badge-primary">Pendientes<span class="badge badge-pill badge-secondary"><strong>{{contadorPendientes}}</strong></span></span>
+			<span class="badge badge-pill badge-danger"> Finalizados <span class="badge badge-pill badge-secondary"><strong>{{contadorFinalizados}}</strong></span></span>
+			<span class="badge badge-pill badge-success"> Con evidencias <span class="badge badge-pill badge-secondary"><strong>{{contadorConEvidencias}}</strong></span></span>
+			<span class="badge badge-pill badge-danger"> Sin evidencias <span class="badge badge-pill badge-secondary"><strong>{{contadorSinEvidencias}}</strong></span></span>
+		</div>
+									<!--
+										<div class="form-inline">
+											<label class="col-3 col-form-label">Info</label>
+													<div class="col-3">
+														<span class="kt-switch kt-switch--info">
+															<label>
+																<input type="checkbox"  name="">
+																<span></span>
+															</label>
+														</span>
+													</div>
+												</div> -->
+
+												<div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="Filtros" data-placement="right">
+													<span class="kt-header__topbar-icon" id="kt_quick_panel_toggler_btn">
+														<button type="button" class="btn btn-brand btn-elevate btn-pill btn-elevate-air btn-sm" id="BtnOpenFiltros">Filtros</button>
+													</span>
+												</div>
+
+											</div>
+										</div>
+										{% endblock %}
+
+										{% block FiltrosPendientesEnviar %}
+										<div id="kt_quick_panel" class="kt-quick-panel">
+											<!--<a href="#" class="kt-quick-panel__close" id="kt_quick_panel_close_btn"><i class="flaticon2-delete"></i></a>-->
+
+											<div class="kt-quick-panel__content">
+												<div class="tab-content">
+													<div class="tab-pane fade show kt-scroll active" id="kt_quick_panel_tab_notifications" role="tabpanel">
+														<div class="kt-notification">
+															<div class="kt-subheader__main">
+																<label class="col-form-label col-lg-3 col-sm-12"><strong>Fecha: </strong></label>
+																<div class="col-lg-12 col-md-8 col-sm-12">
+																	<div class="kt-input-icon pull-right" id='kt_daterangepicker_2_modal'>
+																		<input type="text" class="form-control " placeholder="Desde - Hasta" name="FiltroFecha" id="cboFechaDescarga">
+																		<span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la la-calendar-check-o"></i></span></span>
+																	</div>
+																</div>
+															</div></br>
+															<label class="col-form-label col-lg-3 col-sm-12"><strong>Estatus: </strong></label>
+															<div class="container">
+																<select class="selectpicker" id="cboStatus" multiple name="Status" title="Selecciona un estatus" data-width="100%" data-live-search="true">
+																	<option>Pendiente</option>
+																	<option>Finalizado</option>
+																	<option>Con evidencias</option>
+																</select>
+															</div></br>
+															<div class="container">
+																<label class="col-form-label col-lg-3 col-sm-12"><strong>Cliente: </strong></label>
+																<div>
+																	<select class="selectpicker" id="cboCliente" multiple name="Cliente" title="Selecciona un cliente" data-width="100%" data-live-search="true">
+																		<option value="Eaton">Eaton</option>
+																		<option value="3M">3M</option>
+																	</select>
+																</div>
+															</div></br>
+															<div class="container">
+																<div class="dropdown dropdown-inline" data-toggle="kt-tooltip" data-placement="left">
+																	<div class="form-group col-1">
+																		<label class="col-form-label col-lg-3 col-sm-12"><strong>Moneda: </strong></label>
+																		<label class="kt-radio kt-radio--bold kt-radio--success">
+																			<input type="radio" id="rdMXN" name="radio6" checked> MXN
+																			<span></span>
+																		</label>
+																		<label class="kt-radio kt-radio--bold kt-radio--brand">
+																			<input type="radio" id="rdUSD" name="radio6"> USD
+																			<span></span>
+																		</label>
+																	</div>
+																</div>
+															</div></br>
+
+															<div class="container">
+																<div class="form-group">
+																	<label>Campos de la tabla</label>
+																	<div class="kt-checkbox-list">
+																		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success">
+																			<input type="checkbox" checked="checked" name="Fecha Descarga"> Fecha Descarga
+																			<span></span>
+																		</label>
+																		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success">
+																			<input type="checkbox" checked="checked" name="Subtotal"> Subtotal
+																			<span></span>
+																		</label>
+																		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success">
+																			<input type="checkbox" checked="checked" name="IVA"> IVA
+																			<span></span>
+																		</label>
+																		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success">
+																			<input type="checkbox" checked="checked" name="Retencion"> Retencion
+																			<span></span>
+																		</label>
+																		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success">
+																			<input type="checkbox" checked="checked" name="Total"> Total
+																			<span></span>
+																		</label>
+																	</div>
+
+																</div>
+															</div>
+
+
+															<div class="container py-4">
+										            <div class="row justify-content-between">
+										              <div class="col-4">
+										              <button type="Submit" name="button" class="btn btn-brand btn-elevate btn-pill btn-elevate-air btn-sm float-right" id="BtnAplicarFiltro">Aplicar</button>
+										              </div>
+										              <div class="col-4">
+										              <button type="button" name="button" class="btn btn-danger btn-elevate btn-pill btn-elevate-air btn-sm" id="kt_quick_panel_close_btn">Cancelar</button>
+										              </div>
+										            </div>
+															</div>
+														</div>
+													</div>
+													<div class="tab-pane kt-quick-panel__content-padding-x fade kt-scroll" id="kt_quick_panel_tab_settings" role="tabpanel">
+													</div>
+												</div>
+											</div>
+										</div>
+										{% endblock %}
+
+										{% block PendientesEnviar %}
+										<div id="divTablaPendientesEnviar">
+											{% include "TablaPendientes.html" %}
+										</div>
+										{% endblock %}
+
+										{% block SubirFactura %}
+
+										<!-- modal subir facturas-->
+
+										<div class="modal fade" id="kt_modal_2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+											<div class="modal-dialog modal-lg" role="document" id="WaitModalPE">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLongTitle">Subir Facturas</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="BtnCerrarSF">
+														</button>
+													</div>
+													<div class="modal-body">
+														<div class="kt-scroll" data-scroll="true" id="kt-scroll">
+															<div class="tab-content" id="nav-tabContent">
+																<ul class="nav nav-tabs" id="myTab" role="tablist">
+																	<li class="nav-item">
+																		<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Factura</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Viajes</a>
+																	</li>
+
+																	<div class="form-group row justify-content-end" id="fragmentada">
+																		<label class="col-6 col-form-label kt-badge kt-badge--warning kt-badge--inline kt-badge--pill kt-badge--rounded">Fragmentada</label>
+																		<div class="col-3">
+																				<span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">
+																					<label>
+																						<input type="checkbox" name="Fragmentada">
+																						<span></span>
+																					</label>
+																				</span>
+																		</div>
+																	</div>
+																</ul>
+
+
+
+																<div class="tab-content" id="myTabContent">
+																	<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+																		<div class="container">
+																			<div class="form-inline">
+																				<div class="col">
+																					<label for="FechaFactura">Fecha Factura</label>
+																				</div>
+																				<div class="col">
+																					<label for="FechaRevision">Fecha Revisi&oacute;n</label>
+																				</div>
+																				<div class="col">
+																					<label for="FechaVencimiento">Fecha Vencimiento</label>
+																				</div>
+
+																			</div>
+																		</div></br>
+
+																		<div class="container">
+																			<div class="row">
+																				<div class="input-group date col col-4">
+																					<input type="text" class="form-control" name="FechaFactura" id="FechaFactura">
+																					<div class="input-group-append">
+																						<span class="input-group-text">
+																							<i class="la la-calendar"></i>
+																						</span>
+																					</div>
+																				</div>
+
+																				<div class="input-group date col col-4">
+																					<input type="text" class="form-control" name="FechaRevision" id="FechaRevision">
+																					<div class="input-group-append">
+																						<span class="input-group-text">
+																							<i class="la la-calendar"></i>
+																						</span>
+																					</div>
+																				</div>
+
+																				<div class="input-group date col col-4">
+																					<input type="text" class="form-control" name="FechaVencimiento" id="FechaVencimiento">
+																					<div class="input-group-append">
+																						<span class="input-group-text">
+																							<i class="la la-calendar"></i>
+																						</span>
+																					</div>
+																				</div>
+
+<!--																				<div class="input-group date col col-3">
+																					<input type="number" class="form-control" name="TipoCambio" id="txtTipoCambio" value="1" step="any">
+																					<div class="input-group-append">
+																						<span class="input-group-text">
+																							<i class="la la-dollar"></i>
+																						</span>
+																					</div>
+																				</div>-->
+																			</div>
+																		</div>
+																	</br>
+
+                                  <div class="container">
+																			<div class="row">
+																				<div class="col col-md-4">
+																					<label for="Folio">Folio Factura:</label>
+																					<input type="text" class="form-control form-control-sm" id="txtFolioFactura" name="FolioFactura" required>
+																				</div>
+																				<div class="col">
+																					<label for="Comentarios">Comentarios:</label>
+																					<input type="text" class="form-control form-control-sm" id="txtComentarios" name="Comentarios">
+																				</div>
+																			</div>
+																		</div></br>
+
+																	<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+
+																		<div class="col-lg-12">
+																			<div class="kt-portlet kt-portlet--height-fluid">
+																				<div class="kt-portlet__head">
+																					<div class="kt-portlet__head-label">
+																						<h3 class="kt-portlet__head-title">
+																							PDF y XML
+																						</h3>
+																					</div>
+																				</div>
+																				<div class="kt-portlet__body">
+																					<div class="kt-uppy" id="kt_uppy_1">
+																						<div  class="kt-uppy__dashboard"></div>
+																						<div class="kt-uppy__progress"></div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+
+																	</div>
+
+																	<!--ver archivos subidos (PDF y XML)-->
+																<div class="container">
+																	<div class="uploaded-files">
+																		<h5>Archivos Subidos:</h5>
+																		<ol></ol>
+																	</div>
+																 </div>
+
+																	<!-- fragmentada -->
+																	<div class="alert alert-light alert-elevate" role="alert" id="seeAlert">
+																			<div class="alert-icon"><i class="flaticon-warning"></i></div>
+																			<div class="alert-text"><p class="h3 text-center text-danger">Servicios</p></div>
+																	</div>
+
+																  	<div class="container" id="seeFolioAndComen">
+																			<div class="row">
+																				<div class="col col-md-4">
+																					<label for="Folio">Folio Servicio:</label>
+																					<input type="text" class="form-control form-control-sm" id="txtFolioServicios" name="FolioServicios" required>
+																				</div>
+																				<div class="col">
+																					<label for="Comentarios">Comentarios:</label>
+																					<input type="text" class="form-control form-control-sm" id="txtComentariosServicios" name="ComentariosServicios">
+																				</div>
+																			</div>
+																		</div></br>
+
+																	<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" id="see">
+
+																		<div class="col-lg-12">
+																			<div class="kt-portlet kt-portlet--height-fluid">
+																				<div class="kt-portlet__head">
+																					<div class="kt-portlet__head-label">
+																						<h3 class="kt-portlet__head-title">
+																							PDF y XML Servicios
+																						</h3>
+																					</div>
+																				</div>
+																				<div id="divFragmentada">
+
+																				</div>
+																			</div>
+																		</div>
+																		<!--ver archivos subidos (PDF y XML) fragmentada-->
+																	<div class="container">
+																		<div class="uploaded-files-fragmentadas">
+																			<h5>Archivos Subidos:</h5>
+																			<ol></ol>
+																		</div>
+																	 </div>
+																	</div>
+
+
+																	</div>
+
+																<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+																	<div class="container">
+																		<div class="col">
+																			<label for="TipoCambio">Tipo Cambio: </label>
+																		</div>
+																			<div class="row justify-content-start">
+																			<div class="input-group date col col-3">
+																				<input type="number" class="form-control" name="TipoCambio" id="txtTipoCambio" value="1" step="any">
+
+																			 </div>
+																			</div>
+																		<div class="py-4">
+																		<table class="display" id="ResumTable">
+																			<thead>
+
+																				<tr>
+																					<th>Folio</th>
+																					<th>Subtotal</th>
+																					<th>Iva</th>
+																					<th>Retencion</th>
+																					<th>Total Real</th>
+																					<th>Moneda</th>
+																					<th>Total Cambio</th>
+																				</tr>
+																			</thead>
+																			<tfoot>
+																				<tr>
+																					<td><strong>Total:</strong></td>
+																					<td id="sub"></td>
+																					<td id="iva"></td>
+																					<td id="retencion"></td>
+																					<td id="total"></td>
+																					<td id="Moneda"></td>
+																					<td id="totalCambio"></td>
+																				</tr>
+																			</tfoot>
+																		</table>
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" id="btnGuardarFactura" class="btn btn-success btn-elevate">Guardar</button>
+													<button type="button" class="btn btn-danger btn-elevate " data-dismiss="modal" id="cerrarModalSF">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									</div>
+									<!--end modal subir facturas-->
+
+
+									<!-- modal ver evidencias -->
+									<div class="modal fade" id="ModalVerEvidencias" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+										<div class="modal-dialog modal-md" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" >Evidencias</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+													<div class="container">
+														<div class="row">
+															<a href="http://www.google.com.mx" target="_blank"><embed src='{% static "img\logo-cobrar.png" %}' height="100px" width="150px"></a>
+														</div>
+													</div>
+												</div>
+
+												<div class="modal-footer">
+													<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+
+									<!-- end modal ver evidencias -->
+
+									{% endblock %}
+
+									{% block scripts %}
+									<script src='{% static "js/pages/FuncionesDinamicasCxC.js" %}'></script>
+									<script src='{% static "js/PendientesEnviar.js" %}' type="text/javascript"></script>
+									<script src='{% static "js/es_ES.min.js" %}'></script>
+									{% endblock %}

@@ -1,0 +1,23 @@
+  {% load static %}
+  <table class="table table-striped table-bordered nowrap" id="tablaDetalles" style="width:100%">
+   <thead>
+     <th>Folio viaje</th>
+     <th>Fecha Factura</th>
+     <th>Subtotal</th>
+     <th>IVA</th>
+     <th>Retencion</th>
+     <th>Total</th>
+   </thead>
+   <tbody>
+    {% for Pendiente in Pendientes %}
+    <tr>
+     <td>{{Pendiente.IDPendienteEnviar.Folio}}</td>
+     <td>{{Pendiente.IDPendienteEnviar.FechaDescarga|date:'Y/m/d'}}</td>
+     <td>{{Pendiente.IDPendienteEnviar.PrecioSubtotal|floatformat:"2"}}</td>
+     <td>{{Pendiente.IDPendienteEnviar.PrecioIVA|floatformat:"2"}}</td>
+     <td>{{Pendiente.IDPendienteEnviar.PrecioRetencion|floatformat:"2"}}</td>
+     <td>{{Pendiente.IDPendienteEnviar.PrecioTotal|floatformat:"2"}}</td>
+   </tr>
+   {%endfor%}
+ </tbody>
+</table>
