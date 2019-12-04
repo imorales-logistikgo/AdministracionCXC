@@ -1,0 +1,426 @@
+/* Cubic Bezier Transition */
+/***
+Login page
+***/
+/* logo page */
+.login {
+    background-color: #666 !important;
+}
+
+    .login .logo {
+        margin-top: 10%;
+        margin-bottom: 9%;
+        padding: 1%;
+        text-align: center;
+    }
+
+.logo-modified {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.login .content {
+    box-shadow: 0px 0px 10px black;
+    background-color: rgba(62, 59, 59, 0.80);
+    width: 384px; /*medida del cuadro*/
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 7% !important;
+    margin-bottom: auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 24px;
+    padding-top: 15px !important;
+    padding-bottom: 15px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 197px !important;
+    -ms-border-radius: 7px;
+    -o-border-radius: 7px;
+    border-radius: 7px;
+}
+
+    .login .content h3 {
+        color: #eee;
+    }
+
+    .login .content h4 {
+        color: white;
+        text-align: center;
+        margin-bottom: 0px;
+    }
+
+
+
+    .login .content p,
+    .login .content label {
+        color: #fff;
+        text-align: center;
+    }
+
+.login .mt-checkbox > span:after {
+    border-color: #eee;
+}
+
+.login .content .login-form,
+.login .content .forget-form {
+    padding: 0px;
+    margin: 0px;
+}
+
+.login .content .form-control {
+    background-color: white;
+    height: 38px;
+}
+
+.login .content .forget-form {
+    display: none;
+}
+
+.login .content .register-form {
+    display: none;
+}
+
+.login .content .mensaje-encuesta {
+    display: none;
+}
+
+.login .content .encuesta-form {
+    display: none;
+}
+
+.login .content .mensajefinalizar-form {
+    display: none;
+}
+
+.login .content .form-title {
+    font-weight: 100;
+    margin-top: auto;
+    margin-bottom: 16px;
+}
+
+.login .content .form-actions {
+    clear: both;
+    border: 0px;
+    padding: 0px 30px 25px 30px;
+    margin-bottom: 9% !important;
+}
+
+.login .content .forget-form .form-actions {
+    border: 0;
+    margin-bottom: 0;
+    padding-bottom: 20px;
+}
+
+.login .content .register-form .form-actions {
+    border: 0;
+    margin-bottom: 0;
+    padding-bottom: 0px;
+}
+
+.login .content .form-actions .rememberme {
+    margin-top: 8px;
+    display: inline-block;
+}
+
+.login .content .form-actions .btn {
+    margin-top: 10px;
+}
+
+.login .content .forget-password {
+    margin-top: 25px;
+    text-align: center;
+    color: #fff;
+}
+
+.login .content .create-account {
+    padding-top: 0px;
+    margin-top: 15px;
+}
+
+    .login .content .create-account a {
+        display: inline-block;
+        margin-top: 5px;
+    }
+
+/* select2 dropdowns */
+.login .content .select2-container i {
+    display: inline-block;
+    position: relative;
+    color: #ccc;
+    z-index: 1;
+    top: 1px;
+    margin: 4px 4px 0px -1px;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.login .content .has-error .select2-container i {
+    color: #b94a48;
+}
+
+.login .content .select2-container a span {
+    font-size: 13px;
+}
+
+    .login .content .select2-container a span img {
+        margin-left: 4px;
+    }
+
+
+
+@media (max-width: 480px) {
+    /***
+  Login page
+  ***/
+    .login .logo {
+        margin-top: 10px;
+    }
+
+    .login .content {
+        padding: 30px;
+        width: 222px;
+    }
+
+        .login .content h3 {
+            font-size: 22px;
+        }
+
+    .login .checkbox {
+        font-size: 13px;
+    }
+}
+
+.btn-enviar {
+    background: #5890C1 !important;
+    border-color: #5890C1 !important;
+    color: white;
+    width: 100px;
+}
+
+.btn-regresar {
+    background: #95A5A6 !important;
+    border-color: #95A5A6 !important;
+    color: white;
+    width: 100px;
+}
+
+.login h6 {
+    color: white;
+}
+
+/*Clases del modal*/
+.modal {
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1050;
+    opacity: .75;
+    filter: alpha(opacity=75);
+    font-size: 12px !important;
+}
+/*header*/
+.modal-header {
+    background: #38227F !important;
+    border-radius: 20px 20px 0px 0px !important;
+    color: white !important;
+    padding: 0px !important;
+}
+
+    .modal-header i > img {
+        width: 18px;
+        margin: 0px 5px 0px 10px;
+        padding: 3px;
+    }
+
+.modal .modal-header h6 {
+    text-transform: uppercase;
+    font-size: 16px;
+}
+/*boton cerrar*/
+.modal .modal-header .close {
+    color: white;
+    height: 9px;
+    width: 9px;
+    opacity: .4;
+    float: right;
+    line-height: 1;
+    font-size: 21px;
+    text-shadow: 0 1px 0 #fff;
+    margin-top: -1.5% !important;
+    margin-right: 1%;
+    outline: none;
+}
+
+.modal .modal-md .modal-header .close {
+    margin-top: -4.5% !important;
+    margin-right: 2% !important;
+}
+
+.modal .modal-lg .modal-header .close {
+    margin-top: -2.5% !important;
+    margin-right: 1.3% !important;
+}
+
+.modal .modal-sm .modal-header .close {
+    margin-top: -6% !important;
+    margin-right: 3.3% !important;
+}
+
+.modal .modal-lg .modal-header .col-lg-5 .close {
+    margin-top: 2.5% !important;
+    margin-right: -0.7% !important;
+}
+
+.modal .modal-header .md-radio {
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+}
+
+.modal .modal-header .form-group {
+    margin-bottom: 0px !important;
+    margin-top: 5px !important;
+    padding-top: 0px !important;
+}
+
+.modal .modal-header label {
+    margin-bottom: 0px !important;
+    margin-top: 12px !important;
+    padding-top: 0px !important;
+}
+
+.modal .modal-body form-group form-md-line-input label {
+    color: #999 !important;
+}
+
+.modal-body h6 {
+    margin: 0px 0px 15px 0px !important;
+    text-transform: uppercase;
+    color: #2489c5 !important;
+    box-shadow: 0px 5px 10px -6px #38227f;
+    font-weight: bold !important;
+}
+
+.modal-body .btn:not(.md-skip).btn-xs {
+    padding: 3px 8px 3px 8px;
+    border-radius: 20px;
+    /*margin-top: 25% !important;*/
+}
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+.dataTables_scrollBody {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.modal .modal-header .form-group.form-md-line-input .form-control {
+    color: white !important;
+}
+
+    .modal .modal-header .form-group.form-md-line-input .form-control > option {
+        color: black !important;
+    }
+
+.modal-content {
+    border-radius: 22px 22px 20px 20px !important;
+    border: 0 !important;
+}
+
+.md-shadow-z-3, .modal .modal-content {
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.modal-footer {
+    background: rgba(0, 0, 0, 0.06);
+    text-align: center !important;
+}
+
+.modal-dialog .modal-lg {
+    margin-left: 43px !important;
+    margin: 45px auto;
+}
+
+.modal-dialog .modal-lg {
+    margin-left: 43px !important;
+    margin: 45px auto;
+}
+
+.modal-lg {
+    width: 91px !important;
+}
+
+.modal-body .panel-body {
+    padding: 5px 1px;
+}
+
+.modal-header .select2-container--bootstrap .select2-selection {
+    background-color: transparent !important;
+}
+
+.modal-header .select2-container--bootstrap .select2-selection--single .select2-selection__rendered {
+    color: #fff !important;
+}
+
+
+
+/*Boton modal*/
+
+.btn-round {
+    -webkit-border-radius: 20px 20px 20px 20px !important;
+    -moz-border-radius: 20px 20px 20px 20px !important;
+    -ms-border-radius: 20px 20px 20px 20px !important;
+    -o-border-radius: 20px 20px 20px 20px !important;
+    border-radius: 20px 20px 20px 20px !important;
+    width: 130px !important;
+    color: #FFF !important;
+    font-size: 12px !important;
+}
+
+/*ALERTAS*/
+.hsdivinit {
+    z-index: 100000 !important;
+}
+
+.hsdone, .hswarning, .hserror, .hsheart, .hssad, .hstext {
+    height: 40px !important;
+    width: 40px !important;
+}
+/*END ALERTAS*/
+
+
+/*
+    Popover modal de cambio de contraseña
+*/
+
+/*.popover-content {
+    min-width: 280px !important;
+    background: white !important;
+}
+
+.popover.bottom .arrow:after {
+    border-bottom-color: white;
+    display: block !important;
+}*/
+
+.popover-content {
+    min-width: 280px !important;
+    background: none !important;
+}
+
+.popover .arrow {
+    display: block !important;
+    background-color: #f7f7f7 !important;
+}
+
+.popover-title {
+    background-color: #f7f7f7 !important;
+}
+
+
+.form-group.form-md-line-input {
+    padding-top: 19px !important;
+}

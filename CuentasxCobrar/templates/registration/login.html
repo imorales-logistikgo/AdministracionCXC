@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>LogistikGO | Cuentas por cobrar</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href='{% static "css/font-awesome.min.css" %}' rel="stylesheet" type="text/css" />
+    <link href='{% static "css/simple-line-icons.min.css" %}' rel="stylesheet" type="text/css" />
+    <link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet"/>
+
+    <link href='{% static "css/bootstrap-switch.min.css" %}' rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href='{% static "css/all.css" %}' rel="stylesheet" type="text/css"/>
+    <link href='{% static "css/red.css" %}'  rel="stylesheet" />
+    <link href='{% static "css/select2-bootstrap.min.css" %}'  rel="stylesheet"/>
+    <link href='{% static "css/select2.min.css" %}' rel="stylesheet" />
+    <!-- END PAGE LEVEL PLUGINS -->
+
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href='{% static "css/components-md.min.css" %}'  rel="stylesheet" id="style_components" type="text/css"/>
+    <link href='{% static "css/plugins-md.min.css" %}' rel="stylesheet" type="text/css" />
+    <!-- END THEME GLOBAL STYLES -->
+
+    <!-- BEGIN THEME LAYOUT STYLES -->
+    <link href='{% static "css/layout.min.css" %}'  rel="stylesheet" type="text/css"/>
+    <link href='{% static "css/default.css" %}' rel="stylesheet" type="text/css" id="style_color" />
+    <link href='{% static "css/custom.min.css" %}' rel="stylesheet" type="text/css" />
+    <!-- END THEME LAYOUT STYLES -->
+    <link rel="shortcut icon" href='{% static "img/LogistiKGO-06.ico" %}'/>
+
+    <link href='{% static "css/hotsnackbar.css" %}' rel="stylesheet" />
+    <script type="text/javascript" src='{% static "js/hotsnackbar.js" %}'></script>
+    <link href='{% static "css/sweetalert2.min.css" %}' rel="stylesheet" />
+    <link href='{% static "css/waitMe.css" %}' rel="stylesheet" />
+    <style>
+        input:focus {
+            box-shadow: inset 0px 0px 8px 2px #578ebe !important;
+        }
+    </style>
+
+    <link href='{% static "css/login-4.css" %}' rel="stylesheet" />
+
+    <!--    <link href="css/Brockeraje.css" rel="stylesheet" />-->
+</head>
+<body class="login">
+    <!-- BEGIN LOGIN -->
+    <div class="content" id="divLogin">
+        <div id="divAlertDemo" hidden="true" class="alert alert-danger alert-borderless text-center" role="alert"><i class="fa fa-info-circle"></i><strong>&nbsp;VERSIÓN DEMO (ESTA VERSIÓN ES DE PRUEBA)</strong></div>
+        <div id="divAlertDebug" hidden="true" class="alert alert-info alert-borderless text-center" role="alert"><i class="fa fa-info-circle"></i><strong>&nbsp;VERSIÓN DEBUG (ESTA VERSIÓN ES DE DESARROLLO)</strong></div>
+
+        <!-- BEGIN LOGO -->
+        <div class="logo">
+            <a href="{% url 'login' %}">
+                <img class="logo-modified" src='{% static "img/logo-cobrar.png" %}'alt="" />
+            </a>
+        </div>
+        <!-- END LOGO -->
+        <!-- BEGIN LOGIN FORM -->
+
+        <form class="login-form" action="" method="post" runat="server">
+
+            <!--<asp:ScriptManager ID="scriptManager" runat="server"></asp:ScriptManager>-->
+
+            <!--<asp:Panel ID="pnlLogin" runat="server" DefaultButton="btnLogin">-->
+
+            <h4 class=" form-title bold">Conectamos la logística</h4>
+
+            <div id="divAlert" class="alert display-hide">
+                <button class="close" data-close="alert"></button>
+                <span class="fa fa-warning"></span>&nbsp;<bold id="lblErrorAlert"></bold>
+            </div>
+
+            <div id="divAlertCorreo" class="alert alert-success display-hide">
+                <button class="close" data-close="alert"></button>
+                <span></span>&nbsp;Se ha enviado un correo con la contraseña restablecida, favor de revisar tu bandeja.
+            </div>
+
+            <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <label class="control-label visible-ie8 visible-ie9">Usuario</label>
+                <div class="input-icon">
+                    <i>
+                        <img src='{% static "img/usuario18x18.png" %}'/></i>
+                    <!--<asp:TextBox ID="txtUsuario" runat="server" CssClass="form-control placeholder-no-fix" PlaceHolder="  Ingresa tu usuario o correo"></asp:TextBox>-->
+                    <input id="txtUsuario" name="txtUsuario" class="form-control  placeholder-no-fix" type="text" placeholder="  Ingresa tu usuario" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">Contraseña</label>
+                <div class="input-icon">
+                    <i>
+                        <img src='{% static "img/contrasena18x18.png" %}'/></i>
+                    <!--<asp:TextBox ID="txtContrasena" runat="server" CssClass="form-control  placeholder-no-fix" TextMode="Password" PlaceHolder="  Ingresa tu contraseña"></asp:TextBox>-->
+                    <input id="txtContrasena" name="txtContrasena" class="form-control  placeholder-no-fix" type="password" placeholder="  Ingresa tu contraseña" />
+                </div>
+            </div>
+
+            <div class="text-center">
+                <!--<asp:LinkButton ID="btnLogin" runat="server" CssClass=" btn blue-madison btn-block" OnClick="btnLogin_Click" ClientIDMode="Static">Inicio de Sesión</asp:LinkButton>-->
+                <button id="btnLogin" class=" btn blue-madison btn-block" type="submit">Inicio de sesión</button>
+            </div>
+
+            <div class="forget-password">
+                <p>
+                    ¿Olvidaste tu contraseña? Da click
+                    <a href="javascript:;" id="forget-password" class="text-success font-blue-madison">aquí. </a>
+                </p>
+            </div>
+            <!--
+            <div class="create-account">
+                <p>
+                    ¿Aún no tienes una cuenta?
+                    <a href="javascript:;" id="linkRegistrar" class="text-success font-blue-madison">Regístrate.</a>
+                </p>
+            </div>-->
+<!--
+            <asp:HiddenField ID="HFTipoAcceso" runat="server" ClientIDMode="Static" />
+            <asp:HiddenField ID="HFIDproyecto" runat="server" ClientIDMode="Static" />-->
+
+            <!--</asp:Panel>-->
+        </form>
+
+
+        <!-- END LOGIN FORM -->
+        <!-- BEGIN FORGOT PASSWORD FORM -->
+        <form class="forget-form" name="formForget">
+            <h4 class="bold">¿Olvidaste tu contraseña?</h4>
+            <p class="form-title font-white" style="text-align: center;">Ingresa tu usuario o correo electrónico asignado por el sistema</p>
+            <div id="divAlertInexistente" class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                <span class="fa fa-warning"></span>&nbsp;El usuario o el correo electrónico no existe en el sistema. Intente de nuevo
+            </div>
+            <div class="form-group">
+                <div class="input-icon">
+                    <i>
+                        <img src='{% static "img/Mensaje18x18.png" %}'/></i>
+                    <input id="txtUsuarioContrasena" name="txtUsuarioContrasena" class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Usuario o correo" name="email" />
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" id="back-btn" class="btn btn-sm btn-regresar">Regresar </button>
+                <button type="button" id="btnEnviarContrasena" class="btn btn-md btn-enviar pull-right">Enviar </button>
+            </div>
+        </form>
+
+        <!-- END FORGOT PASSWORD FORM -->
+
+        <!-- BEGIN REGISTRATION FORM    459x142
+        <form id="formRegister" class="register-form">
+            <h4 class="form-title bold">Regístrate.</h4>
+            <div class="form-group">
+                <input id="txtCorreo" class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Correo" name="correo" />
+            </div>
+            <div class="form-group">
+                <input id="txtNombreComercial" class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Nombre Comercial" name="ncomercial" />
+            </div>
+            <div class="form-group">
+                <input id="txtRazonSocial" class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Razón Social" name="razonsocial" />
+            </div>
+            <div class="form-group">
+                <input id="txtRFC" class="form-control placeholder-no-fix rfc" type="text" autocomplete="off" placeholder="RFC" name="rfc" />
+            </div>
+            <div class="form-group">
+                <select id="selectTipo" class="form-control" name="ncbotipo">
+                    <option value="Cliente">Soy Cliente</option>
+                    <option value="Transportista">Soy Transportista</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="register-back-btn" class="btn btn-sm btn-regresar">Regresar </button>
+                <button type="submit" id="btnGuardarRegistro" class="btn btn-sm btn-enviar pull-right">Registrar </button>
+            </div>
+
+        </form>-->
+        <!-- END REGISTRATION FORM -->
+
+        <!-- BEGIN ENCUESTA
+        <form id="MensajeEncuesta" class="mensaje-encuesta">
+            <h4 class="form-title bold">Tu registro casi ha finalizado,
+                puedes ayudarnos a mejorar
+                contestando las siguientes preguntas para poder brindarte un mejor servicio.</h4>
+            <div class="form-actions">
+                <button type="button" id="btnEncuesta" class="btn btn-sm btn-enviar pull-right">Aceptar</button>
+            </div>
+        </form>
+
+        <form id="formEncuesta" class="encuesta-form">
+            <div id="divCliente" class="hidden">
+                <h6 class="form-title bold">¿Con qué frecuencia realiza embarques?</h6>
+                <div class="form-group">
+                    <select id="selectEmbarque" class="form-control" name="ncboEmbarques">
+                        <option value="">Selecciona una opción</option>
+                        <option value="1 a 5 semanas">1 a 5 semanas</option>
+                        <option value="6 a 10 semanas">6 a 10 semanas</option>
+                        <option value="11 a 15 semanas">11 a 15 semanas</option>
+                        <option value="16 o mas">16 o mas</option>
+                    </select>
+                </div>
+                <h6 class="form-title bold">¿Qué ruta necesita en LogistikGO?</h6>
+            </div>
+            <div id="divTransportista" class="hidden">
+                <h6 class="form-title bold">¿Aproximadamente de cuanto es su flotilla?</h6>
+                <div class="form-group">
+                    <select id="selectFlotilla" class="form-control" name="ncboFlotilla">
+                        <option value="">Selecciona una opción</option>
+                        <option value="1 a 3">1 a 3</option>
+                        <option value="4 a 6">4 a 6</option>
+                        <option value="6 a 10">6 a 10</option>
+                        <option value="11 o mas">11 o mas</option>
+                    </select>
+                </div>
+                <h6 class="form-title bold">¿Cuales son tus rutas frecuentes?</h6>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-6">
+                    <select id="selectOrigen" class="form-control" name="ncboOrigen">
+                        <option value="">Origen</option>
+                        <option value="Aguascalientes">Aguascalientes</option>
+                        <option value="Baja California">Baja California</option>
+                        <option value="	Baja California Sur">Baja California Sur</option>
+                        <option value="Campeche">Campeche</option>
+                        <option value="Chiapas">Chiapas</option>
+                        <option value="Chihuahua">Chihuahua</option>
+                        <option value="Ciudad de México">Ciudad de México</option>
+                        <option value="Coahuila">Coahuila</option>
+                        <option value="Colima">Colima</option>
+                        <option value="Durango">Durango</option>
+                        <option value="Guanajuato">Guanajuato</option>
+                        <option value="Guerrero">Guerrero</option>
+                        <option value="Hidalgo">Hidalgo</option>
+                        <option value="Jalisco">Jalisco</option>
+                        <option value="México">México</option>
+                        <option value="Michoacán">Michoacán</option>
+                        <option value="Morelos">Morelos</option>
+                        <option value="Nayarit">Nayarit</option>
+                        <option value="Nuevo León">Nuevo León</option>
+                        <option value="Oaxaca">Oaxaca</option>
+                        <option value="Puebla">Puebla</option>
+                        <option value="Querétaro">Querétaro</option>
+                        <option value="Quintana Roo">Quintana Roo</option>
+                        <option value="San Luis Potosí">San Luis Potosí</option>
+                        <option value="Sinaloa">Sinaloa</option>
+                        <option value="Sonora">Sonora</option>
+                        <option value="Tabasco">Tabasco</option>
+                        <option value="Tamaulipas">Tamaulipas</option>
+                        <option value="Tlaxcala">Tlaxcala</option>
+                        <option value="Veracruz">Veracruz</option>
+                        <option value="Yucatán">Yucatán</option>
+                        <option value="Zacatecas">Zacatecas</option>
+                    </select>
+                </div>
+                <div class="form-group col-lg-6">
+                    <select id="selectDestino" class="form-control" name="ncboDestino">
+                        <option value="">Destino</option>
+                        <option value="Aguascalientes">Aguascalientes</option>
+                        <option value="Baja California">Baja California</option>
+                        <option value="	Baja California Sur">Baja California Sur</option>
+                        <option value="Campeche">Campeche</option>
+                        <option value="Chiapas">Chiapas</option>
+                        <option value="Chihuahua">Chihuahua</option>
+                        <option value="Ciudad de México">Ciudad de México</option>
+                        <option value="Coahuila">Coahuila</option>
+                        <option value="Colima">Colima</option>
+                        <option value="Durango">Durango</option>
+                        <option value="Guanajuato">Guanajuato</option>
+                        <option value="Guerrero">Guerrero</option>
+                        <option value="Hidalgo">Hidalgo</option>
+                        <option value="Jalisco">Jalisco</option>
+                        <option value="México">México</option>
+                        <option value="Michoacán">Michoacán</option>
+                        <option value="Morelos">Morelos</option>
+                        <option value="Nayarit">Nayarit</option>
+                        <option value="Nuevo León">Nuevo León</option>
+                        <option value="Oaxaca">Oaxaca</option>
+                        <option value="Puebla">Puebla</option>
+                        <option value="Querétaro">Querétaro</option>
+                        <option value="Quintana Roo">Quintana Roo</option>
+                        <option value="San Luis Potosí">San Luis Potosí</option>
+                        <option value="Sinaloa">Sinaloa</option>
+                        <option value="Sonora">Sonora</option>
+                        <option value="Tabasco">Tabasco</option>
+                        <option value="Tamaulipas">Tamaulipas</option>
+                        <option value="Tlaxcala">Tlaxcala</option>
+                        <option value="Veracruz">Veracruz</option>
+                        <option value="Yucatán">Yucatán</option>
+                        <option value="Zacatecas">Zacatecas</option>
+                    </select>
+                </div>
+            </div>
+            <h6 class="form-title bold">¿Cómo se entero de LogistikGO?</h6>
+            <div class="form-group">
+                <select id="selectMedioComunicacion" class="form-control" name="ncboMedioComunicacion">
+                    <option value="">Selecciona una opción</option>
+                    <option value="Radio">Radio</option>
+                    <option value="Internet">Internet</option>
+                    <option value="Volantes">Volantes</option>
+                    <option value="Espectacular">Espectacular</option>
+                    <option value="Email">Email</option>
+                    <option value="Contacto Directo">Contacto Directo</option>
+                    <option value="Revista">Revista</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="button" id="btnGuardarEncuesta" class="btn btn-sm btn-enviar pull-right">Aceptar</button>
+            </div>
+        </form>
+
+        <form id="MensajeFinalizar" class="mensajefinalizar-form">
+            <h4 class="form-title bold">Gracias por registrarse en LogistikGo,
+                podra disfrutar de todos los beneficios de la plataforma en su empresa.</h4>
+            <div class="form-actions">
+                <button type="submit" id="btnFinalizar" class="btn btn-sm btn-enviar pull-right">Aceptar</button>
+            </div>
+
+        </form>-->
+        <!-- END ENCUESTA FORM -->
+    </div>
+    <!-- END LOGIN -->
+
+
+    <!--Begin Modal UPDATE PASSWORD
+    <div id="mdActualizarContraseña" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
+        <div class="modal-dialog modal-sm" role="document" id="divActualizarContraseña">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6><i>
+                        <img src="img/logo2.png" /></i>PASSWORD EXPIRED</h6>
+                </div>
+                <div class="modal-body">
+                    <label class="text-danger">The password of this user has expired*</label>
+                    <label id="lblTiempoExpiracion" class="text-danger"></label>
+
+
+                    <div class="row">
+                        <div class="col-lg-1 col-md-1">
+                            <br />
+                            <i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" data-placement="left" data-content="Your current user"></i>
+                        </div>
+
+                        <div class="col-lg-10 col-md-10">
+                            <div class="form-group form-md-line-input">
+                                <input class="form-control" type="text" id="txtcurrentUsuario" readonly="readonly" />
+                                <label>Current user</label><br />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-1 col-md-1">
+                            <br />
+                            <i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" data-placement="left" data-content="Password must have at least a character with uppercase, 8 characters, lowercase
+                                and a special character (/*-+,%&$)"></i>
+                        </div>
+                        <div class="col-lg-10 col-md-10">
+                            <div class="form-group form-md-line-input password">
+                                <label>New password</label>
+                                <input class="form-control" type="password" id="txtNuevaContraseña" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-lg-1 col-md-1">
+                            <br />
+                            <i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" data-placement="left" data-content="Confirm your password as above"></i>
+                        </div>
+                        <div class="col-lg-10 col-md-10">
+                            <div class="form-group form-md-line-input">
+                                <label>Confirm new password</label>
+                                <input class="form-control" type="password" id="txtConfirmarContraseña" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="btnActualizarContraseña" type="button" class="btn btn-success btn-round">Update</button>
+                    <button id="btnCerrarActualizarContrasena" type="button" class="btn btn-warning btn-round" data-dismiss="modal">Maybe later</button>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <!-- End Modal update password -->
+
+    <!-- BEGIN CORE PLUGINS -->
+    <script src='{% static "js/jquery-3.4.1.min.js" %}'></script>
+    <script src='{% static "js/bootstrap.min.js" %}'></script>
+    <!-- END CORE PLUGINS -->
+    <script src='{% static "js/waitMe.js" %}'></script>
+    <script src='{% static "js/form-validation-md.min.js" %}'></script>
+    <script src='{% static "js/jquery.validate.min.js" %}'></script>
+    <script src='{% static "js/jquery.backstretch.min.js" %}'></script>
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+
+    <!-- END THEME GLOBAL SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src='{% static "js/login-4.js" %}'></script>
+
+
+    <!-- END THEME LAYOUT SCRIPTS -->
+
+
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+<table class="table table-striped table-bordered" id="TableReporteCanceladas" style="width: 100%">
+	<thead>
+		<tr>
+			<th>Folio</th>
+			<th>Cliente</th>
+			<th>Fecha Factura</th>
+			<th>Fecha cancelacion</th>
+			<th>Total</th>
+			<th>Folio viaje</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for Factura in Facturas %}
+		<tr>
+			<td>{{Factura.Folio}}</td>
+			<td>{{Factura.Cliente}}</td>
+			<td>{{Factura.FechaFactura|date:'Y/m/d'}}</td>
+			<td>{{Factura.FechaBaja|date:'Y/m/d'}}</td>
+			<td>{{Factura.Total|floatformat:"2"}}</td>
+			<td>{{Factura.Viajes}}</td>
+		</tr>
+		{%endfor%}
+	</tbody>
+</table>
