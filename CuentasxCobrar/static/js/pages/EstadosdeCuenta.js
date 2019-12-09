@@ -92,13 +92,24 @@ $('#modalSubirCobro').on('hidden.bs.modal', function(){
 $(document).on('click', '#BtnSubirCobros',showDatosObtenidos);
 
 //validar el total del cobro por cada factura seleccionada -- en el modal subir cobros
-$('#tableAddCobro').on("change", 'input[name="totalCobro"]', function(){
+$('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
   var table = $('#tableAddCobro').DataTable();
   var datosRow = table.row($(this).parents('tr')).data();
-  if(parseFloat($(this).val()) >= datosRow[2])
+  if(datosRow[3] === 'MXN')
   {
-    (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2]) : $(this).val(totConv)
+    if(parseFloat($(this).val()) >= datosRow[2])
+    {
+      (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2]) : $(this).val(totConv)
+    }
   }
+  else
+  {
+    if(parseFloat($(this).val()) >= totConv)
+    {
+      (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2]) : $(this).val(totConv)
+    }
+  }
+
   $('input#valCobro').each(function(){
    calculo = calculo + parseFloat($(this).val());
  });
