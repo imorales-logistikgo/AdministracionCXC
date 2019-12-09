@@ -16,10 +16,10 @@ def GetPendientesEnviar(request):
 
 
 def GetContadores():
-	ContadorTodos = len(list(View_PendientesEnviarCxC.objects.all()))
-	ContadorPendientes = len(list(View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s", ['Pendiente'])))
-	ContadorFinalizados = len(list(View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s", ['Finalizado'])))
-	ContadorConEvidencias = len(list(View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1")))
+	ContadorTodos = len(list(View_PendientesEnviarCxC.objects.filter(IsFacturaCliente = False)))
+	ContadorPendientes = len(list(View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsFacturaCliente = 0", ['Pendiente'])))
+	ContadorFinalizados = len(list(View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsFacturaCliente = 0", ['Finalizado'])))
+	ContadorConEvidencias = len(list(View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1 AND IsFacturaCliente = 0")))
 	ContadorSinEvidencias = ContadorTodos - ContadorConEvidencias
 	return ContadorTodos, ContadorPendientes, ContadorFinalizados, ContadorConEvidencias, ContadorSinEvidencias
 
@@ -40,7 +40,7 @@ def GetPendientesByFilters(request):
 		QueryClientes = "NombreCliente IN ({}) AND ".format(','.join(['%s' for _ in range(len(Clientes))]))
 	QueryFecha = "FechaDescarga BETWEEN %s AND %s AND "
 	QueryMoneda = "Moneda = %s "
-	FinalQuery = "SELECT * FROM View_PendientesEnviarCxC WHERE " + QueryStatus + QueryClientes + QueryFecha + QueryMoneda
+	FinalQuery = "SELECT * FROM View_PendientesEnviarCxC WHERE " + QueryStatus + QueryClientes + QueryFecha + QueryMoneda + "AND IsFacturaCliente = 0"
 	params = Status + Clientes + [FechaDescargaDesde, FechaDescargaHasta] + [Moneda]
 	PendingToSend = View_PendientesEnviarCxC.objects.raw(FinalQuery,params)
 	htmlRes = render_to_string('TablaPendientes.html', {'pendientes':PendingToSend}, request = request,)

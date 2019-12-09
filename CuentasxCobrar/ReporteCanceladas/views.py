@@ -26,14 +26,17 @@ def ReporteCanceladas(request):
 
 
 def GetCanceladasByFilters(request):
-	FechaCobroDesde = request.GET["FechaCobroDesde"]
-	FechaCobroHasta = request.GET["FechaCobroHasta"]
+	FechaFacturaDesde = request.GET["FechaFacturaDesde"]
+	FechaFacturaHasta = request.GET["FechaFacturaHasta"]
 	Clientes = json.loads(request.GET["Cliente"])
+	Moneda = json.loads(request.GET["Moneda"])
 	if not Clientes:
 		Canceladas = FacturasxCliente.objects.filter(Status = 'Cancelada')
 	else:
 		Canceladas = FacturasxCliente.objects.filter(Status = 'Cancelada', NombreCortoCliente__in = Clientes)
-	Canceladas = Canceladas.filter(FechaFactura__range = [datetime.datetime.strptime(FechaCobroDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaCobroHasta,'%m/%d/%Y')])
+	if Moneda:
+		Canceladas = Canceladas.filter(Moneda__in = Moneda)
+	Canceladas = Canceladas.filter(FechaFactura__range = [datetime.datetime.strptime(FechaFacturaDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaFacturaHasta,'%m/%d/%Y')])
 	listFacturas = list()
 	for Cancelada in Canceladas:
 		Factura = {}

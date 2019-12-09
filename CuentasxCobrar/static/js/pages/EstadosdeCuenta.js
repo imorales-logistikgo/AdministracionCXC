@@ -287,9 +287,12 @@ var fnGetFacturas = function () {
   endDate = ($('#cboFechaDescarga').data('daterangepicker').endDate._d).toLocaleDateString('en-US');
   arrStatus = $('#cboStatus').val();
   arrClientes = $('#cboCliente').val();
-  strMoneda = $('#rdMXN').is(':checked') ? 'MXN' : 'USD';
+  strMoneda = [];
+  $('#rdMXN').is(':checked') ? strMoneda.push('MXN') : null;
+  $('#rdUSD').is(':checked') ? strMoneda.push('USD') : null;
+
   WaitMe_Show('#divTablaFacturas');
-  fetch("/EstadosdeCuenta/FilterBy?FechaDescargaDesde="+ startDate +"&FechaDescargaHasta="+ endDate +"&Status="+ JSON.stringify(arrStatus) +"&Cliente="+ JSON.stringify(arrClientes) +"&Moneda="+ strMoneda, {
+  fetch("/EstadosdeCuenta/FilterBy?FechaDescargaDesde="+ startDate +"&FechaDescargaHasta="+ endDate +"&Status="+ JSON.stringify(arrStatus) +"&Cliente="+ JSON.stringify(arrClientes) +"&Moneda="+ JSON.stringify(strMoneda), {
     method: "GET",
     credentials: "same-origin",
     headers: {
@@ -470,7 +473,7 @@ function saveCobroxCliente()  {
         showConfirmButton: false,
         timer: 2500
       })
-      WaitMe_Hide('#WaitModalPE');
+      $("#modalSubirCobro").modal('hide');
     }
 
   }).then(function(IDCobro){
@@ -513,7 +516,7 @@ function SaveCobroxFactura(IDCobro)
         showConfirmButton: false,
         timer: 2500
       })
-      WaitMe_Hide('#WaitModalPE');
+      $("#modalSubirCobro").modal('hide');
     }
     else if(response.status == 500)
     {
@@ -523,7 +526,7 @@ function SaveCobroxFactura(IDCobro)
         showConfirmButton: false,
         timer: 2500
       })
-      WaitMe_Hide('#WaitModalPE');
+      $("#modalSubirCobro").modal('hide');
     }
 
   }).catch(function(ex){

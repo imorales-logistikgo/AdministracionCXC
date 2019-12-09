@@ -10,7 +10,17 @@ def EstadosdeCuenta(request):
 	FacturasPendiente = View_FacturasxCliente.objects.filter(Status = "Pendiente")
 	FacturasAbonada = View_FacturasxCliente.objects.filter(Status = "Abonada")
 	result = FacturasPendiente | FacturasAbonada
-	return render(request, 'EstadosdeCuenta.html', {'Facturas': result})
+	Folios = list()
+	for Factura in result:
+		FoliosCobro= ""
+		for Cobro in RelacionCobrosFacturasxCliente.objects.filter(IDFactura = Factura.IDFactura):
+			FoliosCobro += Cobro.IDCobro.Folio + ", "
+		FoliosCobro = FoliosCobro[:-2]
+		Folios.append(FoliosCobro)
+	ContadoresPendientes = len(list(FacturasPendiente))
+	ContadoresAbonadas = len(list(FacturasAbonada))
+	return render(request, 'EstadosdeCuenta.html', {'Facturas': result, 'Folios': Folios, 'ContadoresPendientes': ContadoresPendientes, 'ContadoresAbonadas': ContadoresAbonadas})
+
 
 
 def GetFacturasByFilters(request):
@@ -18,19 +28,22 @@ def GetFacturasByFilters(request):
 	FechaDescargaHasta = request.GET["FechaDescargaHasta"]
 	Clientes = json.loads(request.GET["Cliente"])
 	Status = json.loads(request.GET["Status"])
-	if not Status:
-		QueryStatus = ""
-	else:
-		QueryStatus = "Status IN ({}) AND ".format(','.join(['%s' for _ in range(len(Status))]))
-	if not Clientes:
-		QueryClientes = ""
-	else:
-		QueryClientes = "Cliente IN ({}) AND ".format(','.join(['%s' for _ in range(len(Clientes))]))
-	QueryFecha = "FechaFactura BETWEEN %s AND %s AND "
-	FinalQuery = "SELECT * FROM View_FacturasxCliente WHERE " + QueryStatus + QueryClientes + QueryFecha + "IsAutorizada = 0"
-	params = Status + Clientes + [FechaDescargaDesde, FechaDescargaHasta]
-	Facturas = View_FacturasxCliente.objects.raw(FinalQuery,params)
-	htmlRes = render_to_string('TablaEstadosCuenta.html', {'Facturas':Facturas}, request = request,)
+	Moneda = json.loads(request.GET["Moneda"])
+	Facturas = View_FacturasxCliente.objects.filter(FechaFactura__range = [datetime.datetime.strptime(FechaDescargaDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaDescargaHasta,'%m/%d/%Y')])
+	if Status:
+		Facturas = Facturas.filter(Status__in = Status)
+	if Clientes:
+		Facturas = Facturas.filter(NombreCortoCliente__in = Clientes)
+	if Moneda:
+		Facturas = Facturas.filter(Moneda__in = Moneda)
+	Folios = list()
+	for Factura in Facturas:
+		FoliosCobro= ""
+		for Cobro in RelacionCobrosFacturasxCliente.objects.filter(IDFactura = Factura.IDFactura):
+			FoliosCobro += Cobro.IDCobro.Folio + ", "
+		FoliosCobro = FoliosCobro[:-2]
+		Folios.append(FoliosCobro)
+	htmlRes = render_to_string('TablaEstadosCuenta.html', {'Facturas':Facturas, 'Folios': Folios}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
 
 

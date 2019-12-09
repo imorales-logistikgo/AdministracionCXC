@@ -20,9 +20,11 @@ function getReportesByFilters() {
   startDate = ($('#cboFechaDescarga').data('daterangepicker').startDate._d).toLocaleDateString('en-US');
   endDate = ($('#cboFechaDescarga').data('daterangepicker').endDate._d).toLocaleDateString('en-US');
   arrClientes = $('#cboCliente').val();
-  strMoneda = $('#rdMXN').is(':checked') ? 'MXN' : 'USD';
+  strMoneda = [];
+  $('#rdMXN').is(':checked') ? strMoneda.push('MXN') : null;
+  $('#rdUSD').is(':checked') ? strMoneda.push('USD') : null;
   //WaitMe_Show('#divTablaFacturas');
-  fetch("/ReporteCanceladas/FilterBy?FechaCobroDesde="+ startDate +"&FechaCobroHasta="+ endDate +"&Cliente="+ JSON.stringify(arrClientes) +"&Moneda="+ strMoneda, {
+  fetch("/ReporteCanceladas/FilterBy?FechaFacturaDesde="+ startDate +"&FechaFacturaHasta="+ endDate +"&Cliente="+ JSON.stringify(arrClientes) +"&Moneda="+ JSON.stringify(strMoneda), {
     method: "GET",
     credentials: "same-origin",
     headers: {

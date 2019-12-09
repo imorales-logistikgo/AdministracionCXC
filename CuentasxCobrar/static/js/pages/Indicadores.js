@@ -68,3 +68,21 @@ $(document).ready(function(){
 	  chart.draw(data, options);
 	}
 });
+
+function getGraphicsInfo() {
+	fetch("Indicadores/GetIndicadores", {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    return response.clone().json();
+  }).then(function(data){
+    $('#divTablaPendientesEnviar').html(data.htmlRes);
+    formatDataTable();
+  }).catch(function(ex){
+    console.log("no success!");
+  });
+}
