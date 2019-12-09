@@ -167,7 +167,7 @@ KTUtil.ready(function() {
 });
 
 
-$('input[name="TipoCambioCobro"]').on('change', function(){
+$('input[name="TipoCambioCobro"]').on('keyup change', function(){
   showDatosObtenidos();
 });
 
