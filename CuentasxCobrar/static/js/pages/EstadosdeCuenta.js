@@ -121,7 +121,7 @@ $('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
 //validacion si tienes los archivos pdf y xml
 $(document).on('click', '#btnSaveCobro', function(){
   //console.log($('input[name="TipoCambioCobro"]').val());
-  if($('#ComplementosCobros').data("rutaarchivoPDF") != undefined || $('#ComplementosCobros').data("rutaarchivoXML") != undefined)
+  if($('#ComplementosCobros').data("rutaarchivoPDF") != undefined && $('#ComplementosCobros').data("rutaarchivoXML") != undefined || $('#ComplementosCobros').data("rutaarchivoPDF") != null && $('#ComplementosCobros').data("rutaarchivoXML") != null)
   {
     if($('input[name="FolioCobro"]').val() != "")
     {
@@ -168,7 +168,16 @@ KTUtil.ready(function() {
 
 
 $('input[name="TipoCambioCobro"]').on('keyup change', function(){
-  showDatosObtenidos();
+  if($('input[name="TipoCambioCobro"]').val() >=1)
+  {
+    showDatosObtenidos();
+  }
+  else
+  {
+    alertToastError("El tipo de cambio debe ser mayor a 0");
+    $('input[name="TipoCambioCobro"]').val(1);
+  }
+ 
 });
 
 
@@ -180,7 +189,9 @@ function CleanModal()
  $('input[name="FolioCobro"]').val('');
  $('.uploaded-files ol').remove();
  $('#comentariosEC').val('');
- $('#TipoCambioCobro').val(1);
+ $('#TipoCambioCobro').val(1); 
+ $('#ComplementosCobros').data("rutaarchivoXML", null);
+ $('#ComplementosCobros').data("rutaarchivoPDF", null);
  calculo = 0;
  totConv = 0;
 }
@@ -445,8 +456,8 @@ function saveCobroxCliente()  {
     FechaCobro: $('#FechaCobro').val(),
     TipoCambio: $('#TipoCambioCobro').val(),
     Comentarios: $('#comentariosEC').val(),
-    RutaXML: $('#RutaXML').attr('href'),
-    RutaPDF: $('#RutaPDF').attr('href'),
+    RutaXML: $('#ComplementosCobros').data("rutaarchivoXML"),
+    RutaPDF: $('#ComplementosCobros').data("rutaarchivoPDF"),
     Cliente: cliente,
   }
 

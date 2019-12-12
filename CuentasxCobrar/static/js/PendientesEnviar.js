@@ -59,16 +59,16 @@ $(document).on('click', '#BtnSubirFacturaPendietnesEnviar',getDatos);
 $('#BtnAplicarFiltro').on('click', fnGetPendientesEnviar);
 
 $('#btnGuardarFactura').on('click', function(){
-  if($('#kt_uppy_1').data("rutaarchivoPDF") != undefined && $('#kt_uppy_1').data("rutaarchivoXML") != undefined)
+  if($('#kt_uppy_1').data("rutaarchivoPDF") != undefined && $('#kt_uppy_1').data("rutaarchivoXML") != undefined || $('#kt_uppy_1').data("rutaarchivoPDF") != null && $('#kt_uppy_1').data("rutaarchivoXML") != null)
   {
-    if($('#txtFolioFactura').val() != "")
+    if($('#txtFolioFactura').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "")
     {
       WaitMe_Show('#WaitModalPE');
       saveFactura();
     }
     else
     {
-      alertToastError("El folio no puede estar vacio");
+      alertToastError("El folio y las fechas no pueden estar vacias");
     }
 
   }
@@ -199,6 +199,8 @@ function LimpiarModalSF()
   $('#see').hide();
   $('#seeAlert').hide();
   //ids = [];
+  $('#kt_uppy_1').data("rutaarchivoXML", null);
+  $('#kt_uppy_1').data("rutaarchivoPDF", null);
 }
 
 
