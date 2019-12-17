@@ -5,29 +5,44 @@ class PendientesEnviar(models.Model):
     Folio = models.CharField(max_length=10, unique=True)
     NombreCortoCliente = models.CharField(max_length=100)
     NombreCortoProveedor = models.CharField(max_length=100)
-    FechaDescarga = models.CharField(max_length=100, null=True)
+    FechaDescarga = models.DateTimeField()
     Moneda = models.CharField(max_length=10)
     #Costo = models.FloatField(default=0)
+    #Precio = models.FloatField(default=0)
+    Status = models.CharField(max_length=15)
+    IsEvidenciaFisica = models.BooleanField()
+    IsEvidenciaDigital = models.BooleanField()
+    Proyecto = models.CharField(max_length=30)
+
+    def __str__(self):
+        return str(self.IDPendienteEnviar)
+    class Meta:
+        db_table="PendientesEnviar"
+        managed= False
+
+
+class Ext_PendienteEnviar_Costo(models.Model):
+    IDPendienteEnviar = models.OneToOneField(PendientesEnviar, on_delete=models.CASCADE, db_column = 'IDPendienteEnviar', primary_key=True)
     CostoSubtotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     CostoIVA = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     CostoRetencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     CostoTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
-    #Precio = models.FloatField(default=0)
+    IsFacturaProveedor = models.BooleanField(default=False)
+    class Meta:
+        db_table="Ext_PendienteEnviar_Costo"
+        managed= False
+
+
+class Ext_PendienteEnviar_Precio(models.Model):
+    IDPendienteEnviar = models.OneToOneField(PendientesEnviar, on_delete=models.CASCADE, db_column = 'IDPendienteEnviar', primary_key=True)
     PrecioSubtotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     PrecioIVA = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     PrecioRetencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     PrecioTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
-    Status = models.CharField(max_length=15)
-    IsFacturaCliente = models.BooleanField()
-    IsFacturaProveedor = models.BooleanField()
-    IsEvidenciaFisica = models.BooleanField()
-    IsEvidenciaDigital = models.BooleanField()
-
-    def __str__(self):
-        return str(self.IDPendienteEnviar)
-
+    PrecioServicios = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    IsFacturaCliente = models.BooleanField(default=False)
     class Meta:
-        db_table="PendientesEnviar"
+        db_table="Ext_PendienteEnviar_Precio"
         managed= False
 
 
@@ -37,7 +52,6 @@ class RelacionConceptoxProyecto(models.Model):
     IDConcepto = models.IntegerField(default=0)
     IDCliente = models.IntegerField(default=0)
     IDProveedor = models.IntegerField(default=0)
-    Proyecto = models.CharField(max_length=30)
 
     class Meta:
         db_table="RelacionConceptoxProyecto"
@@ -51,17 +65,17 @@ class View_PendientesEnviarCxC(models.Model):
     IDCliente = models.IntegerField(default=0)
     NombreCliente = models.CharField(max_length=100)
     FechaDescarga = models.DateTimeField()
-    PrecioSubtotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
-    PrecioIVA = models.DecimalField(default=0, max_digits=30, decimal_places=5)
-    PrecioRetencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
-    PrecioTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    Subtotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    IVA = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    Retencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    Total = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    Servicios = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     Moneda = models.CharField(max_length=10)
     Status = models.CharField(max_length=15)
     IsEvidenciaDigital = models.BooleanField()
     IsEvidenciaFisica = models.BooleanField()
     Proyecto = models.CharField(max_length=30)
     IsFacturaCliente = models.BooleanField()
-    IsFacturaProveedor = models.BooleanField()
 
     class Meta:
         managed = False

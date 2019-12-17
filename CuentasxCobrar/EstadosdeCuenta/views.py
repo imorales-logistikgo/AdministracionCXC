@@ -1,6 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from EstadosdeCuenta.models import RelacionFacturaxPartidas, View_FacturasxCliente, FacturasxCliente, PendientesEnviar, RelacionConceptoxProyecto, CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
+from PendientesEnviar.models import RelacionConceptoxProyecto, Ext_PendienteEnviar_Precio
+from EstadosdeCuenta.models import RelacionFacturaxPartidas, View_FacturasxCliente, FacturasxCliente, CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
 from django.template.loader import render_to_string
 from decimal import Decimal
 import json, datetime
@@ -57,8 +58,8 @@ def CancelarFactura(request):
 		for Partida in conRelacionFacturaxPartidas:
 			Partida.IDPartida.IsActiva = False
 			Partida.IDPartida.FechaBaja = datetime.datetime.now()
-			conPendienteEnviar = RelacionConceptoxProyecto.objects.get(IDConcepto = Partida.IDConcepto)
-			conPendienteEnviar.IDPendienteEnviar.IsFacturaCliente = False
+			conPendienteEnviar = RelacionConceptoxProyecto.objects.get(IDConcepto = Partida.IDConcepto).IDPendienteEnviar
+			Ext_PendienteEnviar_Precio.objects.get(IDPendienteEnviar = conPendienteEnviar).IsFacturaCliente = False
 			conPendienteEnviar.IDPendienteEnviar.save()
 			Partida.IDPartida.save()
 	return HttpResponse("")
