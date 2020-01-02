@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'EstadosdeCuenta',
     'ReporteCobros',
     'ReporteCanceladas',
-    'Indicadores'
+    'Indicadores',
+    'Users',
+    'UsersAdmon',
 ]
 
 MIDDLEWARE = [
@@ -102,8 +104,25 @@ DATABASES = {
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         }
+    },
+    'users': {
+        'ENGINE': "sql_server.pyodbc",
+        'NAME': "LogistikGo_Admon",
+        'HOST': "104.210.157.194",
+        'USER': "sa",
+        'PASSWORD': "iLs8iC9S69",
+        'PORT': "1433",
+        'OPTIONS': {
+            'driver': "ODBC Driver 17 for SQL Server",
+        },
     }
 }
+
+DATABASE_ROUTERS = ['users.router.AuthRouter',]
+
+AUTHENTICATION_BACKENDS = (
+    'users.backends.EmailBackend',
+    )
 
 
 # Password validation
@@ -143,3 +162,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AUTH_USER_MODEL = 'Users.User'
+LOGIN_REDIRECT_URL = 'PendientesEnviar/'
+SESSION_COOKIE_AGE = 21600
