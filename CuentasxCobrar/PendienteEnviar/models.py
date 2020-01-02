@@ -2,7 +2,7 @@ from django.db import models
 
 class PendientesEnviar(models.Model):
     IDPendienteEnviar = models.AutoField(primary_key=True)
-    Folio = models.CharField(max_length=10, unique=True)
+    Folio = models.CharField(max_length=50, unique=True)
     NombreCortoCliente = models.CharField(max_length=100)
     NombreCortoProveedor = models.CharField(max_length=100)
     FechaDescarga = models.DateTimeField()
@@ -59,7 +59,7 @@ class RelacionConceptoxProyecto(models.Model):
 
 
 class View_PendientesEnviarCxC(models.Model):
-    IDPendienteEnviar = models.OneToOneField(PendientesEnviar, on_delete=models.DO_NOTHING, db_column = 'IDPendienteEnviar', primary_key=True)
+    IDPendienteEnviar = models.IntegerField(primary_key=True)
     IDConcepto = models.IntegerField(default=0)
     Folio = models.CharField(max_length=10, unique=True)
     IDCliente = models.IntegerField(default=0)

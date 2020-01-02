@@ -1,6 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from EstadosdeCuenta.models import RelacionFacturaxPartidas, FacturasxCliente, RelacionConceptoxProyecto
+from PendienteEnviar.models import RelacionConceptoxProyecto
+from EstadosdeCuenta.models import RelacionFacturaxPartidas, FacturasxCliente
 from django.template.loader import render_to_string
 import json, datetime
 

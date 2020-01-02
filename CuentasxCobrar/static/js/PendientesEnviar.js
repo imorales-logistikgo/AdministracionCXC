@@ -355,10 +355,10 @@ function getDatos(){
   moneda = datos[i][5];
   if(datos[i][5] === "MXN")
   {
-    var sub = parseFloat(datos[i][1]);
-    var iva = parseFloat(datos[i][2]);
-    var retencion = parseFloat(datos[i][3]);
-    var tot = parseFloat(datos[i][4]);
+    var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
+    var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
+    var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
+    var tot = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
     subtotal = subtotal + sub;
     Tiva = Tiva + iva;
     TRetencion = TRetencion + retencion;
@@ -371,11 +371,11 @@ function getDatos(){
     var tipoCambio = $('input[name="TipoCambio"]').val();
 
     var folio = datos[i][0];
-    var sub = parseFloat(datos[i][1]);
-    var iva = parseFloat(datos[i][2]);
-    var retencion = parseFloat(datos[i][3]);
-    var tot = parseFloat(datos[i][4]);
-    var totCambio = (parseFloat(datos[i][4]) * tipoCambio);
+    var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
+    var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
+    var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
+    var tot = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
+    var totCambio = (parseFloat(datos[i][4].replace(/(\$)|(,)/g,'')) * tipoCambio);
     datos[i].push(totCambio);
         //newData.push([folio, sub, iva, retencion, tot]);
         subtotal = subtotal + sub;
