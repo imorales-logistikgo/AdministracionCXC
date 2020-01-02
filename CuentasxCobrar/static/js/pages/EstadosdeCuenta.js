@@ -187,7 +187,7 @@ $('input[name="TipoCambioCobro"]').on('keyup change', function(){
 function CleanModal()
 {
  $('input[name="FolioCobro"]').val('');
- $('.uploaded-files ol').remove();
+ $('.uploaded-files-pagos ol').remove();
  $('#comentariosEC').val('');
  $('#TipoCambioCobro').val(1); 
  $('#ComplementosCobros').data("rutaarchivoXML", null);
@@ -450,6 +450,7 @@ function getDetalleFactura()
 }
 
 function saveCobroxCliente()  {
+  WaitMe_Show('#waiteSubirCobro');
   jParams = {
     Folio: $('#FolioCobro').val(),
     Total:$('#AddCosto').val(),
@@ -484,7 +485,8 @@ function saveCobroxCliente()  {
         showConfirmButton: false,
         timer: 2500
       })
-      $("#modalSubirCobro").modal('hide');
+      WaitMe_Hide('#waiteSubirCobro');
+     // $("#modalSubirCobro").modal('hide');
     }
 
   }).then(function(IDCobro){
@@ -496,6 +498,7 @@ function saveCobroxCliente()  {
 
 function SaveCobroxFactura(IDCobro)
 {
+  WaitMe_Show('#waiteSubirCobro');
   var arrCobros = [];
   $('.valCobro').each(function() {
     IDFactura = $(this).data('idfact');
@@ -527,6 +530,11 @@ function SaveCobroxFactura(IDCobro)
         showConfirmButton: false,
         timer: 2500
       })
+      var table = $('#TableEstadosdeCuenta').DataTable();
+      $("input[name=checkEC]:checked").each(function () {
+        table.row($(this).parents('tr')).remove().draw();
+      });
+      WaitMe_Hide('#waiteSubirCobro');
       $("#modalSubirCobro").modal('hide');
     }
     else if(response.status == 500)
@@ -537,7 +545,8 @@ function SaveCobroxFactura(IDCobro)
         showConfirmButton: false,
         timer: 2500
       })
-      $("#modalSubirCobro").modal('hide');
+      WaitMe_Hide('#waiteSubirCobro');
+     // $("#modalSubirCobro").modal('hide');
     }
 
   }).catch(function(ex){
