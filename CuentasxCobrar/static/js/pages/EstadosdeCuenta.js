@@ -97,16 +97,16 @@ $('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
   var datosRow = table.row($(this).parents('tr')).data();
   if(datosRow[3] === 'MXN')
   {
-    if(parseFloat($(this).val()) >= datosRow[2])
+    if(parseFloat($(this).val()) >= datosRow[2].replace(/(\$)|(,)/g,''))
     {
-      (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2]) : $(this).val(totConv)
+      (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2].replace(/(\$)|(,)/g,'')) : $(this).val(totConv)
     }
   }
   else
   {
     if(parseFloat($(this).val()) >= totConv)
     {
-      (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2]) : $(this).val(totConv)
+      (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2].replace(/(\$)|(,)/g,'')) : $(this).val(totConv)
     }
   }
 
@@ -217,15 +217,15 @@ function showDatosObtenidos(){
  {
    if(datos[i][3] == 'MXN')
    {
-     var Balance = parseFloat(datos[i][2]);
-     var tot = parseFloat(datos[i][1]);
+     var Balance = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
+     var tot = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
      total = total + Balance;
    }
    if(datos[i][3] == 'USD')
    {
      var tipoCambio = $('input[name="TipoCambioCobro"]').val();
-     var Balance = parseFloat(datos[i][2] * tipoCambio);
-     var tot = parseFloat(datos[i][1]);
+     var Balance = parseFloat(datos[i][2].replace(/(\$)|(,)/g,'') * tipoCambio);
+     var tot = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
      totConv = Balance;
       // datos[i].push(tot);
       total = total + Balance;

@@ -16,10 +16,11 @@ def GetPendientesEnviar(request):
 
 
 def GetContadores():
-	ContadorTodos = len(list(View_PendientesEnviarCxC.objects.filter(IsFacturaCliente = False)))
-	ContadorPendientes = len(list(View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsFacturaCliente = 0", ['Pendiente'])))
-	ContadorFinalizados = len(list(View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsFacturaCliente = 0", ['Finalizado'])))
-	ContadorConEvidencias = len(list(View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1 AND IsFacturaCliente = 0")))
+	AllPending = list(View_PendientesEnviarCxC.objects.values("IsFacturaCliente", "Status", "IsEvidenciaDigital", "IsEvidenciaFisica").all())
+	ContadorTodos = len(list(filter(lambda x: x["IsFacturaCliente"] == False, AllPending)))
+	ContadorPendientes = len(list(filter(lambda x: x["Status"] == "Pendiente", AllPending)))
+	ContadorFinalizados = len(list(filter(lambda x: x["Status"] == "Finalizado", AllPending)))
+	ContadorConEvidencias = len(list(filter(lambda x: x["IsEvidenciaFisica"] == True and x["IsEvidenciaDigital"] == True, AllPending)))
 	ContadorSinEvidencias = ContadorTodos - ContadorConEvidencias
 	return ContadorTodos, ContadorPendientes, ContadorFinalizados, ContadorConEvidencias, ContadorSinEvidencias
 

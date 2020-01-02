@@ -1,3 +1,4 @@
+{% load humanize %}
 {% load static %}
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
 	<div class="kt-container  kt-container--fluid ">
@@ -35,19 +36,19 @@
 				</thead>
 				<tbody>
 					{% for pendiente in pendientes %}
-					<tr data-IDConcepto="{{pendiente.IDConcepto}}">
+					<tr data-IDConcepto="{{pendiente.IDConcepto|safe}}">
 						<td></td>
-						<td style="font-weight: bold;">{{pendiente.Folio}}</td>
-						<td>{{pendiente.NombreCliente}}</td>
-						<td>{{pendiente.FechaDescarga|date:'Y/m/d'}}</td>
-						<td>{{pendiente.PrecioSubtotal|floatformat:"2"}}</td>
-						<td>{{pendiente.PrecioIVA|floatformat:"2"}}</td>
-						<td>{{pendiente.PrecioRetencion|floatformat:"2"}}</td>
-						<td>{{pendiente.PrecioTotal|floatformat:"2"}}</td>
-						<td>{{pendiente.Moneda}}</td>
-						<td id="status">{{pendiente.Status}}</td>
+						<td style="font-weight: bold;">{{pendiente.Folio|safe}}</td>
+						<td>{{pendiente.NombreCliente|safe}}</td>
+						<td>{{pendiente.FechaDescarga|date:'Y/m/d'|safe}}</td>
+						<td>${{pendiente.Subtotal|safe|floatformat:"2"|intcomma}}</td>
+						<td>${{pendiente.IVA|safe|floatformat:"2"|intcomma}}</td>
+						<td>${{pendiente.Retencion|safe|floatformat:"2"|intcomma}}</td>
+						<td>${{pendiente.Total|safe|floatformat:"2"|intcomma}}</td>
+						<td>{{pendiente.Moneda|safe}}</td>
+						<td id="status">{{pendiente.Status|safe}}</td>
 						<!--<td><input id="isEvicencias" name="isEvicencias" type="hidden" value="{{pendiente.IsEvidenciaDigital}}"></td>-->
-						<td><input name="isEvicencias" type="hidden"  data-idpendienteenviar="{{pendiente.IDPendienteEnviar}}" data-evidenciadigital="{{pendiente.IsEvidenciaDigital}}" data-evidenciafisica="{{pendiente.IsEvidenciaFisica}}"></td>
+						<td><input name="isEvicencias" type="hidden"  data-idpendienteenviar="{{pendiente.IDPendienteEnviar|safe}}" data-evidenciadigital="{{pendiente.IsEvidenciaDigital|safe}}" data-evidenciafisica="{{pendiente.IsEvidenciaFisica|safe}}"></td>
 					</tr>
 					{%endfor%}
 				</tbody>

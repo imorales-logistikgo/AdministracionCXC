@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from PendientesEnviar.models import RelacionConceptoxProyecto, Ext_PendienteEnviar_Precio
+from PendienteEnviar.models import RelacionConceptoxProyecto,  PendientesEnviar, Ext_PendienteEnviar_Precio
 from EstadosdeCuenta.models import RelacionFacturaxPartidas, View_FacturasxCliente, FacturasxCliente, CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
 from django.template.loader import render_to_string
 from decimal import Decimal
@@ -14,13 +14,13 @@ def EstadosdeCuenta(request):
 	Folios = list()
 	for Factura in result:
 		FoliosCobro= ""
-		for Cobro in RelacionCobrosFacturasxCliente.objects.filter(IDFactura = Factura.IDFactura):
+		for Cobro in RelacionCobrosFacturasxCliente.objects.filter(IDFactura = Factura.IDFactura).select_related('IDCobro'):
 			FoliosCobro += Cobro.IDCobro.Folio + ", "
 		FoliosCobro = FoliosCobro[:-2]
 		Folios.append(FoliosCobro)
 	ContadoresPendientes = len(list(FacturasPendiente))
 	ContadoresAbonadas = len(list(FacturasAbonada))
-	return render(request, 'EstadosdeCuenta.html', {'Facturas': result, 'Folios': Folios, 'ContadoresPendientes': ContadoresPendientes, 'ContadoresAbonadas': ContadoresAbonadas})
+	return render(request,  'EstadosdeCuenta.html', {'Facturas': result, 'Folios': Folios, 'ContadoresPendientes': ContadoresPendientes, 'ContadoresAbonadas': ContadoresAbonadas})
 
 
 
