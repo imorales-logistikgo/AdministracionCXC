@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from PendientesEnviar.models import RelacionConceptoxProyecto, Ext_PendienteEnviar_Precio
+from PendienteEnviar.models import RelacionConceptoxProyecto, Ext_PendienteEnviar_Precio
 from EstadosdeCuenta.models import RelacionFacturaxPartidas, View_FacturasxCliente, FacturasxCliente, CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
 from django.template.loader import render_to_string
 from decimal import Decimal
