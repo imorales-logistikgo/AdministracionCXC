@@ -13,6 +13,7 @@ class PendientesEnviar(models.Model):
     IsEvidenciaFisica = models.BooleanField()
     IsEvidenciaDigital = models.BooleanField()
     Proyecto = models.CharField(max_length=30)
+    TipoConcepto = models.CharField(max_length=30)
 
     def __str__(self):
         return str(self.IDPendienteEnviar)
