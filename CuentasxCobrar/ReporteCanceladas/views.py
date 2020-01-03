@@ -4,7 +4,8 @@ from PendienteEnviar.models import RelacionConceptoxProyecto
 from EstadosdeCuenta.models import RelacionFacturaxPartidas, FacturasxCliente
 from django.template.loader import render_to_string
 import json, datetime
-
+from django.contrib.auth.decorators import login_required
+@login_required
 
 def ReporteCanceladas(request):
 	Canceladas = FacturasxCliente.objects.filter(Status = 'Cancelada')

@@ -5,7 +5,8 @@ from EstadosdeCuenta.models import RelacionFacturaxPartidas, View_FacturasxClien
 from django.template.loader import render_to_string
 from decimal import Decimal
 import json, datetime
-
+from django.contrib.auth.decorators import login_required
+@login_required
 
 def EstadosdeCuenta(request):
 	FacturasPendiente = View_FacturasxCliente.objects.filter(Status = "Pendiente")

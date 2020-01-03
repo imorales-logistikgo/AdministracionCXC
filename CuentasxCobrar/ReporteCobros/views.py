@@ -3,6 +3,8 @@ from django.shortcuts import render
 from EstadosdeCuenta.models import CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
 from django.template.loader import render_to_string
 import json, datetime
+from django.contrib.auth.decorators import login_required
+@login_required
 
 def ReporteCobros(request):
 	Cobros = CobrosxCliente.objects.all()
