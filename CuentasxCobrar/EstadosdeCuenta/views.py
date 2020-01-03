@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from PendienteEnviar.models import RelacionConceptoxProyecto,  PendientesEnviar, Ext_PendienteEnviar_Precio
+from PendienteEnviar.models import RelacionConceptoxProyecto,  PendientesEnviar, Ext_PendienteEnviar_Precio, View_PendientesEnviarCxC
 from EstadosdeCuenta.models import RelacionFacturaxPartidas, View_FacturasxCliente, FacturasxCliente, CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
 from django.template.loader import render_to_string
 from decimal import Decimal
@@ -73,7 +73,7 @@ def GetDetallesFactura(request):
 	conRelacionFacturaxPartidas = RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = IDFactura)
 	if conRelacionFacturaxPartidas:
 		for Partida in conRelacionFacturaxPartidas:
-			ListaViajes.append(RelacionConceptoxProyecto.objects.get(IDConcepto = Partida.IDConcepto))
+			ListaViajes.append(View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = Partida.IDPendienteEnviar.IDPendienteEnviar))
 	htmlRes = render_to_string('TablaDetallesFactura.html', {'Pendientes':ListaViajes}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
 
