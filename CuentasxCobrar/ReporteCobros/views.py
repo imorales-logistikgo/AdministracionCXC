@@ -8,7 +8,14 @@ from django.contrib.auth.decorators import login_required
 
 def ReporteCobros(request):
 	Cobros = CobrosxCliente.objects.all()
-	return render(request, 'ReporteCobros.html', {'Cobros': Cobros})
+	Folios = list()
+	for Cobro in Cobros:
+		FoliosFactura = ""
+		for Factura in RelacionCobrosFacturasxCliente.objects.filter(IDCobro = Cobro.IDCobro).select_related('IDFactura'):
+			FoliosFactura += Factura.IDFactura.Folio + ", "
+		FoliosFactura = FoliosFactura[:-2]
+		Folios.append(FoliosFactura)
+	return render(request, 'ReporteCobros.html', {'Cobros': Cobros, "Folios": Folios})
 
 
 
