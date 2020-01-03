@@ -11,11 +11,11 @@
 	<tbody>
 		{% for Cobro in Cobros %}
 		<tr>
-			<td>{{Cobro.IDCobro.Folio}}</td>
-			<td>{{Cobro.IDCobro.NombreCortoCliente}}</td>
-			<td>{{Cobro.IDCobro.FechaCobro|date:'Y/m/d'}}</td>
-			<td>{{Cobro.IDCobro.Total|floatformat:"2"}}</td>
-			<td>{{Cobro.IDFactura.Folio}}</td>
+			<td>{{Cobro.Folio}}</td>
+			<td>{{Cobro.NombreCortoCliente}}</td>
+			<td>{{Cobro.FechaCobro|date:'Y/m/d'}}</td>
+			<td>{{Cobro.Total|floatformat:"2"}}</td>
+			<td>{{Cobro.Folio}}</td>
 		</tr>
 		{%endfor%}
 	</tbody>

@@ -11,15 +11,16 @@ def ReporteCanceladas(request):
 	listFacturas = list()
 	for Cancelada in Canceladas:
 		Factura = {}
-		conFacturaxPartidas= RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = Cancelada.IDFactura)
+		conFacturaxPartidas= RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = Cancelada.IDFactura).select_related("IDPendienteEnviar")
 		Factura['Folio'] = Cancelada.Folio
 		Factura['Cliente'] = Cancelada.NombreCortoCliente
 		Factura['FechaFactura'] = Cancelada.FechaFactura
-		Factura['FechaBaja'] = conFacturaxPartidas.first().IDPartida.FechaBaja
+		if conFacturaxPartidas.exists():
+			Factura['FechaBaja'] = list(conFacturaxPartidas)[0].IDPartida.FechaBaja
 		Factura['Total'] = Cancelada.Total
 		Factura['Viajes'] = ''
 		for Pendiente in conFacturaxPartidas:
-			Factura['Viajes'] += RelacionConceptoxProyecto.objects.get(IDConcepto = Pendiente.IDConcepto).IDPendienteEnviar.Folio + ", "
+			Factura['Viajes'] += Pendiente.IDPendienteEnviar.Folio + ", "
 		Factura['Viajes'] = Factura['Viajes'][:-2]
 		listFacturas.append(Factura)
 	return render(request, 'ReporteCanceladas.html', {'Facturas': listFacturas})
@@ -45,11 +46,11 @@ def GetCanceladasByFilters(request):
 		Factura['Folio'] = Cancelada.Folio
 		Factura['Cliente'] = Cancelada.NombreCortoCliente
 		Factura['FechaFactura'] = Cancelada.FechaFactura
-		Factura['FechaBaja'] = conFacturaxPartidas.first().IDPartida.FechaBaja
+		Factura['FechaBaja'] = list(conFacturaxPartidas)[0].IDPartida.FechaBaja
 		Factura['Total'] = Cancelada.Total
 		Factura['Viajes'] = ''
 		for Pendiente in conFacturaxPartidas:
-			Factura['Viajes'] += RelacionConceptoxProyecto.objects.get(IDConcepto = Pendiente.IDConcepto).IDPendienteEnviar.Folio + ", "
+			Factura['Viajes'] += Pendiente.IDPendienteEnviar.Folio + ", "
 		Factura['Viajes'] = Factura['Viajes'][:-2]
 		listFacturas.append(Factura)
 	htmlRes = render_to_string('TablaReporteCanceladas.html', {'Facturas':listFacturas}, request = request,)

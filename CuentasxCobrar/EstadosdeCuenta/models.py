@@ -1,4 +1,5 @@
 from django.db import models
+from PendienteEnviar.models import PendientesEnviar
 
 class FacturasxCliente(models.Model):
     IDFactura = models.AutoField(primary_key=True)
@@ -48,7 +49,7 @@ class RelacionFacturaxPartidas(models.Model):
     IDRelacionFacturaxPartidas = models.AutoField(primary_key=True)
     IDFacturaxCliente = models.ForeignKey(FacturasxCliente, on_delete=models.CASCADE, db_column = 'IDFacturaxCliente')
     IDPartida = models.ForeignKey(Partida, on_delete=models.CASCADE, db_column = 'IDPartida')
-    IDConcepto = models.IntegerField(default=0)
+    IDPendienteEnviar = models.ForeignKey(PendientesEnviar, on_delete=models.CASCADE, db_column = 'IDPendienteEnviar', related_name ="RelPendiente")
     IDUsuarioAlta = models.IntegerField(default=0)
     IDUsuarioBaja = models.IntegerField(default=0)
 

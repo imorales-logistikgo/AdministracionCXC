@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from PendienteEnviar.models import View_PendientesEnviarCxC, FacturasxCliente, Partida, RelacionFacturaxPartidas, PendientesEnviar
+from PendienteEnviar.models import View_PendientesEnviarCxC, FacturasxCliente, Partida, RelacionFacturaxPartidas, PendientesEnviar, Ext_PendienteEnviar_Precio
 from django.core import serializers
 from .forms import FacturaForm
 from django.template.loader import render_to_string
@@ -76,24 +76,25 @@ def SaveFactura(request):
 
 def SavePartidasxFactura(request):
 	jParams = json.loads(request.body.decode('utf-8'))
-	for IDConcepto in jParams["arrConceptos"]:
-		Viaje = View_PendientesEnviarCxC.objects.get(IDConcepto = IDConcepto)
+	for IDPendiente in jParams["arrPendientes"]:
+		Viaje = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = IDPendiente)
 		newPartida = Partida()
 		newPartida.FechaAlta = datetime.datetime.now()
-		newPartida.Subtotal = Viaje.PrecioSubtotal
-		newPartida.IVA = Viaje.PrecioIVA
-		newPartida.Retencion = Viaje.PrecioRetencion
-		newPartida.Total = Viaje.PrecioTotal
+		newPartida.Subtotal = Viaje.Subtotal
+		newPartida.IVA = Viaje.IVA
+		newPartida.Retencion = Viaje.Retencion
+		newPartida.Total = Viaje.Total
 		newPartida.save()
 		newRelacionFacturaxPartida = RelacionFacturaxPartidas()
 		newRelacionFacturaxPartida.IDFacturaxCliente = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
 		newRelacionFacturaxPartida.IDPartida = newPartida
-		newRelacionFacturaxPartida.IDConcepto = IDConcepto
+		newRelacionFacturaxPartida.IDPendienteEnviar = PendientesEnviar.objects.get(IDPendienteEnviar = IDPendiente)
 		newRelacionFacturaxPartida.IDUsuarioAlta = 1
 		newRelacionFacturaxPartida.IDUsuarioBaja = 1
 		newRelacionFacturaxPartida.save()
-		Viaje.IDPendienteEnviar.IsFacturaCliente = True
-		Viaje.IDPendienteEnviar.save()
+		Ext_Precio = Ext_PendienteEnviar_Precio.objects.get(IDPendienteEnviar = IDPendiente)
+		Ext_Precio.IsFacturaCliente = True
+		Ext_Precio.save()
 	PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1", ['Finalizado'])
 	htmlRes = render_to_string('TablaPendientes.html', {'pendientes':PendingToSend}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
