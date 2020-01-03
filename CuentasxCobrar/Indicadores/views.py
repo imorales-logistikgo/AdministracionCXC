@@ -1,6 +1,8 @@
 from PendienteEnviar.models import View_PendientesEnviarCxC
 from django.shortcuts import render
 from datetime import date
+from django.contrib.auth.decorators import login_required
+@login_required
 
 def Indicadores(request):
     today = date.today()

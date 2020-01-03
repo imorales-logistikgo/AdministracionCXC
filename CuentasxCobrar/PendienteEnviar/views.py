@@ -5,7 +5,8 @@ from django.core import serializers
 from .forms import FacturaForm
 from django.template.loader import render_to_string
 import json, datetime
-
+from django.contrib.auth.decorators import login_required
+@login_required
 
 
 def GetPendientesEnviar(request):
