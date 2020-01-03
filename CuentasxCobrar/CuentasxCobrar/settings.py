@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'ReporteCobros',
     'ReporteCanceladas',
     'Indicadores',
-    'Users',
-    'UsersAdmon',
+    'users',
+    'usersadmon',
 ]
 
 MIDDLEWARE = [
@@ -163,6 +163,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'Users.User'
-LOGIN_REDIRECT_URL = 'PendientesEnviar/'
+AUTH_USER_MODEL = 'users.User'
+LOGIN_REDIRECT_URL = '/PendientesEnviar/'
 SESSION_COOKIE_AGE = 21600

@@ -19,12 +19,12 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('usuarios/', include('django.contrib.auth.urls')),
     path('', include('Indicadores.urls')),
     path('PendientesEnviar/', include('PendienteEnviar.urls')),
     path('', include('EstadosdeCuenta.urls')),
     path('', include('ReporteCobros.urls')),
     path('', include('ReporteCanceladas.urls')),
+    path('Usuario/', include('users.urls')),
 ]
 
 if settings.DEBUG:
