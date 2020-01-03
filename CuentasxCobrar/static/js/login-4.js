@@ -284,3 +284,11 @@ var Login = function () {
 jQuery(document).ready(function () {
     Login.init();
 });
+
+$('#btnLogin').on('click', function(){
+  if($('#id_username').val() != "" && $('#id_password').val() != "")
+  {
+    WaitMe_Show('#divLogin');
+  }
+
+});
