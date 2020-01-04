@@ -19,3 +19,12 @@ class AdmonUsuarios(models.Model):
     class Meta:
         managed = False
         db_table = 'AdmonUsuarios'
+        
+
+
+class Cliente(models.Model):
+    IDCliente = models.AutoField(primary_key=True)
+    NombreCorto = models.CharField(max_length=50)
+    class Meta:
+        managed = False
+        db_table = 'AdmonClientes'

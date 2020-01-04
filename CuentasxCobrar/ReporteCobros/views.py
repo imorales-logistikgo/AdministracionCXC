@@ -1,6 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from EstadosdeCuenta.models import CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
+from usersadmon.models import Cliente
 from django.template.loader import render_to_string
 import json, datetime
 from django.contrib.auth.decorators import login_required
@@ -15,7 +16,8 @@ def ReporteCobros(request):
 			FoliosFactura += Factura.IDFactura.Folio + ", "
 		FoliosFactura = FoliosFactura[:-2]
 		Folios.append(FoliosFactura)
-	return render(request, 'ReporteCobros.html', {'Cobros': Cobros, "Folios": Folios})
+	Clientes = Cliente.objects.all()
+	return render(request, 'ReporteCobros.html', {'Cobros': Cobros, 'Clientes': Clientes, "Folios": Folios})
 
 
 

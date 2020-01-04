@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from PendienteEnviar.models import RelacionConceptoxProyecto
 from EstadosdeCuenta.models import RelacionFacturaxPartidas, FacturasxCliente
+from usersadmon.models import Cliente
 from django.template.loader import render_to_string
 import json, datetime
 from django.contrib.auth.decorators import login_required
@@ -24,7 +25,8 @@ def ReporteCanceladas(request):
 			Factura['Viajes'] += Pendiente.IDPendienteEnviar.Folio + ", "
 		Factura['Viajes'] = Factura['Viajes'][:-2]
 		listFacturas.append(Factura)
-	return render(request, 'ReporteCanceladas.html', {'Facturas': listFacturas})
+	Clientes = Cliente.objects.all()
+	return render(request, 'ReporteCanceladas.html', {'Facturas': listFacturas, 'Clientes': Clientes})
 
 
 
