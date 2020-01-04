@@ -82,3 +82,20 @@ footer{
   height: 440px;
 }
 }
+
+.dropdown-menu.show {
+  max-height: webkit-fill-available !important;
+    overflow: visible !important;
+    min-height: 195px !important;
+    /* min-width: 405px; */
+    position: absolute !important;
+    will-change: transform !important;
+    top: 0px !important;
+    left: 33% !important;
+    transform: translate3d(-95px, 36px, 0px) !important;
+}
+.dropdown-menu.inner.show
+{
+  margin-top: 27px !important;
+  margin-bottom: 26866px !important;
+}
