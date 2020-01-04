@@ -23,7 +23,10 @@ class EmailBackend():
         response = requests.post('https://api-admon.logistikgo.com/api/Usuarios/Encripta',data=data_json,headers=headers)
         respuesta = response.json()
         if respuesta:
-            admonusers=Admon.AdmonUsuarios.objects.get(nombreusuario=nombreusuario) 
+            try:
+                admonusers=Admon.AdmonUsuarios.objects.get(nombreusuario=nombreusuario) 
+            except Admon.AdmonUsuarios.DoesNotExist:
+                return None
             try:
                 user = User.User.objects.get(username=nombreusuario)
             except User.User.DoesNotExist:
