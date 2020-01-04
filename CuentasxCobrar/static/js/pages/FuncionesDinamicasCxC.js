@@ -127,9 +127,11 @@ return cont;
 
 function leerxml(xml)
 {
+    const proxyURL = "https://cors-anywhere.herokuapp.com/";
+    var newXML = proxyURL + xml;
     var rest;
     var req = new XMLHttpRequest();
-       req.open('GET', xml, false);
+       req.open('GET', newXML, false);
        req.send(null);
        if (req.status == 200)
        {
