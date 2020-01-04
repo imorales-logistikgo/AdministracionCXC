@@ -97,16 +97,32 @@ $('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
   var datosRow = table.row($(this).parents('tr')).data();
   if(datosRow[3] === 'MXN')
   {
+    if(parseFloat($(this).val()) >= 0)
+    {
     if(parseFloat($(this).val()) >= datosRow[2].replace(/(\$)|(,)/g,''))
     {
       (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2].replace(/(\$)|(,)/g,'')) : $(this).val(totConv)
     }
+    }
+    else
+    {
+      alertToastError("No se aceptan numero negativos o caracteres");
+      $(this).val(datosRow[2].replace(/(\$)|(,)/g,''));
+    }
   }
   else
   {
+    if(parseFloat($(this).val()) >= 0)
+    {
     if(parseFloat($(this).val()) >= totConv)
     {
       (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2].replace(/(\$)|(,)/g,'')) : $(this).val(totConv)
+    }
+    }
+    else
+    {
+      alertToastError("No se aceptan numero negativos o caracteres");
+      $(this).val(totConv);
     }
   }
 
@@ -177,7 +193,7 @@ $('input[name="TipoCambioCobro"]').on('keyup change', function(){
     alertToastError("El tipo de cambio debe ser mayor a 0");
     $('input[name="TipoCambioCobro"]').val(1);
   }
- 
+
 });
 
 
@@ -189,7 +205,7 @@ function CleanModal()
  $('input[name="FolioCobro"]').val('');
  $('.uploaded-files-pagos ol').remove();
  $('#comentariosEC').val('');
- $('#TipoCambioCobro').val(1); 
+ $('#TipoCambioCobro').val(1);
  $('#ComplementosCobros').data("rutaarchivoXML", null);
  $('#ComplementosCobros').data("rutaarchivoPDF", null);
  calculo = 0;
