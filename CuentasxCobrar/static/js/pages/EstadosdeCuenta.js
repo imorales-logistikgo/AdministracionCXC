@@ -99,7 +99,7 @@ $('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
   {
     if(parseFloat($(this).val()) >= 0)
     {
-    if(parseFloat($(this).val()) >= datosRow[2].replace(/(\$)|(,)/g,''))
+    if(parseFloat($(this).val()) > datosRow[2].replace(/(\$)|(,)/g,''))
     {
       (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2].replace(/(\$)|(,)/g,'')) : $(this).val(totConv)
     }
@@ -114,7 +114,7 @@ $('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
   {
     if(parseFloat($(this).val()) >= 0)
     {
-    if(parseFloat($(this).val()) >= totConv)
+    if(parseFloat($(this).val()) > totConv)
     {
       (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2].replace(/(\$)|(,)/g,'')) : $(this).val(totConv)
     }
@@ -129,7 +129,7 @@ $('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
   $('input#valCobro').each(function(){
    calculo = calculo + parseFloat($(this).val());
  });
-  $('#AddCosto').val(calculo);
+  $('#AddCosto').val(truncarDecimales(calculo, 2));
   calculo = 0;
 });
 
