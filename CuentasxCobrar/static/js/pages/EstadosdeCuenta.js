@@ -139,7 +139,7 @@ $(document).on('click', '#btnSaveCobro', function(){
   //console.log($('input[name="TipoCambioCobro"]').val());
   if($('#ComplementosCobros').data("rutaarchivoPDF") != undefined && $('#ComplementosCobros').data("rutaarchivoXML") != undefined || $('#ComplementosCobros').data("rutaarchivoPDF") != null && $('#ComplementosCobros').data("rutaarchivoXML") != null)
   {
-    if($('input[name="FolioCobro"]').val() != "" && $('input[name="totalCobro"]').val() != "")
+    if($('input[name="FolioCobro"]').val() != "" && $('input[name="totalCobro"]').val() != "" && $('input[name="TipoCambioCobro"]').val() != "")
     {
       //alert("puedes subir el pago");
       saveCobroxCliente();
@@ -191,7 +191,7 @@ $('input[name="TipoCambioCobro"]').on('keyup change', function(){
   else
   {
     alertToastError("El tipo de cambio debe ser mayor a 0");
-    $('input[name="TipoCambioCobro"]').val(1);
+    $('input[name="TipoCambioCobro"]').val('');
   }
 
 });
