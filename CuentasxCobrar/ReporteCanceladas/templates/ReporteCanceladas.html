@@ -41,7 +41,7 @@ kt-menu__item--active
 						<div>
 							<select class="selectpicker" id="cboCliente" multiple name="Cliente" title="Selecciona un cliente" data-width="100%" data-live-search="true">
 								{% for Cliente in Clientes %}
-									<option value="{{Cliente.NombreCorto}}">{{Cliente.NombreCorto}}</option>
+									<option style="width: 270px;" value="{{Cliente.NombreCorto}}">{{Cliente.NombreCorto}}</option>
 								{%endfor%}
 							</select>
 						</div>
@@ -97,7 +97,7 @@ kt-menu__item--active
 
 <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
 	<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
-		<div class="kt-portlet kt-portlet--fit kt-portlet--head-noborder" id="TbPading">		
+		<div class="kt-portlet kt-portlet--fit kt-portlet--head-noborder" id="TbPading">
 			{% include "TablaReporteCanceladas.html" %}
 		</div>
 	</div>
