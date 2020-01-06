@@ -107,7 +107,7 @@ $('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
     else
     {
       alertToastError("No se aceptan numero negativos o caracteres");
-      $(this).val(datosRow[2].replace(/(\$)|(,)/g,''));
+      $(this).val('');
     }
   }
   else
@@ -122,7 +122,7 @@ $('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
     else
     {
       alertToastError("No se aceptan numero negativos o caracteres");
-      $(this).val(totConv);
+      $(this).val('');
     }
   }
 
@@ -139,14 +139,14 @@ $(document).on('click', '#btnSaveCobro', function(){
   //console.log($('input[name="TipoCambioCobro"]').val());
   if($('#ComplementosCobros').data("rutaarchivoPDF") != undefined && $('#ComplementosCobros').data("rutaarchivoXML") != undefined || $('#ComplementosCobros').data("rutaarchivoPDF") != null && $('#ComplementosCobros').data("rutaarchivoXML") != null)
   {
-    if($('input[name="FolioCobro"]').val() != "")
+    if($('input[name="FolioCobro"]').val() != "" && $('input[name="totalCobro"]').val() != "")
     {
       //alert("puedes subir el pago");
       saveCobroxCliente();
     }
     else
     {
-      alertToastError("El folio no puede estar vacio");
+      alertToastError("El folio y el cobro no pueden estar vacios");
     }
   }
   else
