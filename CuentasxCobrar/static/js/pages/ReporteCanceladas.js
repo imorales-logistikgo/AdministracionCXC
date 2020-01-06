@@ -71,6 +71,7 @@ function formatDataTableCanceladas() {
         "width": "12px",
         "className": "dt-head-center dt-body-right"
       },
+
     ]
   });
 }
