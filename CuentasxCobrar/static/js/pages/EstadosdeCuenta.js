@@ -208,6 +208,7 @@ function CleanModal()
  $('#TipoCambioCobro').val(1);
  $('#ComplementosCobros').data("rutaarchivoXML", null);
  $('#ComplementosCobros').data("rutaarchivoPDF", null);
+
  calculo = 0;
  totConv = 0;
 }
@@ -550,6 +551,7 @@ function SaveCobroxFactura(IDCobro)
       $("input[name=checkEC]:checked").each(function () {
         table.row($(this).parents('tr')).remove().draw();
       });
+      $('#BtnSubirCobros').prop('disabled', true);
       WaitMe_Hide('#waiteSubirCobro');
       $("#modalSubirCobro").modal('hide');
     }
