@@ -380,7 +380,10 @@ function formatDataTableFacturas(){
     "paging": false,
     "dom": 'Bfrtip',
     "buttons": [
-    'excel'
+    { 
+      extend: 'excel',
+      text: '<i class="fas fa-file-excel fa-lg"></i>',
+     }
     ],
 
 
