@@ -10,8 +10,8 @@ from django.contrib.auth.decorators import login_required
 @login_required
 
 def EstadosdeCuenta(request):
-	FacturasPendiente = View_FacturasxCliente.objects.filter(Status = "Pendiente")
-	FacturasAbonada = View_FacturasxCliente.objects.filter(Status = "Abonada")
+	FacturasPendiente = View_FacturasxCliente.objects.filter(Status = "PENDIENTE")
+	FacturasAbonada = View_FacturasxCliente.objects.filter(Status = "ABONADA")
 	result = FacturasPendiente | FacturasAbonada
 	Folios = list()
 	for Factura in result:
@@ -114,9 +114,9 @@ def SaveCobroxFactura(request):
 		newRelacionCobroxFactura.IDUsuarioAlta = 1
 		newRelacionCobroxFactura.IDCliente = 1
 		if Factura.Saldo == 0:
-			Factura.Status = "Cobrada"
+			Factura.Status = "COBRADA"
 		else:
-			Factura.Status = "Abonada"
+			Factura.Status = "ABONADA"
 		Factura.save()
 		newRelacionCobroxFactura.save()
 	return HttpResponse("")

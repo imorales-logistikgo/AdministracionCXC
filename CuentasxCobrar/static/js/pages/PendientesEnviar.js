@@ -5,7 +5,7 @@ $(document).ready(function() {
 } );
 
 var fnGetPendientesEnviar = function() {
-	fetch("/PendientesEnviar/FilterBy?FechaDescargaDesde=19-mar-2019&FechaDescargaHasta=19-mar-2019&Status=Pendiente&Cliente=Eaton&Moneda=MXN", {
+	fetch("/PendientesEnviar/FilterBy?FechaDescargaDesde=19-mar-2019&FechaDescargaHasta=19-mar-2019&Status=PENDIENTE&Cliente=Eaton&Moneda=MXN", {
 		method: "GET",
 		credentials: "same-origin",
 		headers: {

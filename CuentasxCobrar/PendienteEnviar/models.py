@@ -104,7 +104,7 @@ class FacturasxCliente(models.Model):
     TipoCambio = models.DecimalField(default=0, max_digits=10, decimal_places=5)
     Comentarios = models.CharField(max_length=500)
     TotalConvertido = models.DecimalField(default=0, max_digits=30, decimal_places=5)
-    Status = models.CharField(max_length=15, default="Pendiente")
+    Status = models.CharField(max_length=15, default="PENDIENTE")
 
     class Meta:
         db_table = "FacturasxCliente"
