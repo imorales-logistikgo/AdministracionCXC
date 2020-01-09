@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('TipoCambio', models.DecimalField(decimal_places=5, default=0, max_digits=10)),
                 ('Comentarios', models.CharField(max_length=500)),
                 ('TotalConvertido', models.DecimalField(decimal_places=5, default=0, max_digits=30)),
-                ('Status', models.CharField(default='Pendiente', max_length=15)),
+                ('Status', models.CharField(default='PENDIENTE', max_length=15)),
             ],
             options={
                 'db_table': 'FacturasxCliente',
