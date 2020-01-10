@@ -6,7 +6,7 @@ var EvDigital;
 var EvFisica;
 //var idpendienteenviar;
 var table;
-var subtotal = 0, Tiva=0, TRetencion=0, total=0;
+var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0;
 $(document).ready(function() {
 //Tabla Pendientes de enviar
 formatDataTable();
@@ -64,7 +64,11 @@ $('#btnGuardarFactura').on('click', function(){
     if($('#txtFolioFactura').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "" && $('input[name="TipoCambio"]').val() != "")
     {
       WaitMe_Show('#WaitModalPE');
-      saveFactura();
+      if($('#chkFragmentada').is(':checked')){
+        saveFacturaFragmentada();
+      }
+      else
+        saveFactura();
     }
     else
     {
@@ -339,7 +343,7 @@ function adddatos(){
   $("input[name=checkPE]:checked").each(function () {
     var table = $('#TablePendientesEnviar').DataTable();
     var datosRow = table.row($(this).parents('tr')).data();
-    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[7], datosRow[8]]);
+    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[7], datosRow[8]]);
   });
   return arrSelect;
 }
@@ -349,24 +353,26 @@ function adddatos(){
 function getDatos(){
  var datos = adddatos();
  var newData = [];
- subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0;
+ subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0;
  for (var i=0; i<datos.length; i++)
  {
   moneda = datos[i][5];
-  if(datos[i][5] === "MXN")
+  if(datos[i][6] === "MXN")
   {
     var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
-    var tot = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
+    var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
+    var tot = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
     subtotal = subtotal + sub;
     Tiva = Tiva + iva;
     TRetencion = TRetencion + retencion;
     total = total + tot;
-    datos[i].push("null");
+    Tservicios = Tservicios + servicios;
+    datos[i].push("n/a");
 
   }
-  if(datos[i][5] === "USD")
+  if(datos[i][6] === "USD")
   {
     var tipoCambio = $('input[name="TipoCambio"]').val();
 
@@ -374,14 +380,16 @@ function getDatos(){
     var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
-    var tot = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
-    var totCambio = (parseFloat(datos[i][4].replace(/(\$)|(,)/g,'')) * tipoCambio);
+    var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
+    var tot = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var totCambio = (parseFloat(datos[i][5].replace(/(\$)|(,)/g,'')) * tipoCambio);
     datos[i].push(totCambio);
         //newData.push([folio, sub, iva, retencion, tot]);
         subtotal = subtotal + sub;
         Tiva = Tiva + iva;
         TRetencion = TRetencion + retencion;
         total = total + tot;
+        Tservicios = Tservicios + servicios;
         totalCambio = totalCambio + totCambio;
 
       }
@@ -397,15 +405,15 @@ function getDatos(){
        "className": "dt-head-center dt-body-center bold"
      },
      {
-       "targets": [1,2,3,4],
+       "targets": [1,2,3,4,5],
        "className": "dt-head-center dt-body-right"
      },
      {
-       "targets": 5,
+       "targets": 6,
        "className": "dt-head-center dt-body-center"
      },
      {
-       "targets": 6,
+       "targets": 7,
        "width": "10%",
        "className": "dt-head-center dt-body-center"
      }
@@ -416,15 +424,27 @@ function getDatos(){
     $('#sub').html('<strong>$'+subtotal+'</strong>');
     $('#iva').html('<strong>$'+Tiva+'</strong>');
     $('#retencion').html('<strong>$'+TRetencion+'</strong>');
+    $('#servicios').html('<strong>$'+Tservicios+'</strong>');
     $('#total').html('<strong>$'+total+'</strong>');
     $('#Moneda').html('');
     $('#totalCambio').html('<strong>$'+truncarDecimales(totalCambio, 2)+'<strong>');
   }
 
+  function saveFacturaFragmentada() {
+    var strFolioServicios = $('#txtFolioServicios').val();
+    var strComentariosServicios = $('#txtComentariosServicios').val();
+    var RutaXML = $('.uploaded-files-fragmentadas #RutaXML').attr('href');
+    var RutaPDF = $('.uploaded-files-fragmentadas #RutaPDF').attr('href');
+    var Total = $('#servicios').val();
 
-  function saveFactura() {
+    saveFactura();
+    saveFactura(strFolioServicios, strComentariosServicios, RutaXML, RutaPDF, Total);
+  }
+
+
+  function saveFactura(FolioFactura = $('#txtFolioFactura').val(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href'), Total = null) {
     jParams = {
-      FolioFactura: $('#txtFolioFactura').val(),
+      FolioFactura: FolioFactura,
       Cliente: cliente,
       FechaFactura: $('#FechaFactura').val(),
       FechaRevision: $('#FechaRevision').val(),
@@ -434,10 +454,10 @@ function getDatos(){
       IVA: Tiva,
       Retencion: TRetencion,
       Total: total,
-      RutaXML: $('#kt_uppy_1').data("rutaarchivoXML"),
-      RutaPDF: $('#kt_uppy_1').data("rutaarchivoPDF"),
+      RutaXML: RutaXML,
+      RutaPDF: RutaPDF,
       TipoCambio: $('#txtTipoCambio').val(),
-      Comentarios: $('#txtComentarios').val(),
+      Comentarios: Comentarios,
     }
 
     fetch("/PendientesEnviar/SaveFactura", {
