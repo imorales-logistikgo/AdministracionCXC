@@ -1,6 +1,6 @@
 //var TestFile = null;
 var cliente;
-var moneda;
+var Moneda;
 var Ev;
 var EvDigital;
 var EvFisica;
@@ -213,7 +213,7 @@ function FiltroCheckboxCliente(){
    var check = table.row($(this).parents('tr')).data();
    if(checked.length > 1)
    {
-     if (check[2] != cliente || check[8] != moneda) {
+     if (check[2] != cliente || check[8] != Moneda) {
       $(this).prop('checked', false);
       alertToastError("El cliente y la moneda deben ser iguales");
     }
@@ -225,7 +225,7 @@ function FiltroCheckboxCliente(){
   else
   {
     cliente = check[2];
-    moneda = check[8];
+    Moneda = check[8];
   }
 });
 }
