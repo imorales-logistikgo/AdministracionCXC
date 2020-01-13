@@ -32,6 +32,7 @@ formatDataTable();
 
 $('input[name="Fragmentada"]').on("change", function()
 {
+  getDatos();
   document.querySelector('#divFragmentada').innerHTML +=
   `<div class="kt-portlet__body"><div class"kt-uppy" id="Fragmentada"><div class="kt-uppy__dashboard"><div class="kt-uppy__progress"></div></div></div></div>`
   var divID = "#Fragmentada";
@@ -46,6 +47,7 @@ $('input[name="Fragmentada"]').on("change", function()
   }
   else
   {
+      $('#alertaViajeFragmentada').css("display", "none");
     $(divID).remove();
     $('#see').hide();
     $('#seeAlert').hide();
@@ -59,28 +61,65 @@ $(document).on('click', '#BtnSubirFacturaPendietnesEnviar',getDatos);
 $('#BtnAplicarFiltro').on('click', fnGetPendientesEnviar);
 
 $('#btnGuardarFactura').on('click', function(){
-  if($('#kt_uppy_1').data("rutaarchivoPDF") != undefined && $('#kt_uppy_1').data("rutaarchivoXML") != undefined || $('#kt_uppy_1').data("rutaarchivoPDF") != null && $('#kt_uppy_1').data("rutaarchivoXML") != null)
+
+  if($('input[name="Fragmentada"]').is(':checked'))
   {
-    if($('#txtFolioFactura').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "" && $('input[name="TipoCambio"]').val() != "")
+    //validaicon si la factura sera fragmentada
+    if($('#Fragmentada').data("rutaarchivoPDF") != undefined && $('#Fragmentada').data("rutaarchivoXML") != undefined)
     {
-      WaitMe_Show('#WaitModalPE');
-      if($('#chkFragmentada').is(':checked')){
-        saveFacturaFragmentada();
+      if($('#kt_uppy_1').data("rutaarchivoPDF") != undefined && $('#kt_uppy_1').data("rutaarchivoXML") != undefined || $('#kt_uppy_1').data("rutaarchivoPDF") != null && $('#kt_uppy_1').data("rutaarchivoXML") != null)
+      {
+        if($('#txtFolioFactura').val() != "" && $('#txtFolioServicios').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "" && $('input[name="TipoCambio"]').val() != "")
+        {
+          WaitMe_Show('#WaitModalPE');
+          if($('#chkFragmentada').is(':checked')){
+            saveFacturaFragmentada();
+          }
+          else
+            saveFactura();
+        }
+        else
+        {
+          alertToastError("Los folios y las fechas no pueden estar vacias");
+        }
       }
       else
-        saveFactura();
+      {
+        alertToastError("Son necesarios los complementos PDF y XML");
+      }
     }
     else
     {
-      alertToastError("El folio y las fechas no pueden estar vacias");
+      alertToastError("Son necesarios los complementos PDF y XML de los servicios");
     }
-
   }
+  //validacion si la factura no sera fragmentada
   else
   {
-    alertToastError("Son necesarios los complementos PDF y XML");
+    if($('#kt_uppy_1').data("rutaarchivoPDF") != undefined && $('#kt_uppy_1').data("rutaarchivoXML") != undefined || $('#kt_uppy_1').data("rutaarchivoPDF") != null && $('#kt_uppy_1').data("rutaarchivoXML") != null)
+    {
+      if($('#txtFolioFactura').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "" && $('input[name="TipoCambio"]').val() != "")
+      {
+        WaitMe_Show('#WaitModalPE');
+        if($('#chkFragmentada').is(':checked')){
+          saveFacturaFragmentada();
+        }
+        else
+          saveFactura();
+      }
+      else
+      {
+        alertToastError("El folio y las fechas no pueden estar vacias");
+      }
 
+    }
+    else
+    {
+      alertToastError("Son necesarios los complementos PDF y XML");
+
+    }
   }
+
 });
 
 
@@ -130,6 +169,7 @@ $("#kt_select2_3").select2({
 
 //Fechas modal
 $('#kt_modal_2').on('shown.bs.modal', function(){
+    $('#alertaViajeFragmentada').css("display", "none");
   $('#FechaFactura').datepicker({
     format: 'yyyy/mm/dd',
     todayHighlight: true
@@ -205,6 +245,7 @@ function LimpiarModalSF()
   //ids = [];
   $('#kt_uppy_1').data("rutaarchivoXML", null);
   $('#kt_uppy_1').data("rutaarchivoPDF", null);
+  $('#seeFolioAndComen').hide();
 }
 
 
@@ -352,6 +393,7 @@ function adddatos(){
 //funcion para obtener los datos de la tabla pendiente de enviar para mostrarlos en la tabla del modal subir facturas
 function getDatos(){
  var datos = adddatos();
+ console.log(datos);
  var newData = [];
  subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0;
  for (var i=0; i<datos.length; i++)
@@ -370,7 +412,13 @@ function getDatos(){
     total = total + tot;
     Tservicios = Tservicios + servicios;
     datos[i].push("n/a");
-
+    if($('input[name="Fragmentada"]').is(':checked'))
+    {
+      $('#alertaViajeFragmentada').css("display", "block");
+      var viaje = total-Tservicios;
+      $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
+      $('#totalViaje').html('<span>'+viaje+'</span>');
+    }
   }
   if(datos[i][6] === "USD")
   {
