@@ -7,7 +7,7 @@ var EvFisica;
 var moneda;
 //var idpendienteenviar;
 var table;
-var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0;
+var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0;
 $(document).ready(function() {
 //Tabla Pendientes de enviar
 formatDataTable();
@@ -33,21 +33,23 @@ formatDataTable();
 
 $('input[name="Fragmentada"]').on("change", function()
 {
-  getDatos();
+
   document.querySelector('#divFragmentada').innerHTML +=
   `<div class="kt-portlet__body"><div class"kt-uppy" id="Fragmentada"><div class="kt-uppy__dashboard"><div class="kt-uppy__progress"></div></div></div></div>`
   var divID = "#Fragmentada";
   if($(this).is(':checked'))
   {
+      getDatos();
     $('#see').show();
     $('#seeAlert').show();
     $('#seeFolioAndComen').show();
 
     var verEv = ".uploaded-files-fragmentadas";
-        KTUppyEvidencias.init(divID, verEv);
+        KTUppyEvidencias.init(divID, verEv, Tservicios);
   }
   else
   {
+      getDatos();
       $('#alertaViajeFragmentada').css("display", "none");
     $(divID).remove();
     $('#see').hide();
@@ -339,23 +341,45 @@ function LimpiarModalSF()
                {
                  const urlXMLCheck = response.body
                  var to = leerxml(urlXMLCheck)
-                 if(to != total)
+                 //Tservicios
+                 if($('input[name="Fragmentada"]').is(':checked'))
                  {
-                   $("#btnGuardarFactura").prop("disabled", true)
-                   alertToastError("El total de la factura no coincide con el total calculado del sistema")
-                    //uppyDashboard.reset()
-                    uppyDashboard.cancelAll()
+                   if(to != viaje)
+                   {
+                     $("#btnGuardarFactura").prop("disabled", true)
+                     alertToastError("El total de la factura no coincide con el total calculado del sistema")
+                      //uppyDashboard.reset()
+                      uppyDashboard.cancelAll()
 
-                  }
-                  else
-                  {
-                   $("#btnGuardarFactura").prop("disabled", false)
-                   const urlPDF = response.body
-                   $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
-                   document.querySelector('.uploaded-files').innerHTML +=
-                   `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
-                 }
+                    }
+                    else
+                    {
+                     $("#btnGuardarFactura").prop("disabled", false)
+                     const urlPDF = response.body
+                     $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
+                     document.querySelector('.uploaded-files').innerHTML +=
+                     `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+                    }
+                   }
+                   else
+                   {
+                     if(to != total)
+                     {
+                       $("#btnGuardarFactura").prop("disabled", true)
+                       alertToastError("El total de la factura no coincide con el total calculado del sistema")
+                        //uppyDashboard.reset()
+                        uppyDashboard.cancelAll()
 
+                      }
+                      else
+                      {
+                       $("#btnGuardarFactura").prop("disabled", false)
+                       const urlPDF = response.body
+                       $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
+                       document.querySelector('.uploaded-files').innerHTML +=
+                       `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+                      }
+                   }
                    //console.log($('#kt_uppy_1').data("rutaarchivoXML"))
                  }
                  //$("#btnGuardarFactura").prop("disabled", false)
@@ -396,7 +420,7 @@ function getDatos(){
  var datos = adddatos();
  console.log(datos);
  var newData = [];
- subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0;
+ subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0, totalViaje=0;
  for (var i=0; i<datos.length; i++)
  {
   moneda = datos[i][6];
@@ -416,7 +440,7 @@ function getDatos(){
     if($('input[name="Fragmentada"]').is(':checked'))
     {
       $('#alertaViajeFragmentada').css("display", "block");
-      var viaje = total-Tservicios;
+       viaje = total-Tservicios;
       $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
       $('#totalViaje').html('<span>'+viaje+'</span>');
     }
@@ -440,6 +464,14 @@ function getDatos(){
         total = total + tot;
         Tservicios = Tservicios + servicios;
         totalCambio = totalCambio + totCambio;
+
+        if($('input[name="Fragmentada"]').is(':checked'))
+        {
+          $('#alertaViajeFragmentada').css("display", "block");
+           viaje = total-Tservicios;
+          $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
+          $('#totalViaje').html('<span>'+viaje+'</span>');
+        }
 
       }
     }

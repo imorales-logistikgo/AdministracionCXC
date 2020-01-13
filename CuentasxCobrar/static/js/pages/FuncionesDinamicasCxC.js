@@ -1,3 +1,4 @@
+var serv;
 // funcion contador para los checkbox seleccionados
 function ContadorCheck(input, btnSubir)
 {
@@ -32,7 +33,7 @@ return cont;
 
 
 			// Private functions
-			var PluginEvicencias = function(idP, ver){
+			var PluginEvicencias = function(idP, ver, servicios){
 				//var id = '#kt_uppy_1';
         var id = idP;
 				var options = {
@@ -103,11 +104,26 @@ return cont;
                }
                else
                {
+
+                  const urlXMLCheck = response.body
+                 var to = leerxml(urlXMLCheck)
+                 if(to != servicios)
+                 {
+                   $("#btnGuardarFactura").prop("disabled", true)
+                   alertToastError("El total de la factura no coincide con el total calculado del sistema")
+                    //uppyDashboard.reset()
+                    uppyDashboard1.cancelAll()
+
+                  }
+                  else
+                  {
+                 $("#btnGuardarFactura").prop("disabled", false)
                  const urlPDF = response.body
                  $(idP).data("rutaarchivoXML", urlPDF)
                  document.querySelector(ver).innerHTML +=
                  `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
                    //console.log($('#kt_uppy_1').data("rutaarchivoXML"))
+                  }
                  }
                  //const url = response.body
    // `<embed src="${url}">`
@@ -116,8 +132,8 @@ return cont;
       }
       return {
 				// public functions
-				init: function(id, ver) {
-					PluginEvicencias(id, ver);
+				init: function(id, ver, servicios) {
+					PluginEvicencias(id, ver, servicios);
 				}
 			};
 		}();
