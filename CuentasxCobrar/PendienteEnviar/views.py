@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from PendienteEnviar.models import View_PendientesEnviarCxC, FacturasxCliente, Partida, RelacionFacturaxPartidas, PendientesEnviar, Ext_PendienteEnviar_Precio
-from usersadmon.models import Cliente
+from usersadmon.models import Cliente, AdmonUsuarios
 from django.core import serializers
 from .forms import FacturaForm
 from django.template.loader import render_to_string
@@ -69,6 +69,7 @@ def SaveFactura(request):
 	newFactura.Comentarios = jParams["Comentarios"]
 	newFactura.RutaXML = jParams["RutaXML"]
 	newFactura.RutaPDF = jParams["RutaPDF"]
+	newFactura.IDUsuarioAlta = AdmonUsuarios.objects.get(idusuario = request.user.idusuario)
 	newFactura.save()
 	return HttpResponse(newFactura.IDFactura)
 
@@ -89,8 +90,6 @@ def SavePartidasxFactura(request):
 		newRelacionFacturaxPartida.IDFacturaxCliente = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
 		newRelacionFacturaxPartida.IDPartida = newPartida
 		newRelacionFacturaxPartida.IDPendienteEnviar = PendientesEnviar.objects.get(IDPendienteEnviar = IDPendiente)
-		newRelacionFacturaxPartida.IDUsuarioAlta = 1
-		newRelacionFacturaxPartida.IDUsuarioBaja = 1
 		newRelacionFacturaxPartida.save()
 		Ext_Precio = Ext_PendienteEnviar_Precio.objects.get(IDPendienteEnviar = IDPendiente)
 		Ext_Precio.IsFacturaCliente = True
