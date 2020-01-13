@@ -1,5 +1,6 @@
 var table;
 var cliente;
+var TBalance=0, total=0;
 $(document).ready(function()
 {
   var calculo =0;
@@ -82,9 +83,7 @@ $('input[name="FiltroFechaCobros"]').on('apply.daterangepicker', function(ev, pi
 // cerrar modal de subir facturas
 $('#modalSubirCobro').on('hidden.bs.modal', function(){
  CleanModal()
- var id = '#ComplementosCobros';
- var verComp = '.uploaded-files-pagos';
- KTUppyEvidencias.init(id, verComp)
+ KTUppy.init()
 });
 
 
@@ -176,11 +175,11 @@ $('input[name="Retencion"]').on('change', function(e){
 });
 
 //inicia el modal de subir complementos
-KTUtil.ready(function() {
+/*KTUtil.ready(function() {
   var id = '#ComplementosCobros';
   var verComp = '.uploaded-files-pagos';
-  KTUppyEvidencias.init(id, verComp);
-});
+  KTUppyEvidencias.init(id, verComp, total);
+});*/
 
 
 $('input[name="TipoCambioCobro"]').on('keyup change', function(){
@@ -229,7 +228,7 @@ function Getdatos(){
 //funcion para obtener los datos de la tabla Estados de cuenta para mostrarlos en la tabla del modal subir pagos
 function showDatosObtenidos(){
  var datos = Getdatos();
- var TBalance=0, total=0;
+ TBalance=0, total=0;
  for (var i=0; i<datos.length; i++)
  {
    if(datos[i][3] == 'MXN')
@@ -308,7 +307,115 @@ function ValidacionCheckboxCobros(){
 });
 }
 
-});
+// plugin para subir los archivos de las facturas en Modal Pendientes de enviar
+"use strict";
+
+		// Class definition
+		var KTUppy = function () {
+			const Tus = Uppy.Tus;
+			const ProgressBar = Uppy.ProgressBar;
+			const StatusBar = Uppy.StatusBar;
+			const FileInput = Uppy.FileInput;
+			const Informer = Uppy.Informer;
+			const XHRUpload = Uppy.XHRUpload;
+
+
+			// to get uppy companions working, please refer to the official documentation here: https://uppy.io/docs/companion/
+			const Dashboard = Uppy.Dashboard;
+			const GoogleDrive = Uppy.GoogleDrive;
+
+			// Private functions
+			var initUppy1 = function(){
+				var id = '#ComplementosCobros';
+
+				var options = {
+					proudlyDisplayPoweredByUppy: false,
+					target: id,
+					inline: true,
+					height: 260,
+					replaceTargetContent: true,
+					showProgressDetails: true,
+					note: 'Logisti-k',
+
+           browserBackButtonClose: true,
+
+         }
+
+         var uppyDashboard = Uppy.Core({
+           autoProceed: false,
+           restrictions: {
+						maxFileSize: 5000000, // 5mb
+						maxNumberOfFiles: 2,
+						minNumberOfFiles: 2,
+           allowedFileTypes:['.pdf', '.xml']
+         },
+         locale: Uppy.locales.es_ES,
+         onBeforeFileAdded: (currentFile, file) => {
+           //if($('.uppy-DashboardContent-title').length == 0)
+           if(Object.values(file)[0] === undefined)
+           {
+             console.log("+1")
+           }
+           else
+           {
+             if((currentFile.type === Object.values(file)[0].meta.type))
+             {
+               uppyDashboard.info(`Los archivos deben ser diferentes`, 'error', 500)
+               return false
+             }
+             else
+             {
+               console.log("ok")
+             }
+           }
+
+         }
+       });
+
+
+         uppyDashboard.use(Dashboard, options);
+         uppyDashboard.use(XHRUpload, { endpoint: 'https://api-bgk-debug.logistikgo.com/api/Viaje/SaveevidenciaTest', method: 'post'});
+				//uppyDashboard.use(XHRUpload, { endpoint: 'http://localhost:63510/api/Viaje/SaveevidenciaTest', method: 'post'});
+				uppyDashboard.use(GoogleDrive, { target: Dashboard, companionUrl: 'https://companion.uppy.io' });
+        uppyDashboard.on('upload-success', (file, response) => {
+          const fileName = file.name
+          if (file.extension === 'pdf')
+          {
+           const urlPDF = response.body
+           $('#ComplementosCobros').data("rutaarchivoPDF", urlPDF)
+           document.querySelector('.uploaded-files-pagos').innerHTML +=
+           `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaPDF">${fileName}</a></li></ol>`
+                 //  console.log($('#kt_uppy_1').data("rutaarchivoPDF"))
+               }
+               else
+               {
+                   const urlPDF = response.body
+                   $('#ComplementosCobros').data("rutaarchivoXML", urlPDF)
+                   document.querySelector('.uploaded-files-pagos').innerHTML +=
+                   `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+
+                 }
+
+ });
+
+      }
+      return {
+				// public functions
+				init: function() {
+					initUppy1();
+
+				}
+			};
+		}();
+
+		KTUtil.ready(function() {
+			KTUppy.init();
+		});
+
+  });
+
+
+//});
 
 var fnGetFacturas = function () {
   startDate = ($('#cboFechaDescarga').data('daterangepicker').startDate._d).toLocaleDateString('en-US');
@@ -380,7 +487,7 @@ function formatDataTableFacturas(){
     "paging": false,
     "dom": 'Bfrtip',
     "buttons": [
-    { 
+    {
       extend: 'excel',
       text: '<i class="fas fa-file-excel fa-lg"></i>',
      }

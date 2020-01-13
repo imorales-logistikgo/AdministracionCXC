@@ -1,4 +1,3 @@
-var serv;
 // funcion contador para los checkbox seleccionados
 function ContadorCheck(input, btnSubir)
 {
