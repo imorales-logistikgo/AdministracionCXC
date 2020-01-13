@@ -399,7 +399,7 @@ function getDatos(){
  subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0;
  for (var i=0; i<datos.length; i++)
  {
-  moneda = datos[i][5];
+  moneda = datos[i][6];
   if(datos[i][6] === "MXN")
   {
     var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
