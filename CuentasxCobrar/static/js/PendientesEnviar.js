@@ -4,6 +4,7 @@ var Moneda;
 var Ev;
 var EvDigital;
 var EvFisica;
+var moneda;
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0;
