@@ -484,14 +484,14 @@ function getDatos(){
     var strComentariosServicios = $('#txtComentariosServicios').val();
     var RutaXML = $('.uploaded-files-fragmentadas #RutaXML').attr('href');
     var RutaPDF = $('.uploaded-files-fragmentadas #RutaPDF').attr('href');
-    var Total = $('#servicios').val();
+    var Total = Tservicios;
 
     saveFactura();
-    saveFactura(strFolioServicios, strComentariosServicios, RutaXML, RutaPDF, Total);
+    saveFactura(strFolioServicios, strComentariosServicios, RutaXML, RutaPDF, Total, true);
   }
 
 
-  function saveFactura(FolioFactura = $('#txtFolioFactura').val(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href'), Total = null) {
+  function saveFactura(FolioFactura = $('#txtFolioFactura').val(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href'), Total = total, IsFacturaServicios = false) {
     jParams = {
       FolioFactura: FolioFactura,
       Cliente: cliente,
@@ -499,10 +499,10 @@ function getDatos(){
       FechaRevision: $('#FechaRevision').val(),
       FechaVencimiento: $('#FechaVencimiento').val(),
       Moneda: moneda,
-      SubTotal: subtotal,
-      IVA: Tiva,
-      Retencion: TRetencion,
-      Total: total,
+      SubTotal: IsFacturaServicios ? 0 : subtotal,
+      IVA: IsFacturaServicios ? 0 : Tiva,
+      Retencion: IsFacturaServicios ? 0 : TRetencion,
+      Total: IsFacturaServicios ? Total : Total - Tservicios,
       RutaXML: RutaXML,
       RutaPDF: RutaPDF,
       TipoCambio: $('#txtTipoCambio').val(),
