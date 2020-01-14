@@ -56,7 +56,7 @@ def CancelarFactura(request):
 	IDFactura = json.loads(request.body.decode('utf-8'))["IDFactura"]
 	conRelacionFacturaxPartidas = RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = IDFactura)
 	if conRelacionFacturaxPartidas:
-		conRelacionFacturaxPartidas[0].IDFacturaxCliente.Status = 'Cancelada'
+		conRelacionFacturaxPartidas[0].IDFacturaxCliente.Status = 'CANCELADA'
 		conRelacionFacturaxPartidas[0].IDFacturaxCliente.IDUsuarioBaja = AdmonUsuarios.objects.get(idusuario = request.user.idusuario)
 		conRelacionFacturaxPartidas[0].IDFacturaxCliente.save()
 		for Partida in conRelacionFacturaxPartidas:

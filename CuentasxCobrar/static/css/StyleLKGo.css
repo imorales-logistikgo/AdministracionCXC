@@ -98,3 +98,30 @@ footer{
 {
   height: 700px;
 }
+
+.DTFC_LeftBodyLiner{
+  position: relative;
+    top: -25px !important;
+    left: 0px;
+    overflow-y: visible !important;
+    width: 96.4px;
+    height: 137px;
+    max-height: 137px;
+}
+
+.DTFC_LeftBodyWrapper
+{
+  position: relative;
+  top: -13px !important;
+  left: 0px;
+  height: 137px;
+  overflow: hidden;
+}
+
+.DTFC_LeftHeadWrapper
+{
+  position: relative;
+  top: -12px !important;
+  left: 0;
+  overflow: hidden;
+}
