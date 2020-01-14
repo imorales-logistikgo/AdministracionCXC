@@ -86,7 +86,6 @@ $('#modalSubirCobro').on('hidden.bs.modal', function(){
  KTUppy.init()
 });
 
-
 //muestra los datos para la tabla del modal subir cobros al hacer click en el boton de  subir cobro
 $(document).on('click', '#BtnSubirCobros',showDatosObtenidos);
 
@@ -573,7 +572,7 @@ function getDetalleFactura()
     WaitMe_Hide('#detallesFactura');
     $('#divTableDetalles').html(data.htmlRes);
   }).catch(function(ex){
-    console.log("no success!");
+    console.log(ex);
   });
 }
 
