@@ -125,3 +125,11 @@ footer{
   left: 0;
   overflow: hidden;
 }
+
+.dataTables_scrollHeadInner
+{
+  box-sizing: content-box !important;
+  width: max-content !important;
+  padding-right: 0px !important;
+  /*display: initial;*/
+}

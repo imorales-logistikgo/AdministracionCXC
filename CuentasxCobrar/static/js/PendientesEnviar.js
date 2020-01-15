@@ -479,6 +479,8 @@ function getDatos(){
     var h = [datos];
     var table = $('#ResumTable').DataTable({
      destroy: true,
+    // scrollX: true,
+     //scrollY: "300px",
      data: h[0],
      columnDefs: [
      {
@@ -488,6 +490,10 @@ function getDatos(){
      {
        "targets": [1,2,3,4,5],
        "className": "dt-head-center dt-body-right"
+     },
+     {
+       "targets": 4,
+       "visible": false
      },
      {
        "targets": 6,
