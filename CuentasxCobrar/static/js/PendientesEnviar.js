@@ -175,7 +175,8 @@ $('#kt_modal_2').on('shown.bs.modal', function(){
     $('#alertaViajeFragmentada').css("display", "none");
   $('#FechaFactura').datepicker({
     format: 'yyyy/mm/dd',
-    todayHighlight: true
+    todayHighlight: true,
+    endDate: '+0d',
   });
   $("#FechaFactura").datepicker('setDate', 'today' );
   $('#FechaRevision').datepicker({
@@ -203,7 +204,14 @@ $('input[name="TipoCambio"]').on('change', function(){
   getDatos();
 });
 
-
+$("#FechaRevision").on('change', function(){
+if($("#FechaRevision").val() < $("#FechaFactura").val())
+{
+  alertToastError("La fecha de revision no puede ser antes que la fecha de factura");
+//  $("#FechaRevision").val($("#FechaFactura").val());
+  $("#FechaRevision").datepicker('setDate', $("#FechaFactura").val() )
+}
+});
 
 
 //FUNCIONES PARA PENDIENTES DE ENVIAR
@@ -479,6 +487,8 @@ function getDatos(){
     var h = [datos];
     var table = $('#ResumTable').DataTable({
      destroy: true,
+    // scrollX: true,
+     //scrollY: "300px",
      data: h[0],
      columnDefs: [
      {
@@ -488,6 +498,10 @@ function getDatos(){
      {
        "targets": [1,2,3,4,5],
        "className": "dt-head-center dt-body-right"
+     },
+     {
+       "targets": 4,
+       "visible": false
      },
      {
        "targets": 6,
