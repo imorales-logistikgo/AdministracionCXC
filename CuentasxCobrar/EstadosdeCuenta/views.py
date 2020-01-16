@@ -121,3 +121,8 @@ def SaveCobroxFactura(request):
 		Factura.save()
 		newRelacionCobroxFactura.save()
 	return HttpResponse("")
+
+
+
+def GetDetallesCobro(request):
+	IDFactura = json.loads(request.body.decode('utf-8'))["IDFactura"]
