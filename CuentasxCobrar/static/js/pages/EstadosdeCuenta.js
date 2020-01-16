@@ -64,7 +64,8 @@ $(document).on( 'click', '.BtnEliminarFactura', function () {
 $('#modalSubirCobro').on('shown.bs.modal', function(){
   $('#FechaCobro').datepicker({
     format: 'yyyy/mm/dd',
-    todayHighlight: true
+    todayHighlight: true,
+    language: 'es'
   });
   $("#FechaCobro").datepicker('setDate', 'today' );
 
@@ -519,9 +520,9 @@ function formatDataTableFacturas(){
       text: '<i class="fas fa-file-excel fa-lg"></i>',
      }
     ],
-    fixedColumns:   {
+  /*  fixedColumns:   {
   leftColumns: 1
-},
+},*/
 
 
     columnDefs: [ {
