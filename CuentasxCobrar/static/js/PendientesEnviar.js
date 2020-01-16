@@ -582,6 +582,7 @@ function getDatos(){
       RutaPDF: RutaPDF,
       TipoCambio: $('#txtTipoCambio').val(),
       Comentarios: Comentarios,
+      IsFragmentada: $('#chkFragmentada').is(':checked'),
     }
 
     fetch("/PendientesEnviar/SaveFactura", {

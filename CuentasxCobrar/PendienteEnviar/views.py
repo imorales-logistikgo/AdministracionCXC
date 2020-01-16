@@ -69,6 +69,7 @@ def SaveFactura(request):
 	newFactura.Comentarios = jParams["Comentarios"]
 	newFactura.RutaXML = jParams["RutaXML"]
 	newFactura.RutaPDF = jParams["RutaPDF"]
+	newFactura.IsFragmentada = jParams["IsFragmentada"]
 	newFactura.IDUsuarioAlta = AdmonUsuarios.objects.get(idusuario = request.user.idusuario)
 	newFactura.save()
 	return HttpResponse(newFactura.IDFactura)

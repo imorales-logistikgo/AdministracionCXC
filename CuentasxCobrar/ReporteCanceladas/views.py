@@ -1,7 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from PendienteEnviar.models import RelacionFacturaxPartidas, RelacionConceptoxProyecto
-from EstadosdeCuenta.models import FacturasxCliente
+from PendienteEnviar.models import RelacionFacturaxPartidas, RelacionConceptoxProyecto, FacturasxCliente
 from usersadmon.models import Cliente
 from django.template.loader import render_to_string
 import json, datetime
@@ -9,17 +8,17 @@ from django.contrib.auth.decorators import login_required
 @login_required
 
 def ReporteCanceladas(request):
-	Canceladas = FacturasxCliente.objects.filter(Status = 'Cancelada')
+	Canceladas = FacturasxCliente.objects.filter(Status = 'CANCELADA')
 	listFacturas = list()
-	for Cancelada in Canceladas:
+	for CANCELADA in Canceladas:
 		Factura = {}
-		conFacturaxPartidas= RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = Cancelada.IDFactura).select_related("IDPendienteEnviar")
-		Factura['Folio'] = Cancelada.Folio
-		Factura['Cliente'] = Cancelada.NombreCortoCliente
-		Factura['FechaFactura'] = Cancelada.FechaFactura
+		conFacturaxPartidas= RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = CANCELADA.IDFactura).select_related("IDPendienteEnviar")
+		Factura['Folio'] = CANCELADA.Folio
+		Factura['Cliente'] = CANCELADA.NombreCortoCliente
+		Factura['FechaFactura'] = CANCELADA.FechaFactura
 		if conFacturaxPartidas.exists():
 			Factura['FechaBaja'] = list(conFacturaxPartidas)[0].IDPartida.FechaBaja
-		Factura['Total'] = Cancelada.Total
+		Factura['Total'] = CANCELADA.Total
 		Factura['Viajes'] = ''
 		for PENDIENTE in conFacturaxPartidas:
 			Factura['Viajes'] += PENDIENTE.IDPendienteEnviar.Folio + ", "
@@ -36,21 +35,21 @@ def GetCanceladasByFilters(request):
 	Clientes = json.loads(request.GET["Cliente"])
 	Moneda = json.loads(request.GET["Moneda"])
 	if not Clientes:
-		Canceladas = FacturasxCliente.objects.filter(Status = 'Cancelada')
+		Canceladas = FacturasxCliente.objects.filter(Status = 'CANCELADA')
 	else:
-		Canceladas = FacturasxCliente.objects.filter(Status = 'Cancelada', NombreCortoCliente__in = Clientes)
+		Canceladas = FacturasxCliente.objects.filter(Status = 'CANCELADA', NombreCortoCliente__in = Clientes)
 	if Moneda:
 		Canceladas = Canceladas.filter(Moneda__in = Moneda)
 	Canceladas = Canceladas.filter(FechaFactura__range = [datetime.datetime.strptime(FechaFacturaDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaFacturaHasta,'%m/%d/%Y')])
 	listFacturas = list()
-	for Cancelada in Canceladas:
+	for CANCELADA in Canceladas:
 		Factura = {}
-		conFacturaxPartidas= RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = Cancelada.IDFactura)
-		Factura['Folio'] = Cancelada.Folio
-		Factura['Cliente'] = Cancelada.NombreCortoCliente
-		Factura['FechaFactura'] = Cancelada.FechaFactura
+		conFacturaxPartidas= RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = CANCELADA.IDFactura)
+		Factura['Folio'] = CANCELADA.Folio
+		Factura['Cliente'] = CANCELADA.NombreCortoCliente
+		Factura['FechaFactura'] = CANCELADA.FechaFactura
 		Factura['FechaBaja'] = list(conFacturaxPartidas)[0].IDPartida.FechaBaja
-		Factura['Total'] = Cancelada.Total
+		Factura['Total'] = CANCELADA.Total
 		Factura['Viajes'] = ''
 		for PENDIENTE in conFacturaxPartidas:
 			Factura['Viajes'] += PENDIENTE.IDPendienteEnviar.Folio + ", "

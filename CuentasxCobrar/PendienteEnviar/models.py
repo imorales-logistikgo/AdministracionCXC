@@ -8,8 +8,6 @@ class PendientesEnviar(models.Model):
     NombreCortoProveedor = models.CharField(max_length=100)
     FechaDescarga = models.DateTimeField()
     Moneda = models.CharField(max_length=10)
-    #Costo = models.FloatField(default=0)
-    #Precio = models.FloatField(default=0)
     Status = models.CharField(max_length=15)
     IsEvidenciaFisica = models.BooleanField()
     IsEvidenciaDigital = models.BooleanField()
@@ -106,6 +104,7 @@ class FacturasxCliente(models.Model):
     Comentarios = models.CharField(max_length=500)
     TotalConvertido = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     Status = models.CharField(max_length=15, default="PENDIENTE")
+    IsFragmentada = models.BooleanField(default=False)
     IDUsuarioAlta = models.ForeignKey(AdmonUsuarios, on_delete=models.CASCADE, db_column = 'IDUsuarioAlta', related_name = "IDUsuarioAltaFactura")
     IDUsuarioBaja = models.ForeignKey(AdmonUsuarios, on_delete=models.CASCADE, db_column = 'IDUsuarioBaja', related_name = "IDUsuarioBajaFactura", null=True)
 

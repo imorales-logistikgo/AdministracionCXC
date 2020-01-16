@@ -50,7 +50,7 @@
 						<td>{{Factura.Moneda}}</td>
 						<td>{{Factura.Status}}</td>
 						<td>{{Folios|index:forloop.counter0}}</td>
-						<td><input name="EvidenciaXML" type="hidden" data-facturaid="{{Factura.IDFactura}}"  data-evidenciaxml="{{Factura.RutaXML}}"></td>
+						<td><input name="EvidenciaXML" type="hidden" data-facturaid="{{Factura.IDFactura}}"  data-isfragmentada="{{Factura.IsFragmentada}}" data-evidenciaxml="{{Factura.RutaXML}}"></td>
 						<td></td>
 					</tr>
 					{%endfor%}
