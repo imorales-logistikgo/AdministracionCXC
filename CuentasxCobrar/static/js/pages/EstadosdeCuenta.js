@@ -72,7 +72,34 @@ $('#modalSubirCobro').on('shown.bs.modal', function(){
 
 //rago fecha para el Filtro
 $('input[name="FiltroFechaCobros"]').daterangepicker({
- autoUpdateInput: false
+ autoUpdateInput: false,
+ showDropdowns:true,
+ autoApply:true,
+ locale: {
+        daysOfWeek: [
+            "Do",
+            "Lu",
+            "Ma",
+            "Mi",
+            "Ju",
+            "Vi",
+            "Sa"
+        ],
+        monthNames: [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+    }
 });
 
 $('input[name="FiltroFechaCobros"]').on('apply.daterangepicker', function(ev, picker) {

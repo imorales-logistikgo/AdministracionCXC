@@ -157,7 +157,34 @@ $('input[name="Total"]').on('change', function(e){
 
 //Filtro Rango fecha
 $('input[name="FiltroFecha"]').daterangepicker({
- autoUpdateInput: false
+ autoUpdateInput: false,
+ showDropdowns:true,
+ autoApply:true,
+ locale: {
+        daysOfWeek: [
+            "Do",
+            "Lu",
+            "Ma",
+            "Mi",
+            "Ju",
+            "Vi",
+            "Sa"
+        ],
+        monthNames: [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+    }
 });
 
 $('input[name="FiltroFecha"]').on('apply.daterangepicker', function(ev, picker) {
@@ -177,11 +204,13 @@ $('#kt_modal_2').on('shown.bs.modal', function(){
     format: 'yyyy/mm/dd',
     todayHighlight: true,
     endDate: '+0d',
+    language: 'es'
   });
   $("#FechaFactura").datepicker('setDate', 'today' );
   $('#FechaRevision').datepicker({
     format: 'yyyy/mm/dd',
     todayHighlight: true,
+    language: 'es'
   });
   $("#FechaRevision").datepicker('setDate', 'today' );
 
