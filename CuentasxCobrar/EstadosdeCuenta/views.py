@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from PendienteEnviar.models import RelacionConceptoxProyecto,  PendientesEnviar, Ext_PendienteEnviar_Precio, View_PendientesEnviarCxC
-from EstadosdeCuenta.models import RelacionFacturaxPartidas, View_FacturasxCliente, FacturasxCliente, CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
+from PendienteEnviar.models import RelacionConceptoxProyecto,  PendientesEnviar, Ext_PendienteEnviar_Precio, View_PendientesEnviarCxC, RelacionFacturaxPartidas, FacturasxCliente
+from EstadosdeCuenta.models import View_FacturasxCliente, CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
 from usersadmon.models import Cliente, AdmonUsuarios
 from django.template.loader import render_to_string
 from decimal import Decimal
@@ -56,7 +56,7 @@ def CancelarFactura(request):
 	IDFactura = json.loads(request.body.decode('utf-8'))["IDFactura"]
 	conRelacionFacturaxPartidas = RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = IDFactura)
 	if conRelacionFacturaxPartidas:
-		conRelacionFacturaxPartidas[0].IDFacturaxCliente.Status = 'Cancelada'
+		conRelacionFacturaxPartidas[0].IDFacturaxCliente.Status = 'CANCELADA'
 		conRelacionFacturaxPartidas[0].IDFacturaxCliente.IDUsuarioBaja = AdmonUsuarios.objects.get(idusuario = request.user.idusuario)
 		conRelacionFacturaxPartidas[0].IDFacturaxCliente.save()
 		for Partida in conRelacionFacturaxPartidas:
