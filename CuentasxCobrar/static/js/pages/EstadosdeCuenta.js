@@ -1,6 +1,7 @@
 var table;
 var cliente;
 var TBalance=0, total=0;
+  var fragmentada;
 $(document).ready(function()
 {
   var calculo =0;
@@ -530,6 +531,7 @@ function formatDataTableFacturas(){
       "width": "1%",
       "mRender": function (data, type, full) {
         idfac = $('input[name="EvidenciaXML"]').data("facturaid");
+        fragmentada = $('input[name="EvidenciaXML"]').data("isfragmentada");
         return (full[10] != 'cobrada'.toUpperCase() && full[10] != 'cancelada'.toUpperCase() ? '<input type="checkbox" name="checkEC" id="estiloCheckbox" data-idfactu="'+idfac+'"/>': '');
       }
     },
@@ -574,7 +576,7 @@ function formatDataTableFacturas(){
       "className": "text-center",
       "targets": 13,
       "mRender": function (data, type, full) {
-       return ( full[10] === 'pendiente'.toUpperCase() ? '<button type ="button" class="BtnEliminarFactura btn btn-danger btn-elevate btn-pill btn-sm" data-idfact="'+idfac+'"><i class="flaticon-delete"></i></button>':'');
+       return (fragmentada != 'True' &&  full[10] === 'pendiente'.toUpperCase() ? '<button type ="button" class="BtnEliminarFactura btn btn-danger btn-elevate btn-pill btn-sm" data-idfact="'+idfac+'"><i class="flaticon-delete"></i></button>':'');
      }
    }
    ]
