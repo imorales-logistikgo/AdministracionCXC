@@ -64,7 +64,8 @@ $(document).on( 'click', '.BtnEliminarFactura', function () {
 $('#modalSubirCobro').on('shown.bs.modal', function(){
   $('#FechaCobro').datepicker({
     format: 'yyyy/mm/dd',
-    todayHighlight: true
+    todayHighlight: true,
+    language: 'es'
   });
   $("#FechaCobro").datepicker('setDate', 'today' );
 
