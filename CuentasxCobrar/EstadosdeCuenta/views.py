@@ -99,6 +99,13 @@ def SaveCobroxCliente(request):
 
 
 
+
+def truncate(number, digits) -> Decimal:
+    stepper = 10.0 ** digits
+    return math.trunc(stepper * number) / stepper
+
+
+
 def SaveCobroxFactura(request):
 	jParams = json.loads(request.body.decode('utf-8'))
 	for Cobro in jParams["arrCobros"]:
@@ -114,7 +121,7 @@ def SaveCobroxFactura(request):
 		newRelacionCobroxFactura.IDFactura = Factura
 		newRelacionCobroxFactura.IDUsuarioAlta = 1
 		newRelacionCobroxFactura.IDCliente = 1
-		if Factura.Saldo == 0:
+		if truncate(float(Factura.Saldo), 2) == 0:
 			Factura.Status = "COBRADA"
 		else:
 			Factura.Status = "ABONADA"
