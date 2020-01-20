@@ -22,7 +22,7 @@ def EstadosdeCuenta(request):
 		Folios.append(FoliosCobro)
 	ContadoresPendientes = len(list(FacturasPendiente))
 	ContadoresAbonadas = len(list(FacturasAbonada))
-	Clientes = Cliente.objects.all()
+	Clientes = Cliente.objects.filter(isFiscal = True).exclude(NombreCorto = "")
 	return render(request,  'EstadosdeCuenta.html', {'Facturas': result, 'Clientes': Clientes, 'Folios': Folios, 'ContadoresPendientes': ContadoresPendientes, 'ContadoresAbonadas': ContadoresAbonadas})
 
 

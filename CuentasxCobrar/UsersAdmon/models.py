@@ -25,6 +25,7 @@ class AdmonUsuarios(models.Model):
 class Cliente(models.Model):
     IDCliente = models.AutoField(primary_key=True)
     NombreCorto = models.CharField(max_length=50)
+    isFiscal = models.BooleanField()
     class Meta:
         managed = False
         db_table = 'AdmonClientes'
