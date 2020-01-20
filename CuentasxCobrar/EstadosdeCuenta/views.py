@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from decimal import Decimal
 import json, datetime
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 @login_required
 
 def EstadosdeCuenta(request):
@@ -22,7 +23,7 @@ def EstadosdeCuenta(request):
 		Folios.append(FoliosCobro)
 	ContadoresPendientes = len(list(FacturasPendiente))
 	ContadoresAbonadas = len(list(FacturasAbonada))
-	Clientes = Cliente.objects.filter(isFiscal = True).exclude(NombreCorto = "")
+	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
 	return render(request,  'EstadosdeCuenta.html', {'Facturas': result, 'Clientes': Clientes, 'Folios': Folios, 'ContadoresPendientes': ContadoresPendientes, 'ContadoresAbonadas': ContadoresAbonadas})
 
 

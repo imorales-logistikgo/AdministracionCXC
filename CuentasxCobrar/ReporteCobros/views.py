@@ -5,6 +5,7 @@ from usersadmon.models import Cliente
 from django.template.loader import render_to_string
 import json, datetime
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 @login_required
 
 def ReporteCobros(request):
@@ -16,7 +17,7 @@ def ReporteCobros(request):
 			FoliosFactura += Factura.IDFactura.Folio + ", "
 		FoliosFactura = FoliosFactura[:-2]
 		Folios.append(FoliosFactura)
-	Clientes = Cliente.objects.filter(isFiscal = True).exclude(NombreCorto = "")
+	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
 	return render(request, 'ReporteCobros.html', {'Cobros': Cobros, 'Clientes': Clientes, "Folios": Folios})
 
 

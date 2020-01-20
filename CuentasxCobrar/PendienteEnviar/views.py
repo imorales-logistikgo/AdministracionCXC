@@ -7,13 +7,14 @@ from .forms import FacturaForm
 from django.template.loader import render_to_string
 import json, datetime
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 @login_required
 
 
 def GetPendientesEnviar(request):
 	PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1 AND IsFacturaCliente = 0", ['FINALIZADO'])
 	ContadorTodos, ContadorPendientes, ContadorFinalizados, ContadorConEvidencias, ContadorSinEvidencias = GetContadores()
-	Clientes = Cliente.objects.filter(isFiscal = True).exclude(NombreCorto = "")
+	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
 	return render(request, 'PendienteEnviar.html', {'pendientes':PendingToSend, 'Clientes': Clientes, 'contadorPendientes': ContadorPendientes, 'contadorFinalizados': ContadorFinalizados, 'contadorConEvidencias': ContadorConEvidencias, 'contadorSinEvidencias': ContadorSinEvidencias})
 
 
@@ -33,19 +34,17 @@ def GetPendientesByFilters(request):
 	Clientes = json.loads(request.GET["Cliente"])
 	Status = json.loads(request.GET["Status"])
 	Moneda = request.GET["Moneda"]
-	if not Status:
-		QueryStatus = ""
-	else:
-		QueryStatus = "Status IN ({}) AND ".format(','.join(['%s' for _ in range(len(Status))]))
-	if not Clientes:
-		QueryClientes = ""
-	else:
-		QueryClientes = "NombreCliente IN ({}) AND ".format(','.join(['%s' for _ in range(len(Clientes))]))
-	QueryFecha = "FechaDescarga BETWEEN %s AND %s AND "
-	QueryMoneda = "Moneda = %s "
-	FinalQuery = "SELECT * FROM View_PendientesEnviarCxC WHERE " + QueryStatus + QueryClientes + QueryFecha + QueryMoneda + "AND IsFacturaCliente = 0"
-	params = Status + Clientes + [FechaDescargaDesde, FechaDescargaHasta] + [Moneda]
-	PendingToSend = View_PendientesEnviarCxC.objects.raw(FinalQuery,params)
+	PendingToSend = View_PendientesEnviarCxC.objects.filter(FechaDescarga__range = [datetime.datetime.strptime(request.GET["FechaDescargaDesde"],'%m/%d/%Y'), datetime.datetime.strptime(request.GET["FechaDescargaHasta"],'%m/%d/%Y')], IsFacturaCliente = False)
+	if Status:
+		if "Con evidencias" in Status:
+			PendingToSend = PendingToSend.filter(IsEvidenciaDigital = True, IsEvidenciaFisica = True)
+			if len(Status) > 1:
+				PendingToSend = PendingToSend.filter(Status__in = Status)
+		else:
+			PendingToSend = PendingToSend.filter(Status__in = Status)
+	if Clientes:
+		PendingToSend = PendingToSend.filter(NombreCliente__in = Clientes)
+	PendingToSend = PendingToSend.filter(Moneda = Moneda)
 	htmlRes = render_to_string('TablaPendientes.html', {'pendientes':PendingToSend}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
 

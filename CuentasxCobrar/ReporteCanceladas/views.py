@@ -5,6 +5,7 @@ from usersadmon.models import Cliente
 from django.template.loader import render_to_string
 import json, datetime
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 @login_required
 
 def ReporteCanceladas(request):
@@ -24,7 +25,7 @@ def ReporteCanceladas(request):
 			Factura['Viajes'] += PENDIENTE.IDPendienteEnviar.Folio + ", "
 		Factura['Viajes'] = Factura['Viajes'][:-2]
 		listFacturas.append(Factura)
-	Clientes = Cliente.objects.filter(isFiscal = True).exclude(NombreCorto = "")
+	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
 	return render(request, 'ReporteCanceladas.html', {'Facturas': listFacturas, 'Clientes': Clientes})
 
 
