@@ -24,7 +24,7 @@ def ReporteCanceladas(request):
 			Factura['Viajes'] += PENDIENTE.IDPendienteEnviar.Folio + ", "
 		Factura['Viajes'] = Factura['Viajes'][:-2]
 		listFacturas.append(Factura)
-	Clientes = Cliente.objects.all()
+	Clientes = Cliente.objects.filter(isFiscal = True).exclude(NombreCorto = "")
 	return render(request, 'ReporteCanceladas.html', {'Facturas': listFacturas, 'Clientes': Clientes})
 
 
