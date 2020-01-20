@@ -64,10 +64,10 @@ $(document).on('click', '#BtnSubirFacturaPendietnesEnviar',getDatos);
 $('#BtnAplicarFiltro').on('click', fnGetPendientesEnviar);
 
 $('#btnGuardarFactura').on('click', function(){
-$('#txtFolioFactura').val() == $('#txtFolioServicios').val() ? $('#txtFolioServicios').val(''): '';
   if($('input[name="Fragmentada"]').is(':checked'))
   {
     //validaicon si la factura sera fragmentada
+    $('#txtFolioFactura').val() == $('#txtFolioServicios').val() ? $('#txtFolioServicios').val(''): '';
     if($('#Fragmentada').data("rutaarchivoPDF") != undefined && $('#Fragmentada').data("rutaarchivoXML") != undefined || $('#Fragmentada').data("rutaarchivoPDF") != null && $('#Fragmentada').data("rutaarchivoXML") != null)
     {
       if($('#kt_uppy_1').data("rutaarchivoPDF") != undefined && $('#kt_uppy_1').data("rutaarchivoXML") != undefined || $('#kt_uppy_1').data("rutaarchivoPDF") != null && $('#kt_uppy_1').data("rutaarchivoXML") != null)
@@ -75,15 +75,15 @@ $('#txtFolioFactura').val() == $('#txtFolioServicios').val() ? $('#txtFolioServi
         if($('#txtFolioFactura').val() != "" && $('#txtFolioServicios').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "" && $('input[name="TipoCambio"]').val() != "")
         {
           WaitMe_Show('#WaitModalPE');
-          if($('#chkFragmentada').is(':checked')){
+          //if($('#chkFragmentada').is(':checked')){
             saveFacturaFragmentada();
-          }
-          else
-            saveFactura();
+          //}
+        //  else
+          //  saveFactura();
         }
         else
         {
-          alertToastError("Los folios y las fechas no pueden estar vacias");
+          alertToastError("Los folios deben ser diferentes y las fechas no pueden estar vacias");
         }
       }
       else
@@ -104,10 +104,10 @@ $('#txtFolioFactura').val() == $('#txtFolioServicios').val() ? $('#txtFolioServi
       if($('#txtFolioFactura').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "" && $('input[name="TipoCambio"]').val() != "")
       {
         WaitMe_Show('#WaitModalPE');
-        if($('#chkFragmentada').is(':checked')){
-          saveFacturaFragmentada();
-        }
-        else
+        //if($('#chkFragmentada').is(':checked')){
+        //  saveFacturaFragmentada();
+        //}
+        //else
           saveFactura();
       }
       else
@@ -738,7 +738,7 @@ function formatDataTable() {
       "targets": 1
     },
     {
-      "width": "10%",
+      "width": "15%",
       "className": "dt-head-center dt-body-center",
       "targets": [2,3]
     },
