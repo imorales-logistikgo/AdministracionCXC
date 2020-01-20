@@ -64,7 +64,7 @@ $(document).on('click', '#BtnSubirFacturaPendietnesEnviar',getDatos);
 $('#BtnAplicarFiltro').on('click', fnGetPendientesEnviar);
 
 $('#btnGuardarFactura').on('click', function(){
-
+$('#txtFolioFactura').val() == $('#txtFolioServicios').val() ? $('#txtFolioServicios').val(''): '';
   if($('input[name="Fragmentada"]').is(':checked'))
   {
     //validaicon si la factura sera fragmentada
@@ -289,6 +289,8 @@ function LimpiarModalSF()
   $('#seeFolioAndComen').hide();
   $('#Fragmentada').data("rutaarchivoXML", null);
   $('#Fragmentada').data("rutaarchivoXML", null);
+  $('#txtFolioServicios').val('')
+  $('#txtComentariosServicios').val('')
 
 }
 
