@@ -68,7 +68,7 @@ $('#btnGuardarFactura').on('click', function(){
   if($('input[name="Fragmentada"]').is(':checked'))
   {
     //validaicon si la factura sera fragmentada
-    if($('#Fragmentada').data("rutaarchivoPDF") != undefined && $('#Fragmentada').data("rutaarchivoXML") != undefined)
+    if($('#Fragmentada').data("rutaarchivoPDF") != undefined && $('#Fragmentada').data("rutaarchivoXML") != undefined || $('#Fragmentada').data("rutaarchivoPDF") != null && $('#Fragmentada').data("rutaarchivoXML") != null)
     {
       if($('#kt_uppy_1').data("rutaarchivoPDF") != undefined && $('#kt_uppy_1').data("rutaarchivoXML") != undefined || $('#kt_uppy_1').data("rutaarchivoPDF") != null && $('#kt_uppy_1').data("rutaarchivoXML") != null)
       {
@@ -278,6 +278,7 @@ function LimpiarModalSF()
   $('input[name="TipoCambio"]').val(1);
   TestFile = null;
   $('.uploaded-files ol').remove();
+  $('.uploaded-files-fragmentadas ol').remove();
   $('#Fragmentada').remove();
   $('input[name="Fragmentada"]').prop('checked', false);
   $('#see').hide();
@@ -286,6 +287,9 @@ function LimpiarModalSF()
   $('#kt_uppy_1').data("rutaarchivoXML", null);
   $('#kt_uppy_1').data("rutaarchivoPDF", null);
   $('#seeFolioAndComen').hide();
+  $('#Fragmentada').data("rutaarchivoXML", null);
+  $('#Fragmentada').data("rutaarchivoXML", null);
+
 }
 
 
@@ -331,7 +335,7 @@ function LimpiarModalSF()
          var uppyDashboard = Uppy.Core({
            autoProceed: false,
            restrictions: {
-						maxFileSize: 5000000, // 5mb
+						maxFileSize: 4200000, // 5mb
 						maxNumberOfFiles: 2,
 						minNumberOfFiles: 2,
            allowedFileTypes:['.pdf', '.xml']
@@ -455,7 +459,7 @@ function adddatos(){
 //funcion para obtener los datos de la tabla pendiente de enviar para mostrarlos en la tabla del modal subir facturas
 function getDatos(){
  var datos = adddatos();
- console.log(datos);
+ //console.log(datos);
  var newData = [];
  subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0, totalViaje=0;
  for (var i=0; i<datos.length; i++)

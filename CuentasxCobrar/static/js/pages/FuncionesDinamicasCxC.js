@@ -48,13 +48,14 @@ return cont;
 						{ id: 'name', name: 'Name', placeholder: 'file name' },
 						{ id: 'caption', name: 'Caption', placeholder: 'describe what the image is about' }
            ],*/
-           browserBackButtonClose: true
+           browserBackButtonClose: true,
+           //showLinkToFileUploadResult: true
          }
 
          var uppyDashboard1 = Uppy.Core({
            autoProceed: false,
            restrictions: {
-						maxFileSize: 5000000, // 5mb
+						maxFileSize: 4200000, // 5mb
 						maxNumberOfFiles: 2,
 						minNumberOfFiles: 2,
            allowedFileTypes:['.pdf', '.xml']
