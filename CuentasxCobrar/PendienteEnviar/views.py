@@ -43,7 +43,7 @@ def GetPendientesByFilters(request):
 		else:
 			PendingToSend = PendingToSend.filter(Status__in = Status)
 	if Clientes:
-		PendingToSend = PendingToSend.filter(NombreCliente__in = Clientes)
+		PendingToSend = PendingToSend.filter(IDCliente__in = Clientes)
 	PendingToSend = PendingToSend.filter(Moneda = Moneda)
 	htmlRes = render_to_string('TablaPendientes.html', {'pendientes':PendingToSend}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
