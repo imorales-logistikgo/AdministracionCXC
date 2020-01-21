@@ -5,7 +5,7 @@ from EstadosdeCuenta.models import View_FacturasxCliente, CobrosxCliente, Cobros
 from usersadmon.models import Cliente, AdmonUsuarios
 from django.template.loader import render_to_string
 from decimal import Decimal
-import json, datetime
+import json, datetime, math
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 @login_required
