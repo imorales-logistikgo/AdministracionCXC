@@ -1,5 +1,6 @@
 //var TestFile = null;
 var cliente;
+var idcliente;
 var Moneda;
 var Ev;
 var EvDigital;
@@ -257,6 +258,7 @@ $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevi
 //validacion mismo cliente en los checkbox
 function FiltroCheckboxCliente(){
   var checked = $("input[name='checkPE']:checked");
+  idcliente = $($(checked[0]).parents('tr')[0]).data("idcliente")
   $("input[name=checkPE]:checked").each(function () {
    var check = table.row($(this).parents('tr')).data();
    if(checked.length > 1)
@@ -597,6 +599,7 @@ function getDatos(){
       TipoCambio: $('#txtTipoCambio').val(),
       Comentarios: Comentarios,
       IsFragmentada: $('#chkFragmentada').is(':checked'),
+      IDCliente: idcliente,
     }
 
     fetch("/PendientesEnviar/SaveFactura", {

@@ -38,7 +38,7 @@ def GetFacturasByFilters(request):
 	if Status:
 		Facturas = Facturas.filter(Status__in = Status)
 	if Clientes:
-		Facturas = Facturas.filter(NombreCortoCliente__in = Clientes)
+		Facturas = Facturas.filter(IDCliente__in = Clientes)
 	if Moneda:
 		Facturas = Facturas.filter(Moneda__in = Moneda)
 	Folios = list()
@@ -95,6 +95,7 @@ def SaveCobroxCliente(request):
 	newCobro.Comentarios = jParams["Comentarios"]
 	newCobro.TipoCambio = jParams["TipoCambio"]
 	newCobro.NombreCortoCliente = jParams["Cliente"]
+	newCobro.IDCliente = jParams["IDCliente"]
 	newCobro.save()
 	return HttpResponse(newCobro.IDCobro)
 

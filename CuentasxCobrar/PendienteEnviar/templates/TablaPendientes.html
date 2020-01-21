@@ -37,7 +37,7 @@
 				</thead>
 				<tbody>
 					{% for pendiente in pendientes %}
-					<tr data-idpendienteenviar="{{pendiente.IDPendienteEnviar|safe}}">
+					<tr data-idpendienteenviar="{{pendiente.IDPendienteEnviar|safe}}" data-idcliente="{{pendiente.IDCliente|safe}}">
 						<td></td>
 						<td style="font-weight: bold;">{{pendiente.Folio|safe}}</td>
 						<td>{{pendiente.NombreCliente|safe}}</td>

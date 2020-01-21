@@ -38,7 +38,7 @@ def GetCanceladasByFilters(request):
 	if not Clientes:
 		Canceladas = FacturasxCliente.objects.filter(Status = 'CANCELADA')
 	else:
-		Canceladas = FacturasxCliente.objects.filter(Status = 'CANCELADA', NombreCortoCliente__in = Clientes)
+		Canceladas = FacturasxCliente.objects.filter(Status = 'CANCELADA', IDCliente__in = Clientes)
 	if Moneda:
 		Canceladas = Canceladas.filter(Moneda__in = Moneda)
 	Canceladas = Canceladas.filter(FechaFactura__range = [datetime.datetime.strptime(FechaFacturaDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaFacturaHasta,'%m/%d/%Y')])

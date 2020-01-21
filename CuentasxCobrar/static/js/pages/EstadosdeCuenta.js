@@ -1,5 +1,6 @@
 var table;
 var cliente;
+var idcliente;
 var TBalance=0, total=0;
   var fragmentada;
 $(document).ready(function()
@@ -314,6 +315,7 @@ function showDatosObtenidos(){
 //validacion mismo cliente en los checkbox
 function ValidacionCheckboxCobros(){
   var checked = $("input[name='checkEC']:checked");
+  idcliente = $($(checked[0]).parents('tr')[0]).data("idcliente")
   $("input[name=checkEC]:checked").each(function () {
    var check = table.row($(this).parents('tr')).data();
    if(checked.length > 1)
@@ -620,6 +622,7 @@ function saveCobroxCliente()  {
     RutaXML: $('#ComplementosCobros').data("rutaarchivoXML"),
     RutaPDF: $('#ComplementosCobros').data("rutaarchivoPDF"),
     Cliente: cliente,
+    IDCliente: idcliente,
   }
 
   fetch("/EstadosdeCuenta/SaveCobroxCliente", {

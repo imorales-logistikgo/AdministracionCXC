@@ -6,6 +6,7 @@ class View_FacturasxCliente(models.Model):
     IDFactura = models.IntegerField(primary_key=True)
     Folio = models.CharField(max_length=50)
     Cliente = models.CharField(max_length=100)
+    IDCliente = models.IntegerField(default=0)
     FechaFactura = models.DateTimeField()
     Subtotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     IVA = models.DecimalField(default=0, max_digits=30, decimal_places=5)
@@ -45,6 +46,7 @@ class CobrosxCliente(models.Model):
     Comentarios = models.CharField(max_length=500, default = "")
     TipoCambio = models.DecimalField(default=1, max_digits=10, decimal_places=5)
     NombreCortoCliente = models.CharField(max_length=100)
+    IDCliente = models.IntegerField(default=0)
 
     class Meta:
         db_table="CobrosxCliente"
@@ -57,7 +59,6 @@ class RelacionCobrosFacturasxCliente(models.Model):
     IDCobroxFactura = models.ForeignKey(CobrosxFacturas, on_delete=models.CASCADE, db_column = 'IDCobroxFactura')
     IDFactura = models.ForeignKey(FacturasxCliente, on_delete=models.CASCADE, db_column = 'IDFactura')
     IDUsuarioAlta = models.IntegerField(default=0)
-    IDCliente = models.IntegerField(default=0)
 
     class Meta:
         db_table="RelacionCobrosFacturasxCliente"

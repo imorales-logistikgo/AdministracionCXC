@@ -37,7 +37,7 @@
 				</thead>
 				<tbody>
 					{% for Factura in Facturas %}
-					<tr data-IDFactura="{{Factura.IDFactura}}">
+					<tr data-IDFactura="{{Factura.IDFactura}}" data-idcliente="{{Factura.IDCliente}}">
 						<td></td>
 						<td style="font-weight: bold;">{{Factura.Folio}}</td>
 						<td>{{Factura.Cliente}}</td>

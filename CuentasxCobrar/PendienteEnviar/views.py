@@ -55,6 +55,7 @@ def SaveFactura(request):
 	newFactura = FacturasxCliente()
 	newFactura.Folio = jParams["FolioFactura"]
 	newFactura.NombreCortoCliente = jParams["Cliente"]
+	newFactura.IDCliente = jParams["IDCliente"]
 	newFactura.FechaFactura = datetime.datetime.strptime(jParams["FechaFactura"],'%Y/%m/%d')
 	newFactura.FechaRevision = datetime.datetime.strptime(jParams["FechaRevision"],'%Y/%m/%d')
 	newFactura.FechaVencimiento = datetime.datetime.strptime(jParams["FechaVencimiento"],'%Y/%m/%d')
