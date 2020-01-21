@@ -46,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
     roles = models.CharField(max_length=200,null=True, default="users")
     idusuario= models.IntegerField(blank=True, null=True) 
+    IDTransportista = models.IntegerField(blank=True, null=True) 
     
 
     USERNAME_FIELD = 'username'
