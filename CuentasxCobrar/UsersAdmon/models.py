@@ -25,7 +25,7 @@ class AdmonUsuarios(models.Model):
 class Cliente(models.Model):
     IDCliente = models.AutoField(primary_key=True)
     NombreCorto = models.CharField(max_length=50)
-    RazonSocial = models.CharField(max_length=200)
+    RazonSocial = models.CharField(max_length=300)
     isFiscal = models.BooleanField()
     StatusProceso = models.CharField(max_length=20)
     class Meta:
