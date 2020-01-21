@@ -103,6 +103,7 @@ footer{
   position: relative;
     top: -25px !important;
     left: 0px;
+    overflow-y: hidden !important;
     overflow-x: hidden !important;
     width: 96.4px;
     height: 137px;
