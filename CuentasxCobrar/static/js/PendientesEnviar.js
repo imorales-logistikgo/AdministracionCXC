@@ -575,12 +575,12 @@ function getDatos(){
     var RutaPDF = $('.uploaded-files-fragmentadas #RutaPDF').attr('href');
     var Total = Tservicios;
 
-    saveFactura();
-    saveFactura(strFolioServicios, strComentariosServicios, RutaXML, RutaPDF, Total, true);
+    saveFactura(false, total - Tservicios);
+    saveFactura(true, Total, strFolioServicios, strComentariosServicios, RutaXML, RutaPDF);
   }
 
 
-  function saveFactura(FolioFactura = $('#txtFolioFactura').val(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href'), Total = total, IsFacturaServicios = false) {
+  function saveFactura(IsFacturaServicios = false, Total = total, FolioFactura = $('#txtFolioFactura').val(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href')) {
     jParams = {
       FolioFactura: FolioFactura,
       Cliente: cliente,
@@ -591,7 +591,7 @@ function getDatos(){
       SubTotal: IsFacturaServicios ? 0 : subtotal,
       IVA: IsFacturaServicios ? 0 : Tiva,
       Retencion: IsFacturaServicios ? 0 : TRetencion,
-      Total: IsFacturaServicios ? Total : Total - Tservicios,
+      Total: Total,
       RutaXML: RutaXML,
       RutaPDF: RutaPDF,
       TipoCambio: $('#txtTipoCambio').val(),
