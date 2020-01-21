@@ -49,7 +49,7 @@
 						<td>{{pendiente.Moneda|safe}}</td>
 						<td id="status">{{pendiente.Status|safe}}</td>
 						<!--<td><input id="isEvicencias" name="isEvicencias" type="hidden" value="{{pendiente.IsEvidenciaDigital}}"></td>-->
-						<td><input name="isEvicencias" type="hidden"  data-idpendienteenviar="{{pendiente.IDPendienteEnviar|safe}}" data-evidenciadigital="{{pendiente.IsEvidenciaDigital|safe}}" data-evidenciafisica="{{pendiente.IsEvidenciaFisica|safe}}" data-diascredito="{{pendiente.DiasCredito}}"></td>
+						<td><input name="isEvicencias" type="hidden"  data-idpendienteenviar="{{pendiente.IDPendienteEnviar|safe}}" data-evidenciadigital="{{pendiente.IsEvidenciaDigital|safe}}" data-evidenciafisica="{{pendiente.IsEvidenciaFisica|safe}}" data-diascredito="{{pendiente.DiasCredito|safe}}" data-iscontroldesk = {{pendiente.IsControlDesk|safe}}></td>
 						<td hidden="hidden" >${{pendiente.Servicios|safe|floatformat:"2"|intcomma}}</td>
 					</tr>
 					{%endfor%}
