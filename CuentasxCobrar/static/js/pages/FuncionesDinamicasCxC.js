@@ -217,3 +217,15 @@ function truncarDecimales (x, posiciones = 0) {
         return Number(numStr)
     }
 }
+/*
+function calculoFechaVencimiento(fechaRevision, creditoD)
+{
+  var newDate;
+  var day = $(fechaRevision).datepicker('getDate').getDate();
+  var month = $(fechaRevision).datepicker('getDate').getMonth() +1;
+  var year = $(fechaRevision).datepicker('getDate').getFullYear();
+  var newDay =  day + creditoD;
+  newDate = year + "/" + month + "/" + newDay;
+  return newDate;
+}
+*/

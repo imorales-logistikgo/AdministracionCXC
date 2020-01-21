@@ -41,7 +41,7 @@ kt-menu__item--active
 						<div>
 							<select class="selectpicker" id="cboCliente" multiple name="Cliente" title="Selecciona un cliente" data-width="100%" data-live-search="true">
 								{% for Cliente in Clientes %}
-									<option style="width: 270px;" value="{{Cliente.NombreCorto}}">{{Cliente.NombreCorto}}</option>
+									<option style="width: 270px;" value="{{Cliente.RazonSocial}}">{{Cliente.RazonSocial}}</option>
 								{%endfor%}
 							</select>
 						</div>
