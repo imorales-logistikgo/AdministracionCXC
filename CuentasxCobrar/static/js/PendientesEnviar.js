@@ -6,6 +6,7 @@ var Ev;
 var EvDigital;
 var EvFisica;
 var moneda;
+var controlDesk;
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0;
@@ -739,8 +740,9 @@ function formatDataTable() {
    "mRender": function (data, type, full) {
      EvDigital = $('input[name="isEvicencias"]').data("evidenciadigital");
      EvFisica = $('input[name="isEvicencias"]').data("evidenciafisica");
+     controlDesk = $('input[name="isEvicencias"]').data("iscontroldesk");
          //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar");
-         return (full[9] == 'finalizado'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' ? '<input type="checkbox" name="checkPE" id="estiloCheckbox" />': '');
+         return (full[9] == 'finalizado'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" id="estiloCheckbox"/>': '');
        }
      },
      {
