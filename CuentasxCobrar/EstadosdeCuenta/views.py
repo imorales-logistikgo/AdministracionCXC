@@ -122,7 +122,6 @@ def SaveCobroxFactura(request):
 		Factura.Saldo -= Decimal(Cobro["Total"])
 		newRelacionCobroxFactura.IDFactura = Factura
 		newRelacionCobroxFactura.IDUsuarioAlta = 1
-		newRelacionCobroxFactura.IDCliente = 1
 		if truncate(float(Factura.Saldo), 2) == 0:
 			Factura.Status = "COBRADA"
 		else:

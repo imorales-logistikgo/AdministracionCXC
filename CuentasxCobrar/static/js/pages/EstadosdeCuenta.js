@@ -649,6 +649,7 @@ function saveCobroxCliente()  {
         timer: 2500
       })
       WaitMe_Hide('#waiteSubirCobro');
+      return;
      // $("#modalSubirCobro").modal('hide');
     }
 
@@ -710,6 +711,7 @@ function SaveCobroxFactura(IDCobro)
         timer: 2500
       })
       WaitMe_Hide('#waiteSubirCobro');
+      return;
      // $("#modalSubirCobro").modal('hide');
     }
 
