@@ -770,6 +770,7 @@ function formatDataTable() {
     {
       "width": "5%",
       "className": "dt-head-center dt-body-center",
+      "visible": false,
       "targets": 10,
       "mRender": function (data, type, full) {
         return (full[9] == 'finalizado'.toUpperCase() && EvDigital != 'False'   && EvFisica != 'False' ? '<a class="kt-badge kt-badge--info kt-badge--inline text-white" data-toggle="modal" data-target="#ModalVerEvidencias" data-backdrop="static" data-keyboard="false"><i class="flaticon2-image-file"></i></a>':'');

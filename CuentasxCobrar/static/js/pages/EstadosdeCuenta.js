@@ -698,6 +698,7 @@ function SaveCobroxFactura(IDCobro)
       $("input[name=checkEC]:checked").each(function () {
         table.row($(this).parents('tr')).remove().draw();
       });
+      
       $('#BtnSubirCobros').prop('disabled', true);
       WaitMe_Hide('#waiteSubirCobro');
       $("#modalSubirCobro").modal('hide');
@@ -712,7 +713,7 @@ function SaveCobroxFactura(IDCobro)
       })
       WaitMe_Hide('#waiteSubirCobro');
       return;
-     // $("#modalSubirCobro").modal('hide');
+      $("#modalSubirCobro").modal('hide');
     }
 
   }).catch(function(ex){
