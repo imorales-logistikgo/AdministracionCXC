@@ -694,11 +694,14 @@ function SaveCobroxFactura(IDCobro)
         showConfirmButton: false,
         timer: 2500
       })
-      var table = $('#TableEstadosdeCuenta').DataTable();
-      $("input[name=checkEC]:checked").each(function () {
-        table.row($(this).parents('tr')).remove().draw();
+
+
+       var rowID=[];
+       var table = $('#TableEstadosdeCuenta').DataTable();
+      $("input[name=checkEC]:checked").each(function (value) {
+        rowID.push($(this).closest('tr').index());
       });
-      
+        table.rows(rowID).remove().draw();
       $('#BtnSubirCobros').prop('disabled', true);
       WaitMe_Hide('#waiteSubirCobro');
       $("#modalSubirCobro").modal('hide');
@@ -717,6 +720,6 @@ function SaveCobroxFactura(IDCobro)
     }
 
   }).catch(function(ex){
-    console.log("no success!");
+    console.log(ex);
   });
 }
