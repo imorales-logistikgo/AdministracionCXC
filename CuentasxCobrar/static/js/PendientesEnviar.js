@@ -696,8 +696,9 @@ var fnGetPendientesEnviar = function () {
   arrStatus = $('#cboStatus').val();
   arrClientes = $('#cboCliente').val();
   strMoneda = $('#rdMXN').is(':checked') ? 'MXN' : 'USD';
+  arrProyectos = $('#cboProyecto').val();
   WaitMe_Show('#divTablaPendientesEnviar');
-  fetch("/PendientesEnviar/FilterBy?FechaDescargaDesde="+ startDate +"&FechaDescargaHasta="+ endDate +"&Status="+ JSON.stringify(arrStatus) +"&Cliente="+ JSON.stringify(arrClientes) +"&Moneda="+ strMoneda, {
+  fetch("/PendientesEnviar/FilterBy?FechaDescargaDesde="+ startDate +"&FechaDescargaHasta="+ endDate +"&Status="+ JSON.stringify(arrStatus) +"&Cliente="+ JSON.stringify(arrClientes) +"&Moneda="+ strMoneda + "&Proyecto=" + JSON.stringify(arrProyectos), {
     method: "GET",
     credentials: "same-origin",
     headers: {

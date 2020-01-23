@@ -33,6 +33,7 @@ def GetPendientesByFilters(request):
 	FechaDescargaHasta = request.GET["FechaDescargaHasta"]
 	Clientes = json.loads(request.GET["Cliente"])
 	Status = json.loads(request.GET["Status"])
+	Proyectos = json.loads(request.GET["Proyecto"])
 	Moneda = request.GET["Moneda"]
 	PendingToSend = View_PendientesEnviarCxC.objects.filter(FechaDescarga__range = [datetime.datetime.strptime(request.GET["FechaDescargaDesde"],'%m/%d/%Y'), datetime.datetime.strptime(request.GET["FechaDescargaHasta"],'%m/%d/%Y')], IsFacturaCliente = False)
 	if Status:
@@ -44,6 +45,8 @@ def GetPendientesByFilters(request):
 			PendingToSend = PendingToSend.filter(Status__in = Status)
 	if Clientes:
 		PendingToSend = PendingToSend.filter(IDCliente__in = Clientes)
+	if Proyectos:
+		PendingToSend = PendingToSend.filter(Proyecto__in = Proyectos)
 	PendingToSend = PendingToSend.filter(Moneda = Moneda)
 	htmlRes = render_to_string('TablaPendientes.html', {'pendientes':PendingToSend}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
