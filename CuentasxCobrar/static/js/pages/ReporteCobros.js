@@ -3,6 +3,8 @@ $(document).ready(function(){
 
   formatTableCobros();
 
+  $(document).on('click', '.btnDetalleCobro', fnGetDetalleCobro);
+
   //rago fecha para el Filtro
   $('input[name="FiltroFechaReporteCobros"]').daterangepicker({
    autoUpdateInput: false,
@@ -102,5 +104,27 @@ function formatTableCobros() {
       "className": "dt-head-center dt-body-right"
     },
     ]
+  });
+}
+
+
+var fnGetDetalleCobro = function () {
+  var IDCobro = $(this).parents('tr').data('idcobro');
+  //WaitMe_Show('#divTableDetallesCobro');
+
+  fetch("/ReporteCobros/GetDetallesCobro?IDCobro=" + IDCobro, {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    return response.clone().json();
+  }).then(function(data){
+    //WaitMe_Hide('#divTableDetallesCobro');
+    $('#divTableDetallesCobro').html(data.htmlRes);
+  }).catch(function(ex){
+    console.log("no success!");
   });
 }

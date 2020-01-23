@@ -33,3 +33,18 @@ def GetCobrosByFilters(request):
 	Cobros = Cobros.filter(IDCobro__FechaCobro__range = [datetime.datetime.strptime(FechaCobroDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaCobroHasta,'%m/%d/%Y')])
 	htmlRes = render_to_string('TablaReporteCobros.html', {'Cobros':Cobros}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
+
+
+
+def GetDetallesCobro(request):
+	IDCobro = request.GET["IDCobro"]
+	FacturasxCobro = RelacionCobrosFacturasxCliente.objects.filter(IDCobro = IDCobro).select_related('IDFactura').select_related('IDCobroxFactura')
+	Facturas = list()
+	for FacturaxCobro in FacturasxCobro:
+		Cobro = {}
+		Cobro["FolioFactura"] = FacturaxCobro.IDFactura.Folio
+		Cobro["FechaFactura"] = FacturaxCobro.IDFactura.FechaFactura
+		Cobro["Total"] = FacturaxCobro.IDCobroxFactura.Total
+		Facturas.append(Cobro)
+	htmlRes = render_to_string('TablaDetallesReporteCobro.html', {'Facturas':Facturas}, request = request,)
+	return JsonResponse({'htmlRes' : htmlRes})

@@ -11,6 +11,8 @@ $(document).ready(function()
   var totConv=0;
 //tabla estados de cuenta
 formatDataTableFacturas();
+
+$(document).on('click', '.btnDetalleCobro', fnGetDetalleCobro);
 //ejecuta varias funciones cada que el checkbox es seleccionado en la tabla estados de cuenta
 $(document).on( 'change', 'input[name="checkEC"]', function () {
   var input = 'input[name="checkEC"]';
@@ -716,6 +718,27 @@ function SaveCobroxFactura(IDCobro)
       $("#modalSubirCobro").modal('hide');
     }
 
+  }).catch(function(ex){
+    console.log("no success!");
+  });
+}
+
+var fnGetDetalleCobro = function () {
+  var IDFactura = $(this).parents('tr').data('idfactura');
+  WaitMe_Show('#divTableDetallesCobro');
+
+  fetch("/EstadosdeCuenta/GetDetallesCobro?IDFactura=" + IDFactura, {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    return response.clone().json();
+  }).then(function(data){
+    WaitMe_Hide('#divTableDetallesCobro');
+    $('#divTableDetallesCobro').html(data.htmlRes);
   }).catch(function(ex){
     console.log("no success!");
   });

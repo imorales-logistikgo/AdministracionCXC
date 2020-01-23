@@ -12,8 +12,8 @@
 	</thead>
 	<tbody>
 		{% for Cobro in Cobros %}
-		<tr>
-			<td>{{Cobro.Folio}}</td>
+		<tr data-idcobro="{{Cobro.IDCobro}}">
+			<td style="font-weight: bold;" class=" text-center bold"><a data-toggle="modal" href="#detallesCobro" class="btnDetalleCobro" data-backdrop="static">{{Cobro.Folio}}</a></td>
 			<td>{{Cobro.NombreCortoCliente}}</td>
 			<td>{{Cobro.FechaCobro|date:'Y/m/d'}}</td>
 			<td>{{Cobro.Total|floatformat:"2"}}</td>

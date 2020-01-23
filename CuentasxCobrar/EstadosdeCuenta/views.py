@@ -134,3 +134,18 @@ def SaveCobroxFactura(request):
 
 def GetDetallesCobro(request):
 	IDFactura = json.loads(request.body.decode('utf-8'))["IDFactura"]
+
+
+
+def GetDetallesCobro(request):
+	IDFactura = request.GET["IDFactura"]
+	FacturasxCobro = RelacionCobrosFacturasxCliente.objects.filter(IDFactura = IDFactura).select_related('IDCobro').select_related('IDCobroxFactura')
+	Facturas = list()
+	for FacturaxCobro in FacturasxCobro:
+		Cobro = {}
+		Cobro["FolioCobro"] = FacturaxCobro.IDCobro.Folio
+		Cobro["FechaFactura"] = FacturaxCobro.IDFactura.FechaFactura
+		Cobro["Total"] = FacturaxCobro.IDCobroxFactura.Total
+		Facturas.append(Cobro)
+	htmlRes = render_to_string('TablaDetallesCobro.html', {'Facturas':Facturas}, request = request,)
+	return JsonResponse({'htmlRes' : htmlRes})
