@@ -12,7 +12,7 @@
 			{% for Factura in Facturas %}
 			<tr>
 				<td>{{Factura.FolioCobro}}</td>
-				<td>{{Factura.FechaFactura|date:'Y/m/d'}}</td>
+				<td>{{Factura.FechaCobro|date:'Y/m/d'}}</td>
 				<td>${{Factura.Total|floatformat:"2"|intcomma}}</td>
 			</tr>
 			{%endfor%}

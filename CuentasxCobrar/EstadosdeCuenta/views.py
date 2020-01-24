@@ -144,7 +144,7 @@ def GetDetallesCobro(request):
 	for FacturaxCobro in FacturasxCobro:
 		Cobro = {}
 		Cobro["FolioCobro"] = FacturaxCobro.IDCobro.Folio
-		Cobro["FechaFactura"] = FacturaxCobro.IDFactura.FechaFactura
+		Cobro["FechaCobro"] = FacturaxCobro.IDCobro.FechaCobro
 		Cobro["Total"] = FacturaxCobro.IDCobroxFactura.Total
 		Facturas.append(Cobro)
 	htmlRes = render_to_string('TablaDetallesCobro.html', {'Facturas':Facturas}, request = request,)
