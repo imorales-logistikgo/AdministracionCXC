@@ -49,7 +49,7 @@
 						<td>{{Factura.Saldo|floatformat:"2"}}</td>
 						<td>{{Factura.Moneda}}</td>
 						<td>{{Factura.Status}}</td>
-						<td><a data-toggle="modal" href="#detallesCobro" class="btnDetalleCobro" data-backdrop="static">{{Folios|index:forloop.counter0}}</a></td>
+						<td><a data-toggle="modal" href="#detallesCobro" class="btnDetalleCobro" data-backdrop="static">{{Folios|index:forloop.counter0|safe}}</a></td>
 						<td><input name="EvidenciaXML" type="hidden" data-facturaid="{{Factura.IDFactura}}"  data-isfragmentada="{{Factura.IsFragmentada}}" data-evidenciaxml="{{Factura.RutaXML}}"></td>
 						<td></td>
 					</tr>
