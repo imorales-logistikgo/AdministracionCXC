@@ -11,7 +11,7 @@ class EmailBackend():
     Custom Email Backend to perform authentication via email
     """
 
-    
+
     def authenticate(self, request, username=None, password=None):
         nombreusuario=username
         data = {
@@ -24,7 +24,7 @@ class EmailBackend():
         respuesta = response.json()
         if respuesta:
             try:
-                admonusers=Admon.AdmonUsuarios.objects.get(nombreusuario=nombreusuario) 
+                admonusers=Admon.AdmonUsuarios.objects.get(nombreusuario=nombreusuario)
             except Admon.AdmonUsuarios.DoesNotExist:
                 return None
             try:

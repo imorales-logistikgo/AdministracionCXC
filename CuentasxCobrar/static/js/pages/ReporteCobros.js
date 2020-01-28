@@ -110,7 +110,7 @@ function formatTableCobros() {
 
 var fnGetDetalleCobro = function () {
   var IDCobro = $(this).parents('tr').data('idcobro');
-  //WaitMe_Show('#divTableDetallesCobro');
+  WaitMe_Show('#divTableDetallesCobro');
 
   fetch("/ReporteCobros/GetDetallesCobro?IDCobro=" + IDCobro, {
     method: "GET",
@@ -122,7 +122,7 @@ var fnGetDetalleCobro = function () {
   }).then(function(response){
     return response.clone().json();
   }).then(function(data){
-    //WaitMe_Hide('#divTableDetallesCobro');
+    WaitMe_Hide('#divTableDetallesCobro');
     $('#divTableDetallesCobro').html(data.htmlRes);
   }).catch(function(ex){
     console.log("no success!");
