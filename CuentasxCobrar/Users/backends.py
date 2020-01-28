@@ -11,7 +11,7 @@ class EmailBackend():
     Custom Email Backend to perform authentication via email
     """
 
-    
+
     def authenticate(self, request, username=None, password=None):
         nombreusuario=username
         data = {
@@ -20,11 +20,11 @@ class EmailBackend():
         }
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         data_json = json.dumps(data)
-        response = requests.post('https://api-admon.logistikgo.com/api/Usuarios/Encripta',data=data_json,headers=headers)
+        response = requests.post('http://api-admon.logistikgo.com/api/Usuarios/Encripta',data=data_json,headers=headers)
         respuesta = response.json()
         if respuesta:
             try:
-                admonusers=Admon.AdmonUsuarios.objects.get(nombreusuario=nombreusuario) 
+                admonusers=Admon.AdmonUsuarios.objects.get(nombreusuario=nombreusuario)
             except Admon.AdmonUsuarios.DoesNotExist:
                 return None
             try:
