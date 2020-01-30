@@ -82,6 +82,7 @@ def SaveFactura(request):
 def SavePartidasxFactura(request):
 	jParams = json.loads(request.body.decode('utf-8'))
 	for IDPendiente in jParams["arrPendientes"]:
+		print(IDPendiente)
 		Viaje = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = IDPendiente)
 		newPartida = Partida()
 		newPartida.FechaAlta = datetime.datetime.now()

@@ -39,7 +39,7 @@ class Ext_PendienteEnviar_Precio(models.Model):
     PrecioIVA = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     PrecioRetencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     PrecioTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
-    PrecioServicios = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    #PrecioServicios = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     IsFacturaCliente = models.BooleanField(default=False)
     class Meta:
         db_table="Ext_PendienteEnviar_Precio"
@@ -69,7 +69,10 @@ class View_PendientesEnviarCxC(models.Model):
     IVA = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     Retencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     Total = models.DecimalField(default=0, max_digits=30, decimal_places=5)
-    Servicios = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    ServiciosIVA = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    ServiciosRetencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    ServiciosSubtotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    ServiciosTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     Moneda = models.CharField(max_length=10)
     Status = models.CharField(max_length=15)
     IsEvidenciaDigital = models.BooleanField()

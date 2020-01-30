@@ -9,7 +9,7 @@ var moneda;
 var controlDesk;
 //var idpendienteenviar;
 var table;
-var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0;
+var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
 $(document).ready(function() {
 //Tabla Pendientes de enviar
 formatDataTable();
@@ -378,7 +378,7 @@ function LimpiarModalSF()
 
 
          uppyDashboard.use(Dashboard, options);
-         uppyDashboard.use(XHRUpload, { endpoint: 'http://api-bgk-debug.logistikgo.com/api/Viaje/SaveevidenciaTest', method: 'post'});
+         uppyDashboard.use(XHRUpload, { endpoint: 'https://api-bgk-debug.logistikgo.com/api/Viaje/SaveevidenciaTest', method: 'post'});
 				//uppyDashboard.use(XHRUpload, { endpoint: 'http://localhost:63510/api/Viaje/SaveevidenciaTest', method: 'post'});
 				uppyDashboard.use(GoogleDrive, { target: Dashboard, companionUrl: 'https://companion.uppy.io' });
         uppyDashboard.on('upload-success', (file, response) => {
@@ -404,6 +404,7 @@ function LimpiarModalSF()
                      alertToastError("El total de la factura no coincide con el total calculado del sistema")
                       //uppyDashboard.reset()
                       uppyDashboard.cancelAll()
+                        $('.uploaded-files ol').remove();
 
                     }
                     else
@@ -463,7 +464,7 @@ function adddatos(){
   $("input[name=checkPE]:checked").each(function () {
     var table = $('#TablePendientesEnviar').DataTable();
     var datosRow = table.row($(this).parents('tr')).data();
-    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[7], datosRow[8]]);
+    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[12], datosRow[13], datosRow[14], datosRow[7], datosRow[8]]);
   });
   return arrSelect;
 }
@@ -477,29 +478,35 @@ function getDatos(){
  subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0, totalViaje=0;
  for (var i=0; i<datos.length; i++)
  {
-  moneda = datos[i][6];
-  if(datos[i][6] === "MXN")
+  moneda = datos[i][9];
+  if(datos[i][9] === "MXN")
   {
     var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
     var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
-    var tot = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var SubServicios = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var RetServicios = parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
+    var IVServicios = parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
+    var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
     subtotal = subtotal + sub;
     Tiva = Tiva + iva;
     TRetencion = TRetencion + retencion;
     total = total + tot;
     Tservicios = Tservicios + servicios;
+    SBServicios = SubServicios;
+    RServicios = RetServicios;
+    IServicios = IVServicios;
     datos[i].push("n/a");
     if($('input[name="Fragmentada"]').is(':checked'))
     {
       $('#alertaViajeFragmentada').css("display", "block");
-       viaje = total-Tservicios;
+       viaje = total;
       $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
       $('#totalViaje').html('<span>'+viaje+'</span>');
     }
   }
-  if(datos[i][6] === "USD")
+  if(datos[i][9] === "USD")
   {
     var tipoCambio = $('input[name="TipoCambio"]').val();
 
@@ -517,12 +524,15 @@ function getDatos(){
         TRetencion = TRetencion + retencion;
         total = total + tot;
         Tservicios = Tservicios + servicios;
+        SBServicios = SubServicios;
+        RServicios = RetServicios;
+        IServicios = IVServicios;
         totalCambio = totalCambio + totCambio;
 
         if($('input[name="Fragmentada"]').is(':checked'))
         {
           $('#alertaViajeFragmentada').css("display", "block");
-           viaje = total-Tservicios;
+           viaje = total;
           $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
           $('#totalViaje').html('<span>'+viaje+'</span>');
         }
@@ -531,7 +541,7 @@ function getDatos(){
     }
 
     var h = [datos];
-    var table = $('#ResumTable').DataTable({
+    $('#ResumTable').DataTable({
      destroy: true,
     // scrollX: true,
      //scrollY: "300px",
@@ -542,22 +552,18 @@ function getDatos(){
        "className": "dt-head-center dt-body-center bold"
      },
      {
-       "targets": [1,2,3,4,5],
+       "targets": [1,2,3],
        "className": "dt-head-center dt-body-right"
      },
      {
-       "targets": 4,
+       "targets": [4,5,6,7],
+       "className": "dt-head-center dt-body-center",
        "visible": false
      },
      {
-       "targets": 6,
+       "targets": [8,9,10],
        "className": "dt-head-center dt-body-center"
      },
-     {
-       "targets": 7,
-       "width": "10%",
-       "className": "dt-head-center dt-body-center"
-     }
      ]
 
    });
@@ -565,7 +571,7 @@ function getDatos(){
     $('#sub').html('<strong>$'+subtotal+'</strong>');
     $('#iva').html('<strong>$'+Tiva+'</strong>');
     $('#retencion').html('<strong>$'+TRetencion+'</strong>');
-    $('#servicios').html('<strong>$'+Tservicios+'</strong>');
+    //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
     $('#total').html('<strong>$'+total+'</strong>');
     $('#Moneda').html('');
     $('#totalCambio').html('<strong>$'+truncarDecimales(totalCambio, 2)+'<strong>');
@@ -591,9 +597,9 @@ function getDatos(){
       FechaRevision: $('#FechaRevision').val(),
       FechaVencimiento: $('#FechaVencimiento').val(),
       Moneda: moneda,
-      SubTotal: IsFacturaServicios ? 0 : subtotal,
-      IVA: IsFacturaServicios ? 0 : Tiva,
-      Retencion: IsFacturaServicios ? 0 : TRetencion,
+      SubTotal: IsFacturaServicios ? SBServicios : subtotal,
+      IVA: IsFacturaServicios ? IServicios : Tiva,
+      Retencion: IsFacturaServicios ? RServicios : TRetencion,
       Total: Total,
       RutaXML: RutaXML,
       RutaPDF: RutaPDF,
@@ -730,6 +736,9 @@ function formatDataTable() {
  {
    extend: 'excel',
    text: '<i class="fas fa-file-excel fa-lg"></i>',
+   exportOptions: {
+    columns: ':visible'
+   }
  }
  ],
 
