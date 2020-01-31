@@ -217,7 +217,7 @@ function truncarDecimales (x, posiciones = 0) {
         return Number(numStr)
     }
 }
-/*
+
 function calculoFechaVencimiento(fechaRevision, creditoD)
 {
   var newDate;
@@ -228,4 +228,3 @@ function calculoFechaVencimiento(fechaRevision, creditoD)
   newDate = year + "/" + month + "/" + newDay;
   return newDate;
 }
-*/

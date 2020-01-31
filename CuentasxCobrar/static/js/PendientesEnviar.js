@@ -7,6 +7,7 @@ var EvDigital;
 var EvFisica;
 var moneda;
 var controlDesk;
+var DiasCredito;
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
@@ -221,8 +222,8 @@ $('#kt_modal_2').on('shown.bs.modal', function(){
    todayHighlight: true,
    language: 'es'
  });
-  $("#FechaVencimiento").datepicker('setDate', 'today' );
-  //$('#FechaVencimiento').prop('disabled', true);
+//  $("#FechaVencimiento").datepicker('setDate', 'today' );
+
 				//KTUppy.init()
       });
 
@@ -237,19 +238,20 @@ $('input[name="TipoCambio"]').on('change', function(){
 });
 
 $("#FechaRevision").on('change', function(){
-  //  var diasCredito = 30;
+  var diasCredito = $('input[name="checkPE"]').data("creditodias");
   if($("#FechaRevision").val() < $("#FechaFactura").val())
   {
     alertToastError("La fecha de revision no puede ser antes que la fecha de factura");
   //  $("#FechaRevision").val($("#FechaFactura").val());
     $("#FechaRevision").datepicker('setDate', $("#FechaFactura").val() )
   }
-  /*
+
   $('#FechaVencimiento').datepicker({
     format: 'yyyy/mm/dd',
     language: 'es'
   });
-  $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", diasCredito) );*/
+    $('#FechaVencimiento').prop('disabled', true);
+  $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", diasCredito) );
 });
 
 
@@ -751,8 +753,9 @@ function formatDataTable() {
      EvDigital = $('input[name="isEvicencias"]').data("evidenciadigital");
      EvFisica = $('input[name="isEvicencias"]').data("evidenciafisica");
      controlDesk = $('input[name="isEvicencias"]').data("iscontroldesk");
+     DiasCredito = $('input[name="isEvicencias"]').data("diascredito");
          //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar");
-         return (full[9] == 'finalizado'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" id="estiloCheckbox"/>': '');
+         return (full[9] == 'finalizado'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
        }
      },
      {

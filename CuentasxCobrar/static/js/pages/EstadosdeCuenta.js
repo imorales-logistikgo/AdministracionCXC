@@ -282,6 +282,7 @@ function showDatosObtenidos(){
 
   var h = [datos];
   $('#tableAddCobro').DataTable({
+     "order": [1, 'asc'],
     "paging": false,
     "info":   false,
     destroy: true,
