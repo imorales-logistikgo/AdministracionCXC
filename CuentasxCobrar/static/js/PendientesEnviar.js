@@ -584,7 +584,7 @@ function getDatos(){
     var RutaPDF = $('.uploaded-files-fragmentadas #RutaPDF').attr('href');
     var Total = Tservicios;
 
-    saveFactura(false, total - Tservicios);
+    saveFactura(false, total /*- Tservicios*/);
     saveFactura(true, Total, strFolioServicios, strComentariosServicios, RutaXML, RutaPDF);
   }
 
