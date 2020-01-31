@@ -237,19 +237,19 @@ $('input[name="TipoCambio"]').on('change', function(){
 });
 
 $("#FechaRevision").on('change', function(){
-//  var diasCredito = 25;
-if($("#FechaRevision").val() < $("#FechaFactura").val())
-{
-  alertToastError("La fecha de revision no puede ser antes que la fecha de factura");
-//  $("#FechaRevision").val($("#FechaFactura").val());
-  $("#FechaRevision").datepicker('setDate', $("#FechaFactura").val() )
-}
-/*
-$('#FechaVencimiento').datepicker({
-  format: 'yyyy/mm/dd',
-  language: 'es'
-});
-$("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", diasCredito) );*/
+  //  var diasCredito = 30;
+  if($("#FechaRevision").val() < $("#FechaFactura").val())
+  {
+    alertToastError("La fecha de revision no puede ser antes que la fecha de factura");
+  //  $("#FechaRevision").val($("#FechaFactura").val());
+    $("#FechaRevision").datepicker('setDate', $("#FechaFactura").val() )
+  }
+  /*
+  $('#FechaVencimiento').datepicker({
+    format: 'yyyy/mm/dd',
+    language: 'es'
+  });
+  $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", diasCredito) );*/
 });
 
 
