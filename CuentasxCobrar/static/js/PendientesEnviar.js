@@ -64,7 +64,10 @@ $('input[name="Fragmentada"]').on("change", function()
 });
 
 //on click para el boton del modal subir factura
-$(document).on('click', '#BtnSubirFacturaPendietnesEnviar',getDatos);
+$(document).on('click', '#BtnSubirFacturaPendietnesEnviar', function(){
+  getDatos();
+  mostrarTipoCambio();
+});
 
 //verificar si el folio ya existe en la base de datos
 $('#txtFolioFactura').on('change', function() {
@@ -298,6 +301,32 @@ function FiltroCheckboxCliente(){
 }
 
 //funcion limpiar modal subir facturas de pendientes de enviar
+
+//funcion para mostrar u ocultar el input del timpo de cambio
+function mostrarTipoCambio()
+{
+  var found;
+  var datos = adddatos();
+  for(var i=0; i<datos.length; i++)
+  {
+    // datos[i][3].push(datos[i][3]);
+    found = datos[i][9].includes('USD');
+  }
+  if(found != true)
+  {
+   $('#txtTipoCambio').hide();
+   $('#labelTipoCambio').hide();
+ }
+ else
+ {
+   $('#txtTipoCambio').show();
+   $('#labelTipoCambio').show();
+ }
+}
+
+
+
+
 function LimpiarModalSF()
 {
   $('input[name="FolioFactura"]').val("");
