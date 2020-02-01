@@ -8,6 +8,7 @@ var EvFisica;
 var moneda;
 var controlDesk;
 var DiasCredito;
+var Dcreditos;
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
@@ -17,6 +18,7 @@ formatDataTable();
 
 //on click select row checkbox
         $(document).on( 'change', 'input[name="checkPE"]', function () {
+          Dcreditos = $(this).data("creditodias");
           var input = 'input[name="checkPE"]';
           var btnSubir = '#BtnSubirFacturaPendietnesEnviar';
           if($(this).is(':checked'))
@@ -63,6 +65,18 @@ $('input[name="Fragmentada"]').on("change", function()
 
 //on click para el boton del modal subir factura
 $(document).on('click', '#BtnSubirFacturaPendietnesEnviar',getDatos);
+
+//verificar si el folio ya existe en la base de datos
+$('#txtFolioFactura').on('change', function() {
+  var folioFac = $('#txtFolioFactura').val();
+  fnCheckFolio(folioFac);
+});
+
+//verificar si el folio ya existe en la base de datos para la fragmentacion
+$('#txtFolioServicios').on('change', function(){
+  var folioFacServ = $('#txtFolioServicios').val();
+  fnCheckFolio(folioFacServ);
+});
 
 $('#BtnAplicarFiltro').on('click', fnGetPendientesEnviar);
 
@@ -238,7 +252,7 @@ $('input[name="TipoCambio"]').on('change', function(){
 });
 
 $("#FechaRevision").on('change', function(){
-  var diasCredito = $('input[name="checkPE"]').data("creditodias");
+  //var diasCredito = $('input[name="checkPE"]').data("creditodias");
   if($("#FechaRevision").val() < $("#FechaFactura").val())
   {
     alertToastError("La fecha de revision no puede ser antes que la fecha de factura");
@@ -251,7 +265,7 @@ $("#FechaRevision").on('change', function(){
     language: 'es'
   });
     $('#FechaVencimiento').prop('disabled', true);
-  $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", diasCredito) );
+  $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", Dcreditos) );
 });
 
 
@@ -304,6 +318,7 @@ function LimpiarModalSF()
   $('#Fragmentada').data("rutaarchivoXML", null);
   $('#txtFolioServicios').val('')
   $('#txtComentariosServicios').val('')
+  $('#chkFragmentada').prop('disabled', false);
 
 }
 
@@ -416,6 +431,7 @@ function LimpiarModalSF()
                      $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
                      document.querySelector('.uploaded-files').innerHTML +=
                      `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+                     $('#chkFragmentada').prop('disabled', true);
                     }
                    }
                    else
@@ -435,6 +451,7 @@ function LimpiarModalSF()
                        $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
                        document.querySelector('.uploaded-files').innerHTML +=
                        `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+                        $('#chkFragmentada').prop('disabled', true);
                       }
                    }
                    //console.log($('#kt_uppy_1').data("rutaarchivoXML"))
@@ -517,8 +534,8 @@ function getDatos(){
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
     var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
-    var tot = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
-    var totCambio = (parseFloat(datos[i][5].replace(/(\$)|(,)/g,'')) * tipoCambio);
+    var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
+    var totCambio = (parseFloat(datos[i][8].replace(/(\$)|(,)/g,'')) * tipoCambio);
     datos[i].push(totCambio);
         //newData.push([folio, sub, iva, retencion, tot]);
         subtotal = subtotal + sub;
@@ -697,6 +714,36 @@ function SavePartidasxFactura(IDFactura) {
     console.log("no success!");
   });
 }
+
+
+var fnCheckFolio = function (fol) {
+  fetch("/PendientesEnviar/CheckFolioDuplicado?Folio=" + fol, {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    return response.clone().json();
+  }).then(function(data){
+    if(data.IsDuplicated) {
+      Swal.fire({
+        type: 'error',
+        title: 'El folio indicado ya existe en el sistema',
+        showConfirmButton: false,
+        timer: 2500
+      })
+      $('#btnGuardarFactura').attr('disabled',true);
+    }
+    else {
+      $('#btnGuardarFactura').attr('disabled',false);
+    }
+  }).catch(function(ex){
+    console.log("no success!");
+  });
+}
+
 
 var fnGetPendientesEnviar = function () {
   startDate = ($('#cboFechaDescarga').data('daterangepicker').startDate._d).toLocaleDateString('en-US');

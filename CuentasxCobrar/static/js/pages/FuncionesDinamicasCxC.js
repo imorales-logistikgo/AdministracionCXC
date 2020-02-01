@@ -122,6 +122,7 @@ return cont;
                  $(idP).data("rutaarchivoXML", urlPDF)
                  document.querySelector(ver).innerHTML +=
                  `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+                 $('#chkFragmentada').prop('disabled', true);
                    //console.log($('#kt_uppy_1').data("rutaarchivoXML"))
                   }
                  }

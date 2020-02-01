@@ -35,6 +35,7 @@ $('#BtnAplicarFiltro').on('click', fnGetFacturas);
 $(document).on('click', '.btnDetalleFactura',getDetalleFactura);
 
 
+
 //eliminar row de la tabla estados de cuenta
 $(document).on( 'click', '.BtnEliminarFactura', function () {
  Swal.fire({

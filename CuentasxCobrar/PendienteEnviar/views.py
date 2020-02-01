@@ -102,3 +102,8 @@ def SavePartidasxFactura(request):
 	PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1", ['FINALIZADO'])
 	htmlRes = render_to_string('TablaPendientes.html', {'pendientes':PendingToSend}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
+
+
+def CheckFolioDuplicado(request):
+	IsDuplicated = FacturasxCliente.objects.filter(Folio = request.GET["Folio"]).exclude(Status = "CANCELADA").exists()
+	return JsonResponse({'IsDuplicated' : IsDuplicated})
