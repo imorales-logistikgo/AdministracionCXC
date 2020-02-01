@@ -347,7 +347,7 @@ function LimpiarModalSF()
   $('#Fragmentada').data("rutaarchivoXML", null);
   $('#txtFolioServicios').val('')
   $('#txtComentariosServicios').val('')
-  $('#chkFragmentada').prop('disabled', false);
+
 
 }
 
@@ -521,7 +521,7 @@ function adddatos(){
 //funcion para obtener los datos de la tabla pendiente de enviar para mostrarlos en la tabla del modal subir facturas
 function getDatos(){
  var datos = adddatos();
- //console.log(datos);
+ datos.length == 1 ? $('#chkFragmentada').prop('disabled', false):$('#chkFragmentada').prop('disabled', true); 
  var newData = [];
  subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0, totalViaje=0;
  for (var i=0; i<datos.length; i++)
