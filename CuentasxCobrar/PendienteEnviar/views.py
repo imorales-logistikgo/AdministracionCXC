@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from PendienteEnviar.models import View_PendientesEnviarCxC, FacturasxCliente, Partida, RelacionFacturaxPartidas, PendientesEnviar, Ext_PendienteEnviar_Precio
-from usersadmon.models import Cliente, AdmonUsuarios
+from usersadmon.models import Cliente, AdmonUsuarios, AdmonClientes_Facturacion
 from django.core import serializers
 from .forms import FacturaForm
 from django.template.loader import render_to_string
