@@ -2,7 +2,8 @@ var table;
 var cliente;
 var idcliente;
 var TBalance=0, total=0;
-  var fragmentada;
+var fragmentada;
+var tipoCambio = 0;
 $(document).ready(function()
 {
   var calculo =0;
@@ -33,6 +34,7 @@ $(document).on( 'change', 'input[name="checkEC"]', function () {
 $('#BtnAplicarFiltro').on('click', fnGetFacturas);
 
 $(document).on('click', '.btnDetalleFactura',getDetalleFactura);
+
 
 
 //eliminar row de la tabla estados de cuenta
@@ -144,9 +146,9 @@ $('#tableAddCobro').on("keyup change", 'input[name="totalCobro"]', function(){
   {
     if(parseFloat($(this).val()) >= 0)
     {
-    if(parseFloat($(this).val()) > totConv)
+    if(parseFloat($(this).val()) > datosRow[7])
     {
-      (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2].replace(/(\$)|(,)/g,'')) : $(this).val(totConv)
+      (datosRow[3] === 'MXN') ?  $(this).val(datosRow[2].replace(/(\$)|(,)/g,'')) : $(this).val(datosRow[7])
     }
     }
     else
@@ -270,11 +272,11 @@ function showDatosObtenidos(){
    }
    if(datos[i][3] == 'USD')
    {
-     var tipoCambio = $('input[name="TipoCambioCobro"]').val();
+     tipoCambio = $('input[name="TipoCambioCobro"]').val();
      var Balance = parseFloat(datos[i][2].replace(/(\$)|(,)/g,'') * tipoCambio);
      var tot = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
      totConv = Balance;
-      // datos[i].push(tot);
+       datos[i].push(totConv);
       total = total + Balance;
     }
 
@@ -282,6 +284,7 @@ function showDatosObtenidos(){
 
   var h = [datos];
   $('#tableAddCobro').DataTable({
+     "order": [1, 'asc'],
     "paging": false,
     "info":   false,
     destroy: true,
@@ -303,7 +306,7 @@ function showDatosObtenidos(){
     "className": "dt-head-center dt-body-right",
     "targets": 4,
     "mRender": function (data, type, full) {
-     return (full[3] === 'MXN' ? `$ <input class="col-6 text-right valCobro" type="number" data-idfact="${full[5]}" name="totalCobro" id="valCobro" value="${full[2]}">` : '<input type="number" class="valCobro" data-idfact="'+ full[5] +'" name="totalCobro" id="valCobro" value="'+totConv+'">');
+     return (full[3] === 'MXN' ? `$ <input class="col-6 text-right valCobro" type="number" data-idfact="${full[5]}" name="totalCobro" id="valCobro" value="${full[2]}">` : `<input type="number" class="valCobro" data-idfact="${full[5]}" name="totalCobro" id="valCobro" value="${full[7]}">`);
    }
  },
 
@@ -406,7 +409,7 @@ function ValidacionCheckboxCobros(){
 
 
          uppyDashboard.use(Dashboard, options);
-         uppyDashboard.use(XHRUpload, { endpoint: 'http://api-bgk-debug.logistikgo.com/api/Viaje/SaveevidenciaTest', method: 'post'});
+         uppyDashboard.use(XHRUpload, { endpoint: 'https://api-bgk-debug.logistikgo.com/api/Viaje/SaveevidenciaTest', method: 'post'});
 				//uppyDashboard.use(XHRUpload, { endpoint: 'http://localhost:63510/api/Viaje/SaveevidenciaTest', method: 'post'});
 				uppyDashboard.use(GoogleDrive, { target: Dashboard, companionUrl: 'https://companion.uppy.io' });
         uppyDashboard.on('upload-success', (file, response) => {
@@ -524,10 +527,10 @@ function formatDataTableFacturas(){
       text: '<i class="fas fa-file-excel fa-lg"></i>',
      }
     ],
-    fixedColumns:   {
+    /*fixedColumns:   {
   leftColumns: 1
 },
-
+*/
 
     columnDefs: [ {
       orderable: false,

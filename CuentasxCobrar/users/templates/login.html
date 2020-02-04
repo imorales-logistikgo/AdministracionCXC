@@ -69,7 +69,7 @@
 
             <div id="divAlert" class="alert display-hide">
                 <button class="close" data-close="alert"></button>
-                <span class="fa fa-warning"></span>&nbsp;<bold id="lblErrorAlert"></bold>
+                <span class="fa fa-warning"></span>&nbsp;<bold id="lblErrorAlert">{{msj}}</bold>
             </div>
 
             <div id="divAlertCorreo" class="alert alert-success display-hide">
@@ -162,8 +162,12 @@
             $(function() {
                 $('#id_username').addClass('form-control');
                 $('#id_username').attr("placeholder", " Ingresa tu usuario o correo");
+              /*    $('#id_username').attr("id", " txtUsuario");
+                  $('#id_username').attr("name", " txtUsuario");*/
                 $('#id_password').addClass('form-control');
                 $('#id_password').attr("placeholder", " Ingresa tu contraseña");
+              /*  $('#id_password').attr("id", " txtContrasena");
+                $('#id_password').attr("name", " txtContrasena");*/
             });
     </script>
 

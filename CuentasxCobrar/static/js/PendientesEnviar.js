@@ -7,15 +7,18 @@ var EvDigital;
 var EvFisica;
 var moneda;
 var controlDesk;
+var DiasCredito;
+var Dcreditos;
 //var idpendienteenviar;
 var table;
-var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0;
+var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
 $(document).ready(function() {
 //Tabla Pendientes de enviar
 formatDataTable();
 
 //on click select row checkbox
         $(document).on( 'change', 'input[name="checkPE"]', function () {
+          Dcreditos = $(this).data("creditodias");
           var input = 'input[name="checkPE"]';
           var btnSubir = '#BtnSubirFacturaPendietnesEnviar';
           if($(this).is(':checked'))
@@ -61,7 +64,22 @@ $('input[name="Fragmentada"]').on("change", function()
 });
 
 //on click para el boton del modal subir factura
-$(document).on('click', '#BtnSubirFacturaPendietnesEnviar',getDatos);
+$(document).on('click', '#BtnSubirFacturaPendietnesEnviar', function(){
+  getDatos();
+  mostrarTipoCambio();
+});
+
+//verificar si el folio ya existe en la base de datos
+$('#txtFolioFactura').on('change', function() {
+  var folioFac = $('#txtFolioFactura').val();
+  fnCheckFolio(folioFac);
+});
+
+//verificar si el folio ya existe en la base de datos para la fragmentacion
+$('#txtFolioServicios').on('change', function(){
+  var folioFacServ = $('#txtFolioServicios').val();
+  fnCheckFolio(folioFacServ);
+});
 
 $('#BtnAplicarFiltro').on('click', fnGetPendientesEnviar);
 
@@ -221,8 +239,8 @@ $('#kt_modal_2').on('shown.bs.modal', function(){
    todayHighlight: true,
    language: 'es'
  });
-  $("#FechaVencimiento").datepicker('setDate', 'today' );
-  //$('#FechaVencimiento').prop('disabled', true);
+//  $("#FechaVencimiento").datepicker('setDate', 'today' );
+
 				//KTUppy.init()
       });
 
@@ -237,19 +255,20 @@ $('input[name="TipoCambio"]').on('change', function(){
 });
 
 $("#FechaRevision").on('change', function(){
-//  var diasCredito = 25;
-if($("#FechaRevision").val() < $("#FechaFactura").val())
-{
-  alertToastError("La fecha de revision no puede ser antes que la fecha de factura");
-//  $("#FechaRevision").val($("#FechaFactura").val());
-  $("#FechaRevision").datepicker('setDate', $("#FechaFactura").val() )
-}
-/*
-$('#FechaVencimiento').datepicker({
-  format: 'yyyy/mm/dd',
-  language: 'es'
-});
-$("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", diasCredito) );*/
+  //var diasCredito = $('input[name="checkPE"]').data("creditodias");
+  if($("#FechaRevision").val() < $("#FechaFactura").val())
+  {
+    alertToastError("La fecha de revision no puede ser antes que la fecha de factura");
+  //  $("#FechaRevision").val($("#FechaFactura").val());
+    $("#FechaRevision").datepicker('setDate', $("#FechaFactura").val() )
+  }
+
+  $('#FechaVencimiento').datepicker({
+    format: 'yyyy/mm/dd',
+    language: 'es'
+  });
+    $('#FechaVencimiento').prop('disabled', true);
+  $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", Dcreditos) );
 });
 
 
@@ -282,6 +301,32 @@ function FiltroCheckboxCliente(){
 }
 
 //funcion limpiar modal subir facturas de pendientes de enviar
+
+//funcion para mostrar u ocultar el input del timpo de cambio
+function mostrarTipoCambio()
+{
+  var found;
+  var datos = adddatos();
+  for(var i=0; i<datos.length; i++)
+  {
+    // datos[i][3].push(datos[i][3]);
+    found = datos[i][9].includes('USD');
+  }
+  if(found != true)
+  {
+   $('#txtTipoCambio').hide();
+   $('#labelTipoCambio').hide();
+ }
+ else
+ {
+   $('#txtTipoCambio').show();
+   $('#labelTipoCambio').show();
+ }
+}
+
+
+
+
 function LimpiarModalSF()
 {
   $('input[name="FolioFactura"]').val("");
@@ -302,6 +347,7 @@ function LimpiarModalSF()
   $('#Fragmentada').data("rutaarchivoXML", null);
   $('#txtFolioServicios').val('')
   $('#txtComentariosServicios').val('')
+
 
 }
 
@@ -378,7 +424,7 @@ function LimpiarModalSF()
 
 
          uppyDashboard.use(Dashboard, options);
-         uppyDashboard.use(XHRUpload, { endpoint: 'http://api-bgk-debug.logistikgo.com/api/Viaje/SaveevidenciaTest', method: 'post'});
+         uppyDashboard.use(XHRUpload, { endpoint: 'https://api-bgk-debug.logistikgo.com/api/Viaje/SaveevidenciaTest', method: 'post'});
 				//uppyDashboard.use(XHRUpload, { endpoint: 'http://localhost:63510/api/Viaje/SaveevidenciaTest', method: 'post'});
 				uppyDashboard.use(GoogleDrive, { target: Dashboard, companionUrl: 'https://companion.uppy.io' });
         uppyDashboard.on('upload-success', (file, response) => {
@@ -404,6 +450,7 @@ function LimpiarModalSF()
                      alertToastError("El total de la factura no coincide con el total calculado del sistema")
                       //uppyDashboard.reset()
                       uppyDashboard.cancelAll()
+                        $('.uploaded-files ol').remove();
 
                     }
                     else
@@ -413,6 +460,7 @@ function LimpiarModalSF()
                      $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
                      document.querySelector('.uploaded-files').innerHTML +=
                      `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+                     $('#chkFragmentada').prop('disabled', true);
                     }
                    }
                    else
@@ -432,6 +480,7 @@ function LimpiarModalSF()
                        $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
                        document.querySelector('.uploaded-files').innerHTML +=
                        `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+                        $('#chkFragmentada').prop('disabled', true);
                       }
                    }
                    //console.log($('#kt_uppy_1').data("rutaarchivoXML"))
@@ -463,7 +512,7 @@ function adddatos(){
   $("input[name=checkPE]:checked").each(function () {
     var table = $('#TablePendientesEnviar').DataTable();
     var datosRow = table.row($(this).parents('tr')).data();
-    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[7], datosRow[8]]);
+    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[12], datosRow[13], datosRow[14], datosRow[7], datosRow[8]]);
   });
   return arrSelect;
 }
@@ -472,34 +521,40 @@ function adddatos(){
 //funcion para obtener los datos de la tabla pendiente de enviar para mostrarlos en la tabla del modal subir facturas
 function getDatos(){
  var datos = adddatos();
- //console.log(datos);
+ datos.length == 1 ? $('#chkFragmentada').prop('disabled', false):$('#chkFragmentada').prop('disabled', true);
  var newData = [];
  subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0, totalViaje=0;
  for (var i=0; i<datos.length; i++)
  {
-  moneda = datos[i][6];
-  if(datos[i][6] === "MXN")
+  moneda = datos[i][9];
+  if(datos[i][9] === "MXN")
   {
     var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
     var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
-    var tot = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var SubServicios = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var RetServicios = parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
+    var IVServicios = parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
+    var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
     subtotal = subtotal + sub;
     Tiva = Tiva + iva;
     TRetencion = TRetencion + retencion;
     total = total + tot;
     Tservicios = Tservicios + servicios;
+    SBServicios = SubServicios;
+    RServicios = RetServicios;
+    IServicios = IVServicios;
     datos[i].push("n/a");
     if($('input[name="Fragmentada"]').is(':checked'))
     {
       $('#alertaViajeFragmentada').css("display", "block");
-       viaje = total-Tservicios;
+       viaje = total;
       $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
       $('#totalViaje').html('<span>'+viaje+'</span>');
     }
   }
-  if(datos[i][6] === "USD")
+  if(datos[i][9] === "USD")
   {
     var tipoCambio = $('input[name="TipoCambio"]').val();
 
@@ -508,8 +563,11 @@ function getDatos(){
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
     var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
-    var tot = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
-    var totCambio = (parseFloat(datos[i][5].replace(/(\$)|(,)/g,'')) * tipoCambio);
+    var SubServicios = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var RetServicios = parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
+    var IVServicios = parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
+    var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
+    var totCambio = (parseFloat(datos[i][8].replace(/(\$)|(,)/g,'')) * tipoCambio);
     datos[i].push(totCambio);
         //newData.push([folio, sub, iva, retencion, tot]);
         subtotal = subtotal + sub;
@@ -517,12 +575,15 @@ function getDatos(){
         TRetencion = TRetencion + retencion;
         total = total + tot;
         Tservicios = Tservicios + servicios;
+        SBServicios = SubServicios;
+        RServicios = RetServicios;
+        IServicios = IVServicios;
         totalCambio = totalCambio + totCambio;
 
         if($('input[name="Fragmentada"]').is(':checked'))
         {
           $('#alertaViajeFragmentada').css("display", "block");
-           viaje = total-Tservicios;
+           viaje = total;
           $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
           $('#totalViaje').html('<span>'+viaje+'</span>');
         }
@@ -531,7 +592,7 @@ function getDatos(){
     }
 
     var h = [datos];
-    var table = $('#ResumTable').DataTable({
+    $('#ResumTable').DataTable({
      destroy: true,
     // scrollX: true,
      //scrollY: "300px",
@@ -542,22 +603,18 @@ function getDatos(){
        "className": "dt-head-center dt-body-center bold"
      },
      {
-       "targets": [1,2,3,4,5],
+       "targets": [1,2,3],
        "className": "dt-head-center dt-body-right"
      },
      {
-       "targets": 4,
+       "targets": [4,5,6,7],
+       "className": "dt-head-center dt-body-center",
        "visible": false
      },
      {
-       "targets": 6,
+       "targets": [8,9,10],
        "className": "dt-head-center dt-body-center"
      },
-     {
-       "targets": 7,
-       "width": "10%",
-       "className": "dt-head-center dt-body-center"
-     }
      ]
 
    });
@@ -565,7 +622,7 @@ function getDatos(){
     $('#sub').html('<strong>$'+subtotal+'</strong>');
     $('#iva').html('<strong>$'+Tiva+'</strong>');
     $('#retencion').html('<strong>$'+TRetencion+'</strong>');
-    $('#servicios').html('<strong>$'+Tservicios+'</strong>');
+    //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
     $('#total').html('<strong>$'+total+'</strong>');
     $('#Moneda').html('');
     $('#totalCambio').html('<strong>$'+truncarDecimales(totalCambio, 2)+'<strong>');
@@ -578,7 +635,7 @@ function getDatos(){
     var RutaPDF = $('.uploaded-files-fragmentadas #RutaPDF').attr('href');
     var Total = Tservicios;
 
-    saveFactura(false, total - Tservicios);
+    saveFactura(false, total /*- Tservicios*/);
     saveFactura(true, Total, strFolioServicios, strComentariosServicios, RutaXML, RutaPDF);
   }
 
@@ -591,9 +648,9 @@ function getDatos(){
       FechaRevision: $('#FechaRevision').val(),
       FechaVencimiento: $('#FechaVencimiento').val(),
       Moneda: moneda,
-      SubTotal: IsFacturaServicios ? 0 : subtotal,
-      IVA: IsFacturaServicios ? 0 : Tiva,
-      Retencion: IsFacturaServicios ? 0 : TRetencion,
+      SubTotal: IsFacturaServicios ? SBServicios : subtotal,
+      IVA: IsFacturaServicios ? IServicios : Tiva,
+      Retencion: IsFacturaServicios ? RServicios : TRetencion,
       Total: Total,
       RutaXML: RutaXML,
       RutaPDF: RutaPDF,
@@ -690,6 +747,36 @@ function SavePartidasxFactura(IDFactura) {
   });
 }
 
+
+var fnCheckFolio = function (fol) {
+  fetch("/PendientesEnviar/CheckFolioDuplicado?Folio=" + fol, {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    return response.clone().json();
+  }).then(function(data){
+    if(data.IsDuplicated) {
+      Swal.fire({
+        type: 'error',
+        title: 'El folio indicado ya existe en el sistema',
+        showConfirmButton: false,
+        timer: 2500
+      })
+      $('#btnGuardarFactura').attr('disabled',true);
+    }
+    else {
+      $('#btnGuardarFactura').attr('disabled',false);
+    }
+  }).catch(function(ex){
+    console.log("no success!");
+  });
+}
+
+
 var fnGetPendientesEnviar = function () {
   startDate = ($('#cboFechaDescarga').data('daterangepicker').startDate._d).toLocaleDateString('en-US');
   endDate = ($('#cboFechaDescarga').data('daterangepicker').endDate._d).toLocaleDateString('en-US');
@@ -730,6 +817,9 @@ function formatDataTable() {
  {
    extend: 'excel',
    text: '<i class="fas fa-file-excel fa-lg"></i>',
+   exportOptions: {
+    columns: ':visible'
+   }
  }
  ],
 
@@ -742,8 +832,9 @@ function formatDataTable() {
      EvDigital = $('input[name="isEvicencias"]').data("evidenciadigital");
      EvFisica = $('input[name="isEvicencias"]').data("evidenciafisica");
      controlDesk = $('input[name="isEvicencias"]').data("iscontroldesk");
+     DiasCredito = $('input[name="isEvicencias"]').data("diascredito");
          //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar");
-         return (full[9] == 'finalizado'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" id="estiloCheckbox"/>': '');
+         return (full[9] == 'finalizado'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
        }
      },
      {
