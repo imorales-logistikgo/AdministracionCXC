@@ -521,7 +521,7 @@ function adddatos(){
 //funcion para obtener los datos de la tabla pendiente de enviar para mostrarlos en la tabla del modal subir facturas
 function getDatos(){
  var datos = adddatos();
- datos.length == 1 ? $('#chkFragmentada').prop('disabled', false):$('#chkFragmentada').prop('disabled', true); 
+ datos.length == 1 ? $('#chkFragmentada').prop('disabled', false):$('#chkFragmentada').prop('disabled', true);
  var newData = [];
  subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0, totalViaje=0;
  for (var i=0; i<datos.length; i++)
@@ -563,6 +563,9 @@ function getDatos(){
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
     var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
+    var SubServicios = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var RetServicios = parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
+    var IVServicios = parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
     var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
     var totCambio = (parseFloat(datos[i][8].replace(/(\$)|(,)/g,'')) * tipoCambio);
     datos[i].push(totCambio);
