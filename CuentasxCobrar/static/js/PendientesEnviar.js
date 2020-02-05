@@ -465,7 +465,7 @@ function LimpiarModalSF()
                    }
                    else
                    {
-                     if(to != total)
+                     if(to != truncarDecimales(total, 2))
                      {
                        $("#btnGuardarFactura").prop("disabled", true)
                        alertToastError("El total de la factura no coincide con el total calculado del sistema")
@@ -546,10 +546,11 @@ function getDatos(){
     RServicios = RetServicios;
     IServicios = IVServicios;
     datos[i].push("n/a");
+
     if($('input[name="Fragmentada"]').is(':checked'))
     {
       $('#alertaViajeFragmentada').css("display", "block");
-       viaje = total;
+       viaje = total-Tservicios;
       $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
       $('#totalViaje').html('<span>'+viaje+'</span>');
     }
@@ -583,7 +584,7 @@ function getDatos(){
         if($('input[name="Fragmentada"]').is(':checked'))
         {
           $('#alertaViajeFragmentada').css("display", "block");
-           viaje = total;
+           viaje = total-Tservicios;
           $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
           $('#totalViaje').html('<span>'+viaje+'</span>');
         }
@@ -623,7 +624,7 @@ function getDatos(){
     $('#iva').html('<strong>$'+Tiva+'</strong>');
     $('#retencion').html('<strong>$'+TRetencion+'</strong>');
     //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
-    $('#total').html('<strong>$'+total+'</strong>');
+    $('#total').html('<strong>$'+truncarDecimales(total, 2)+'</strong>');
     $('#Moneda').html('');
     $('#totalCambio').html('<strong>$'+truncarDecimales(totalCambio, 2)+'<strong>');
   }
@@ -634,13 +635,15 @@ function getDatos(){
     var RutaXML = $('.uploaded-files-fragmentadas #RutaXML').attr('href');
     var RutaPDF = $('.uploaded-files-fragmentadas #RutaPDF').attr('href');
     var Total = Tservicios;
-
-    saveFactura(false, total /*- Tservicios*/);
-    saveFactura(true, Total, strFolioServicios, strComentariosServicios, RutaXML, RutaPDF);
+    var Subt = subtotal - SBServicios;
+    var IV = Tiva - IServicios;
+    var Ret = TRetencion - RServicios;
+    saveFactura(false, total-Tservicios, Subt, IV, Ret /*- Tservicios*/);
+    saveFactura(true, Total, Subt= SBServicios, IV = IServicios,Ret= RServicios, strFolioServicios, strComentariosServicios, RutaXML, RutaPDF);
   }
 
 
-  function saveFactura(IsFacturaServicios = false, Total = total, FolioFactura = $('#txtFolioFactura').val(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href')) {
+  function saveFactura(IsFacturaServicios = false, Total = total, Subt=subtotal, IV = Tiva, Ret = TRetencion, FolioFactura = $('#txtFolioFactura').val(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href')) {
     jParams = {
       FolioFactura: FolioFactura,
       Cliente: cliente,
@@ -648,9 +651,9 @@ function getDatos(){
       FechaRevision: $('#FechaRevision').val(),
       FechaVencimiento: $('#FechaVencimiento').val(),
       Moneda: moneda,
-      SubTotal: IsFacturaServicios ? SBServicios : subtotal,
-      IVA: IsFacturaServicios ? IServicios : Tiva,
-      Retencion: IsFacturaServicios ? RServicios : TRetencion,
+      SubTotal: Subt,
+      IVA: IV,
+      Retencion: Ret,
       Total: Total,
       RutaXML: RutaXML,
       RutaPDF: RutaPDF,
@@ -721,8 +724,7 @@ function SavePartidasxFactura(IDFactura) {
   }).then(function(response){
     if(response.status == 200)
     {
-      WaitMe_Hide('#WaitModalPE');
-      $("#kt_modal_2").modal('hide');
+
       var table = $('#TablePendientesEnviar').DataTable();
       $("#TablePendientesEnviar input[name=checkPE]:checked").each(function () {
         table.row($(this).parents('tr')).remove().draw();
@@ -734,6 +736,8 @@ function SavePartidasxFactura(IDFactura) {
         showConfirmButton: false,
         timer: 1500
       })
+      WaitMe_Hide('#WaitModalPE');
+      $("#kt_modal_2").modal('hide');
       $('#divTablaPendientesEnviar').html(data.htmlRes)
       formatDataTable();
     }
@@ -834,7 +838,7 @@ function formatDataTable() {
      controlDesk = $('input[name="isEvicencias"]').data("iscontroldesk");
      DiasCredito = $('input[name="isEvicencias"]').data("diascredito");
          //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar");
-         return (full[9] == 'finalizado'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
+         return (full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
        }
      },
      {
