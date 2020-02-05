@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from PendienteEnviar.models import View_PendientesEnviarCxC, FacturasxCliente, Partida, RelacionFacturaxPartidas, PendientesEnviar, Ext_PendienteEnviar_Precio
-from usersadmon.models import Cliente, AdmonUsuarios, AdmonClientes_Facturacion
+from usersadmon.models import Cliente, AdmonUsuarios
 from django.core import serializers
 from .forms import FacturaForm
 from django.template.loader import render_to_string
@@ -82,7 +82,6 @@ def SaveFactura(request):
 def SavePartidasxFactura(request):
 	jParams = json.loads(request.body.decode('utf-8'))
 	for IDPendiente in jParams["arrPendientes"]:
-		print(IDPendiente)
 		Viaje = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = IDPendiente)
 		newPartida = Partida()
 		newPartida.FechaAlta = datetime.datetime.now()
