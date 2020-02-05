@@ -52,7 +52,7 @@ function getReportesByFilters() {
   strMoneda = [];
   $('#rdMXN').is(':checked') ? strMoneda.push('MXN') : null;
   $('#rdUSD').is(':checked') ? strMoneda.push('USD') : null;
-  //WaitMe_Show('#TbPading');
+  WaitMe_Show('#TbPading');
   fetch("/ReporteCobros/FilterBy?FechaCobroDesde="+ startDate +"&FechaCobroHasta="+ endDate +"&Cliente="+ JSON.stringify(arrClientes) +"&Moneda="+ JSON.stringify(strMoneda), {
     method: "GET",
     credentials: "same-origin",
@@ -64,7 +64,7 @@ function getReportesByFilters() {
     return response.clone().json();
   }).then(function(data){
     $('#TbPading').html(data.htmlRes);
-    //WaitMe_Hide('#TbPading');
+    WaitMe_Hide('#TbPading');
     formatTableCobros();
   }).catch(function(ex){
     console.log("no success!");

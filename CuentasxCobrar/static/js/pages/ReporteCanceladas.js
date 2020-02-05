@@ -50,7 +50,7 @@ function getReportesByFilters() {
   strMoneda = [];
   $('#rdMXN').is(':checked') ? strMoneda.push('MXN') : null;
   $('#rdUSD').is(':checked') ? strMoneda.push('USD') : null;
-  //WaitMe_Show('#divTablaFacturas');
+  WaitMe_Show('#TbPading');
   fetch("/ReporteCanceladas/FilterBy?FechaFacturaDesde="+ startDate +"&FechaFacturaHasta="+ endDate +"&Cliente="+ JSON.stringify(arrClientes) +"&Moneda="+ JSON.stringify(strMoneda), {
     method: "GET",
     credentials: "same-origin",
@@ -61,7 +61,7 @@ function getReportesByFilters() {
   }).then(function(response){
     return response.clone().json();
   }).then(function(data){
-    //WaitMe_Hide('#divTablaFacturas');
+    WaitMe_Hide('#TbPading');
     $('#TbPading').html(data.htmlRes);
     formatDataTableCanceladas();
   }).catch(function(ex){
