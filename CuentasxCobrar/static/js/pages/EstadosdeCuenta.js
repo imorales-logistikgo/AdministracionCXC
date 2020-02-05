@@ -620,7 +620,7 @@ function saveCobroxCliente()  {
   WaitMe_Show('#waiteSubirCobro');
   jParams = {
     Folio: $('#FolioCobro').val(),
-    Total:$('#AddCosto').val(),
+    Total:$('#AddCosto').val()/$('#TipoCambioCobro').val(),
     FechaCobro: $('#FechaCobro').val(),
     TipoCambio: $('#TipoCambioCobro').val(),
     Comentarios: $('#comentariosEC').val(),
@@ -671,7 +671,7 @@ function SaveCobroxFactura(IDCobro)
   var arrCobros = [];
   $('.valCobro').each(function() {
     IDFactura = $(this).data('idfact');
-    Total = $(this).val();
+    Total = $(this).val()/$('#TipoCambioCobro').val();
     arrCobros.push({'Total': Total, 'IDFactura': IDFactura});
   });
 
