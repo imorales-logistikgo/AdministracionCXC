@@ -29,9 +29,16 @@ def GetCobrosByFilters(request):
 	if not Clientes:
 		Cobros = CobrosxCliente.objects.all()
 	else:
-		Cobros = CobrosxCliente.objects.filter(IDCobro__NombreCortoCliente__in = Clientes)
-	Cobros = Cobros.filter(IDCobro__FechaCobro__range = [datetime.datetime.strptime(FechaCobroDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaCobroHasta,'%m/%d/%Y')])
-	htmlRes = render_to_string('TablaReporteCobros.html', {'Cobros':Cobros}, request = request,)
+		Cobros = CobrosxCliente.objects.filter(IDCliente__in = Clientes)
+	Cobros = Cobros.filter(FechaCobro__range = [datetime.datetime.strptime(FechaCobroDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaCobroHasta,'%m/%d/%Y')])
+	Folios = list()
+	for Cobro in Cobros:
+		FoliosFactura = ""
+		for Factura in RelacionCobrosFacturasxCliente.objects.filter(IDCobro = Cobro.IDCobro).select_related('IDFactura'):
+			FoliosFactura += Factura.IDFactura.Folio + ", "
+		FoliosFactura = FoliosFactura[:-2]
+		Folios.append(FoliosFactura)
+	htmlRes = render_to_string('TablaReporteCobros.html', {'Cobros':Cobros, "Folios": Folios}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
 
 
