@@ -180,6 +180,23 @@ function WaitMe_Hide(idForm) {
         $(idForm).waitMe('hide');
 };
 
+function WaitMe_ShowBtn(idForm) {
+    $(idForm).waitMe({
+        effect: 'ios',
+        //text: 'Por favor espera...',
+        bg: 'rgb(255,255,255)',
+        maxSize : 30,
+        color: '#38227F',
+        sizeW: '',
+        sizeH: '',
+        source: ''
+    });
+};
+
+function WaitMe_HideBtn(idForm) {
+        $(idForm).waitMe('hide');
+};
+
 function alertToastError(msj)
 {
   toastr.options = {

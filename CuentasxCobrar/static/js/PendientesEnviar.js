@@ -9,6 +9,7 @@ var moneda;
 var controlDesk;
 var DiasCredito;
 var Dcreditos;
+var ClienteID;
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
@@ -753,6 +754,7 @@ function SavePartidasxFactura(IDFactura) {
 
 
 var fnCheckFolio = function (fol) {
+  WaitMe_ShowBtn('#btnGuardarFactura')
   fetch("/PendientesEnviar/CheckFolioDuplicado?Folio=" + fol, {
     method: "GET",
     credentials: "same-origin",
@@ -771,9 +773,11 @@ var fnCheckFolio = function (fol) {
         timer: 2500
       })
       $('#btnGuardarFactura').attr('disabled',true);
+      WaitMe_HideBtn('#btnGuardarFactura');
     }
     else {
       $('#btnGuardarFactura').attr('disabled',false);
+      WaitMe_HideBtn('#btnGuardarFactura');
     }
   }).catch(function(ex){
     console.log("no success!");
@@ -837,8 +841,17 @@ function formatDataTable() {
      EvFisica = $('input[name="isEvicencias"]').data("evidenciafisica");
      controlDesk = $('input[name="isEvicencias"]').data("iscontroldesk");
      DiasCredito = $('input[name="isEvicencias"]').data("diascredito");
-         //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar");
-         return (full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
+     ClienteID = $('input[name="isEvicencias"]').data("clienteid");
+         //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar"); 2950
+         if(full[2] != 'Eaton')
+         {
+           return (full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
+         }
+         else
+         {
+           return (full[9] == 'finalizado'.toUpperCase() || full[9] == 'entregado'.toUpperCase() &&  EvDigital != 'False'  && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
+         }
+
        }
      },
      {
