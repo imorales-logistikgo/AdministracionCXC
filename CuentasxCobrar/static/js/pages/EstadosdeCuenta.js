@@ -704,7 +704,8 @@ function SaveCobroxFactura(IDCobro)
        var rowID=[];
        var table = $('#TableEstadosdeCuenta').DataTable();
       $("input[name=checkEC]:checked").each(function (value) {
-        rowID.push($(this).closest('tr').index());
+        //rowID.push($(this).closest('tr').index());
+        rowID.push(table.row($(this).parents('tr')).index());
       });
         table.rows(rowID).remove().draw();
       $('#BtnSubirCobros').prop('disabled', true);
