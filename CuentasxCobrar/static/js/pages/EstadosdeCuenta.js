@@ -218,6 +218,7 @@ $('input[name="Retencion"]').on('change', function(e){
 $('input[name="TipoCambioCobro"]').on('keyup change', function(){
   if($('input[name="TipoCambioCobro"]').val() >=1)
   {
+    console.log($('#valCobro').val());
     showDatosObtenidos();
   }
   else

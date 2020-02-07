@@ -9,7 +9,7 @@ var moneda;
 var controlDesk;
 var DiasCredito;
 var Dcreditos;
-var ClienteID;
+var TipoConcepto;
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
@@ -841,15 +841,16 @@ function formatDataTable() {
      EvFisica = $('input[name="isEvicencias"]').data("evidenciafisica");
      controlDesk = $('input[name="isEvicencias"]').data("iscontroldesk");
      DiasCredito = $('input[name="isEvicencias"]').data("diascredito");
-     ClienteID = $('input[name="isEvicencias"]').data("clienteid");
+     TipoConcepto = $('input[name="isEvicencias"]').data("tipoconcepto");
          //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar"); 2950
-         if(full[2] != 'Eaton')
+        console.log(!(full[2] == "Eaton" && TipoConcepto == "PEDIDO"));
+         if(!(full[2] == "Eaton" && TipoConcepto == "PEDIDO"))
          {
            return (full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
          }
          else
          {
-           return (full[9] == 'finalizado'.toUpperCase() || full[9] == 'entregado'.toUpperCase() &&  EvDigital != 'False'  && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
+           return (full[9] == 'completo'.toUpperCase() || full[9] == 'entregado'.toUpperCase() &&  EvDigital != 'False'  && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
          }
 
        }

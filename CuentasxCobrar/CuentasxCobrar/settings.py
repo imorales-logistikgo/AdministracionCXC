@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'EstadosdeCuenta',
     'ReporteCobros',
     'ReporteCanceladas',
+    'ReporteMaster',
     'Indicadores',
     'users',
     'usersadmon',
