@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def GetReporteMaster(request):
+	return render(request, 'ReporteMaster.html')
