@@ -12,7 +12,7 @@ from django.db.models import Q
 
 
 def GetPendientesEnviar(request):
-	PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1 AND IsFacturaCliente = 0", ['FINALIZADO'])
+	PendingToSend = View_PendientesEnviarCxC.objects.filter(Status__in = ["FINALIZADO", "COMPLETO", "ENTREGADO"], IsEvidenciaDigital = True, IsEvidenciaFisica = True, IsFacturaCliente = False)
 	ContadorTodos, ContadorPendientes, ContadorFinalizados, ContadorConEvidencias, ContadorSinEvidencias = GetContadores()
 	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
 	return render(request, 'PendienteEnviar.html', {'pendientes':PendingToSend, 'Clientes': Clientes, 'contadorPendientes': ContadorPendientes, 'contadorFinalizados': ContadorFinalizados, 'contadorConEvidencias': ContadorConEvidencias, 'contadorSinEvidencias': ContadorSinEvidencias})
