@@ -253,7 +253,7 @@ function Getdatos(){
   $("input[name=checkEC]:checked").each(function () {
     var datosRow = table.row($(this).parents('tr')).data();
     var prueba = $(this).data("idfactu");
-    arrSelect.push([datosRow[1],datosRow[7], datosRow[8], datosRow[9], datosRow[7], prueba, datosRow[2]]);
+    arrSelect.push([datosRow[1],truncarDecimalesPE(datosRow[7], 2), truncarDecimalesPE(datosRow[8], 2), datosRow[9], truncarDecimalesPE(datosRow[7], 2), prueba, datosRow[2]]);
   });
   return arrSelect;
 }
@@ -561,9 +561,49 @@ function formatDataTableFacturas(){
       "targets": [2,3]
     },
     {
+      "className": "text-right",
+      'width' : '5%',
+      "targets": 4,
+      "mRender": function (data, type, full) {
+        return (truncarDecimalesPE(data, 2));
+      }
+    },
+    {
+      "className": "text-right",
+      'width' : '5%',
+      "targets": 5,
+      "mRender": function (data, type, full) {
+        return (truncarDecimalesPE(data, 2));
+      }
+    },
+    {
+      "className": "text-right",
+      'width' : '5%',
+      "targets": 6,
+      "mRender": function (data, type, full) {
+        return (truncarDecimalesPE(data, 2));
+      }
+    },
+    {
+      "className": "text-right",
+      'width' : '5%',
+      "targets": 7,
+      "mRender": function (data, type, full) {
+        return (truncarDecimalesPE(data, 2));
+      }
+    },
+    {
+      "className": "text-right",
+      'width' : '5%',
+      "targets": 8,
+      "mRender": function (data, type, full) {
+        return (truncarDecimalesPE(data, 2));
+      }
+    },
+    {
       "width": "5%",
       "className": "text-center",
-      "targets": [8,9, 10]
+      "targets": [9, 10]
 
     },
     {
