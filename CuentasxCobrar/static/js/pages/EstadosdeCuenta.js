@@ -673,7 +673,7 @@ function SaveCobroxFactura(IDCobro)
   $('.valCobro').each(function() {
     IDFactura = $(this).data('idfact');
     Total = $(this).val()/$('#TipoCambioCobro').val();
-    arrCobros.push({'Total': Total, 'IDFactura': IDFactura});
+    arrCobros.push({'Total': truncarDecimales(Total, 2), 'IDFactura': IDFactura});
   });
 
   jParams = {
