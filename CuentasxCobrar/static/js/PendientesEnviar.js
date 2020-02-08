@@ -513,7 +513,7 @@ function adddatos(){
   $("input[name=checkPE]:checked").each(function () {
     var table = $('#TablePendientesEnviar').DataTable();
     var datosRow = table.row($(this).parents('tr')).data();
-    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[12], datosRow[13], datosRow[14], truncarDecimalesPE(datosRow[7], 2), datosRow[8]]);
+    arrSelect.push([datosRow[1], truncarDecimalesPE(datosRow[4], 2), truncarDecimalesPE(datosRow[5], 2), truncarDecimalesPE(datosRow[6], 2), truncarDecimalesPE(datosRow[11], 2), truncarDecimalesPE(datosRow[12], 2), truncarDecimalesPE(datosRow[13], 2), truncarDecimalesPE(datosRow[14], 2), truncarDecimalesPE(datosRow[7], 2), datosRow[8]]);
   });
   return arrSelect;
 }
@@ -867,7 +867,26 @@ function formatDataTable() {
     {
       "className": "dt-head-center dt-body-right",
       'width' : '5%',
-      "targets": [4,5,6]
+      "targets": 4,
+      "mRender": function (data, type, full) {
+          return (truncarDecimalesPE(data, 2));
+      }
+    },
+    {
+      "className": "dt-head-center dt-body-right",
+      'width' : '5%',
+      "targets": 5,
+      "mRender": function (data, type, full) {
+          return (truncarDecimalesPE(data, 2));
+      }
+    },
+    {
+      "className": "dt-head-center dt-body-right",
+      'width' : '5%',
+      "targets": 6,
+      "mRender": function (data, type, full) {
+          return (truncarDecimalesPE(data, 2));
+      }
     },
     {
       "className": "dt-head-center dt-body-right",
