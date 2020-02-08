@@ -513,7 +513,7 @@ function adddatos(){
   $("input[name=checkPE]:checked").each(function () {
     var table = $('#TablePendientesEnviar').DataTable();
     var datosRow = table.row($(this).parents('tr')).data();
-    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[12], datosRow[13], datosRow[14], datosRow[7], datosRow[8]]);
+    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[12], datosRow[13], datosRow[14], truncarDecimalesPE(datosRow[7], 2), datosRow[8]]);
   });
   return arrSelect;
 }
@@ -843,14 +843,13 @@ function formatDataTable() {
      DiasCredito = $('input[name="isEvicencias"]').data("diascredito");
      TipoConcepto = $('input[name="isEvicencias"]').data("tipoconcepto");
          //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar"); 2950
-        console.log(!(full[2] == "Eaton" && TipoConcepto == "PEDIDO"));
-         if(!(full[2] == "Eaton" && TipoConcepto == "PEDIDO"))
+         if(full[2] != "Eaton")
          {
            return (full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
          }
          else
          {
-           return (full[9] == 'completo'.toUpperCase() || full[9] == 'entregado'.toUpperCase() &&  EvDigital != 'False'  && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
+           return ((full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase() || full[9] == 'entregado'.toUpperCase()) &&  (EvDigital != 'False'  && controlDesk != 'False') ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
          }
 
        }
@@ -868,7 +867,15 @@ function formatDataTable() {
     {
       "className": "dt-head-center dt-body-right",
       'width' : '5%',
-      "targets": [4,5,6,7]
+      "targets": [4,5,6]
+    },
+    {
+      "className": "dt-head-center dt-body-right",
+      'width' : '5%',
+      "targets": 7,
+      "mRender": function (data, type, full) {
+        return (truncarDecimalesPE(data, 2));
+      }
     },
     {
       "width": "5%",

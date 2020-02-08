@@ -36,7 +36,8 @@
 						<th hidden="hidden">Subtotal Servicios</th>
 						<th hidden="hidden">Retencion Servicios</th>
 						<th hidden="hidden">IVA Servicios</th>
-					
+						<th hidden="hidden">Tipo Concepto</th>
+
 					</tr>
 				</thead>
 				<tbody>
@@ -49,7 +50,7 @@
 						<td>${{pendiente.Subtotal|safe|floatformat:"2"|intcomma}}</td>
 						<td>${{pendiente.IVA|safe|floatformat:"2"|intcomma}}</td>
 						<td>${{pendiente.Retencion|safe|floatformat:"2"|intcomma}}</td>
-						<td>${{pendiente.Total|safe|floatformat:"2"|intcomma}}</td>
+						<td>${{pendiente.Total|safe|intcomma}}</td>
 						<td>{{pendiente.Moneda|safe}}</td>
 						<td id="status">{{pendiente.Status|safe}}</td>
 						<!--<td><input id="isEvicencias" name="isEvicencias" type="hidden" value="{{pendiente.IsEvidenciaDigital}}"></td>-->
@@ -58,6 +59,7 @@
 						<td hidden="hidden" >${{pendiente.ServiciosSubtotal|safe|floatformat:"2"|intcomma}}</td>
 						<td hidden="hidden" >${{pendiente.ServiciosRetencion|safe|floatformat:"2"|intcomma}}</td>
 						<td hidden="hidden" >${{pendiente.ServiciosIVA|safe|floatformat:"2"|intcomma}}</td>
+						<td hidden="hidden">{{pendiente.TipoConcepto|safe}}</td>
 
 					</tr>
 					{%endfor%}
