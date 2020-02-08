@@ -513,7 +513,7 @@ function adddatos(){
   $("input[name=checkPE]:checked").each(function () {
     var table = $('#TablePendientesEnviar').DataTable();
     var datosRow = table.row($(this).parents('tr')).data();
-    arrSelect.push([datosRow[1], truncarDecimalesPE(datosRow[4], 2), truncarDecimalesPE(datosRow[5], 2), truncarDecimalesPE(datosRow[6], 2), truncarDecimalesPE(datosRow[11], 2), truncarDecimalesPE(datosRow[12], 2), truncarDecimalesPE(datosRow[13], 2), truncarDecimalesPE(datosRow[14], 2), truncarDecimalesPE(datosRow[7], 2), datosRow[8]]);
+    arrSelect.push([datosRow[1], truncarDecimalesPE(datosRow[4], 2), truncarDecimalesPE(datosRow[5], 2), truncarDecimalesPE(datosRow[6], 2), isNaN(truncarDecimalesPE(datosRow[11], 2)) ? 0:truncarDecimalesPE(datosRow[11], 2) , isNaN(truncarDecimalesPE(datosRow[12], 2)) ? 0:truncarDecimalesPE(datosRow[12], 2), isNaN(truncarDecimalesPE(datosRow[13], 2)) ? 0:truncarDecimalesPE(datosRow[13], 2), isNaN(truncarDecimalesPE(datosRow[14], 2)) ? 0:truncarDecimalesPE(datosRow[14], 2), truncarDecimalesPE(datosRow[7], 2), datosRow[8]]);
   });
   return arrSelect;
 }
@@ -530,19 +530,19 @@ function getDatos(){
   moneda = datos[i][9];
   if(datos[i][9] === "MXN")
   {
-    var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
-    var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
-    var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
-    var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
-    var SubServicios = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
-    var RetServicios = parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
-    var IVServicios = parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
-    var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
-    subtotal = subtotal + sub;
-    Tiva = Tiva + iva;
-    TRetencion = TRetencion + retencion;
-    total = total + tot;
-    Tservicios = Tservicios + servicios;
+    var sub = datos[i][1].replace(/(\$)|(,)/g,'');
+    var iva = datos[i][2].replace(/(\$)|(,)/g,'');
+    var retencion = datos[i][3].replace(/(\$)|(,)/g,'');
+    var servicios = parseFloat(datos[i][4]);
+    var SubServicios = parseFloat(datos[i][5]);
+    var RetServicios = parseFloat(datos[i][6]);
+    var IVServicios = parseFloat(datos[i][7]);
+    var tot = datos[i][8].replace(/(\$)|(,)/g,'');
+    subtotal = Number(subtotal) + Number(sub);
+    Tiva = Number(Tiva) + Number(iva);
+    TRetencion = Number(TRetencion) + Number(retencion);
+    total = Number(total) + Number(tot);
+    Tservicios = Number(Tservicios) + Number(servicios);
     SBServicios = SubServicios;
     RServicios = RetServicios;
     IServicios = IVServicios;
@@ -551,7 +551,7 @@ function getDatos(){
     if($('input[name="Fragmentada"]').is(':checked'))
     {
       $('#alertaViajeFragmentada').css("display", "block");
-       viaje = total-Tservicios;
+       viaje = Number(total)-Number(Tservicios);
       $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
       $('#totalViaje').html('<span>'+viaje+'</span>');
     }
@@ -564,28 +564,28 @@ function getDatos(){
     var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
-    var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
-    var SubServicios = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
-    var RetServicios = parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
-    var IVServicios = parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
+    var servicios = parseFloat(datos[i][4]);
+    var SubServicios = parseFloat(datos[i][5]);
+    var RetServicios = parseFloat(datos[i][6]);
+    var IVServicios = parseFloat(datos[i][7]);
     var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
     var totCambio = (parseFloat(datos[i][8].replace(/(\$)|(,)/g,'')) * tipoCambio);
     datos[i].push(totCambio);
         //newData.push([folio, sub, iva, retencion, tot]);
-        subtotal = subtotal + sub;
-        Tiva = Tiva + iva;
-        TRetencion = TRetencion + retencion;
-        total = total + tot;
-        Tservicios = Tservicios + servicios;
+        subtotal = Number(subtotal) + Number(sub);
+        Tiva = Number(Tiva) + Number(iva);
+        TRetencion = Number(TRetencion) + Number(retencion);
+        total = Number(total) + Number(tot);
+        Tservicios = Number(Tservicios) + Number(servicios);
         SBServicios = SubServicios;
         RServicios = RetServicios;
         IServicios = IVServicios;
-        totalCambio = totalCambio + totCambio;
+        totalCambio = Number(totalCambio) + Number(totCambio);
 
         if($('input[name="Fragmentada"]').is(':checked'))
         {
           $('#alertaViajeFragmentada').css("display", "block");
-           viaje = total-Tservicios;
+           viaje = Number(total)-Number(Tservicios);
           $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
           $('#totalViaje').html('<span>'+viaje+'</span>');
         }
