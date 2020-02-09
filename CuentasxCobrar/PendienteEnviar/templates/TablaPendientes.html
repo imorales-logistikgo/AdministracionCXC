@@ -47,18 +47,18 @@
 						<td style="font-weight: bold;">{{pendiente.Folio|safe}}</td>
 						<td>{{pendiente.NombreCliente|safe}}</td>
 						<td>{{pendiente.FechaDescarga|date:'Y/m/d'|safe}}</td>
-						<td>${{pendiente.Subtotal|safe|intcomma}}</td>
-						<td>${{pendiente.IVA|safe|intcomma}}</td>
-						<td>${{pendiente.Retencion|safe|intcomma}}</td>
-						<td>${{pendiente.Total|safe|intcomma}}</td>
+						<td>${{pendiente.Subtotal|safe|floatformat:"2"|intcomma}}</td>
+						<td>${{pendiente.IVA|safe|floatformat:"2"|intcomma}}</td>
+						<td>${{pendiente.Retencion|safe|floatformat:"2"|intcomma}}</td>
+						<td>${{pendiente.Total|safe|floatformat:"2"|intcomma}}</td>
 						<td>{{pendiente.Moneda|safe}}</td>
 						<td id="status">{{pendiente.Status|safe}}</td>
 						<!--<td><input id="isEvicencias" name="isEvicencias" type="hidden" value="{{pendiente.IsEvidenciaDigital}}"></td>-->
 						<td><input name="isEvicencias" type="hidden"  data-idpendienteenviar="{{pendiente.IDPendienteEnviar|safe}}" data-evidenciadigital="{{pendiente.IsEvidenciaDigital|safe}}" data-evidenciafisica="{{pendiente.IsEvidenciaFisica|safe}}" data-diascredito="{{pendiente.DiasCredito|safe}}" data-iscontroldesk = "{{pendiente.IsControlDesk|safe}}" data-tipoconcepto="{{pendiente.TipoConcepto|safe}}"></td>
-						<td hidden="hidden" >${{pendiente.ServiciosTotal|safe|intcomma}}</td>
-						<td hidden="hidden" >${{pendiente.ServiciosSubtotal|safe|intcomma}}</td>
-						<td hidden="hidden" >${{pendiente.ServiciosRetencion|safe|intcomma}}</td>
-						<td hidden="hidden" >${{pendiente.ServiciosIVA|safe|intcomma}}</td>
+						<td hidden="hidden" >${{pendiente.ServiciosTotal|safe|floatformat:"2"|intcomma}}</td>
+						<td hidden="hidden" >${{pendiente.ServiciosSubtotal|safe|floatformat:"2"|intcomma}}</td>
+						<td hidden="hidden" >${{pendiente.ServiciosRetencion|safe|floatformat:"2"|intcomma}}</td>
+						<td hidden="hidden" >${{pendiente.ServiciosIVA|safe|floatformat:"2"|intcomma}}</td>
 						<td hidden="hidden">{{pendiente.TipoConcepto|safe}}</td>
 
 					</tr>

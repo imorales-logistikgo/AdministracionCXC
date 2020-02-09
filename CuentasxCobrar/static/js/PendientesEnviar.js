@@ -304,7 +304,7 @@ function FiltroCheckboxCliente(){
 //funcion limpiar modal subir facturas de pendientes de enviar
 
 //funcion para mostrar u ocultar el input del timpo de cambio
-function mostrarTipoCambio()
+/*function mostrarTipoCambio()
 {
   var found;
   var datos = adddatos();
@@ -324,7 +324,7 @@ function mostrarTipoCambio()
    $('#labelTipoCambio').show();
  }
 }
-
+*/
 
 
 
@@ -513,7 +513,7 @@ function adddatos(){
   $("input[name=checkPE]:checked").each(function () {
     var table = $('#TablePendientesEnviar').DataTable();
     var datosRow = table.row($(this).parents('tr')).data();
-    arrSelect.push([datosRow[1], truncarDecimalesPE(datosRow[4], 2), truncarDecimalesPE(datosRow[5], 2), truncarDecimalesPE(datosRow[6], 2), isNaN(truncarDecimalesPE(datosRow[11], 2)) ? 0:truncarDecimalesPE(datosRow[11], 2) , isNaN(truncarDecimalesPE(datosRow[12], 2)) ? 0:truncarDecimalesPE(datosRow[12], 2), isNaN(truncarDecimalesPE(datosRow[13], 2)) ? 0:truncarDecimalesPE(datosRow[13], 2), isNaN(truncarDecimalesPE(datosRow[14], 2)) ? 0:truncarDecimalesPE(datosRow[14], 2), truncarDecimalesPE(datosRow[7], 2), datosRow[8]]);
+    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[12], datosRow[13], datosRow[14], datosRow[7], datosRow[8]]);
   });
   return arrSelect;
 }
@@ -530,19 +530,19 @@ function getDatos(){
   moneda = datos[i][9];
   if(datos[i][9] === "MXN")
   {
-    var sub = datos[i][1].replace(/(\$)|(,)/g,'');
-    var iva = datos[i][2].replace(/(\$)|(,)/g,'');
-    var retencion = datos[i][3].replace(/(\$)|(,)/g,'');
-    var servicios = parseFloat(datos[i][4]);
-    var SubServicios = parseFloat(datos[i][5]);
-    var RetServicios = parseFloat(datos[i][6]);
-    var IVServicios = parseFloat(datos[i][7]);
-    var tot = datos[i][8].replace(/(\$)|(,)/g,'');
-    subtotal = Number(subtotal) + Number(sub);
-    Tiva = Number(Tiva) + Number(iva);
-    TRetencion = Number(TRetencion) + Number(retencion);
-    total = Number(total) + Number(tot);
-    Tservicios = Number(Tservicios) + Number(servicios);
+    var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
+    var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
+    var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
+    var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
+    var SubServicios = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var RetServicios = parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
+    var IVServicios = parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
+    var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
+    subtotal = subtotal + sub;
+    Tiva = Tiva + iva;
+    TRetencion = TRetencion + retencion;
+    total = total + tot;
+    Tservicios = Tservicios + servicios;
     SBServicios = SubServicios;
     RServicios = RetServicios;
     IServicios = IVServicios;
@@ -551,7 +551,7 @@ function getDatos(){
     if($('input[name="Fragmentada"]').is(':checked'))
     {
       $('#alertaViajeFragmentada').css("display", "block");
-       viaje = Number(total)-Number(Tservicios);
+       viaje = total-Tservicios;
       $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
       $('#totalViaje').html('<span>'+viaje+'</span>');
     }
@@ -564,28 +564,28 @@ function getDatos(){
     var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
-    var servicios = parseFloat(datos[i][4]);
-    var SubServicios = parseFloat(datos[i][5]);
-    var RetServicios = parseFloat(datos[i][6]);
-    var IVServicios = parseFloat(datos[i][7]);
+    var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
+    var SubServicios = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var RetServicios = parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
+    var IVServicios = parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
     var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
     var totCambio = (parseFloat(datos[i][8].replace(/(\$)|(,)/g,'')) * tipoCambio);
     datos[i].push(totCambio);
         //newData.push([folio, sub, iva, retencion, tot]);
-        subtotal = Number(subtotal) + Number(sub);
-        Tiva = Number(Tiva) + Number(iva);
-        TRetencion = Number(TRetencion) + Number(retencion);
-        total = Number(total) + Number(tot);
-        Tservicios = Number(Tservicios) + Number(servicios);
+        subtotal = subtotal + sub;
+        Tiva = Tiva + iva;
+        TRetencion = TRetencion + retencion;
+        total = total + tot;
+        Tservicios = Tservicios + servicios;
         SBServicios = SubServicios;
         RServicios = RetServicios;
         IServicios = IVServicios;
-        totalCambio = Number(totalCambio) + Number(totCambio);
+        totalCambio = totalCambio + totCambio;
 
         if($('input[name="Fragmentada"]').is(':checked'))
         {
           $('#alertaViajeFragmentada').css("display", "block");
-           viaje = Number(total)-Number(Tservicios);
+           viaje = total-Tservicios;
           $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
           $('#totalViaje').html('<span>'+viaje+'</span>');
         }
@@ -621,13 +621,13 @@ function getDatos(){
 
    });
 
-    $('#sub').html('<strong>$'+subtotal+'</strong>');
-    $('#iva').html('<strong>$'+Tiva+'</strong>');
-    $('#retencion').html('<strong>$'+TRetencion+'</strong>');
+    $('#sub').html('<strong>$'+subtotal.toFixed(2)+'</strong>');
+    $('#iva').html('<strong>$'+Tiva.toFixed(2)+'</strong>');
+    $('#retencion').html('<strong>$'+TRetencion.toFixed(2)+'</strong>');
     //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
-    $('#total').html('<strong>$'+truncarDecimales(total, 2)+'</strong>');
+    $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
     $('#Moneda').html('');
-    $('#totalCambio').html('<strong>$'+truncarDecimales(totalCambio, 2)+'<strong>');
+    $('#totalCambio').html('<strong>$'+totalCambio.toFixed(2)+'<strong>');
   }
 
   function saveFacturaFragmentada() {
@@ -867,34 +867,7 @@ function formatDataTable() {
     {
       "className": "dt-head-center dt-body-right",
       'width' : '5%',
-      "targets": 4,
-      "mRender": function (data, type, full) {
-          return (truncarDecimalesPE(data, 2));
-      }
-    },
-    {
-      "className": "dt-head-center dt-body-right",
-      'width' : '5%',
-      "targets": 5,
-      "mRender": function (data, type, full) {
-          return (truncarDecimalesPE(data, 2));
-      }
-    },
-    {
-      "className": "dt-head-center dt-body-right",
-      'width' : '5%',
-      "targets": 6,
-      "mRender": function (data, type, full) {
-          return (truncarDecimalesPE(data, 2));
-      }
-    },
-    {
-      "className": "dt-head-center dt-body-right",
-      'width' : '5%',
-      "targets": 7,
-      "mRender": function (data, type, full) {
-        return (truncarDecimalesPE(data, 2));
-      }
+      "targets": [4,5,6,7]
     },
     {
       "width": "5%",
