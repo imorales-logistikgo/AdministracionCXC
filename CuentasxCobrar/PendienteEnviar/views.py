@@ -8,15 +8,21 @@ from django.template.loader import render_to_string
 import json, datetime
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+import math
+from decimal import *
 @login_required
 
 
 def GetPendientesEnviar(request):
-	PendingToSend = View_PendientesEnviarCxC.objects.filter(Status__in = ["FINALIZADO", "COMPLETO", "ENTREGADO"], IsEvidenciaDigital = True, IsEvidenciaFisica = True, IsFacturaCliente = False)
+	PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1 AND IsFacturaCliente = 0 AND Moneda = %s", ['FINALIZADO','MXN'])
+	#PendingToSend = View_PendientesEnviarCxC.objects.filter(IsEvidenciaDigital = True, IsEvidenciaFisica = True, IsFacturaCliente = False, Status__in = ["FINALIZADO", "COMPLETO", "ENTREGADO"])
 	ContadorTodos, ContadorPendientes, ContadorFinalizados, ContadorConEvidencias, ContadorSinEvidencias = GetContadores()
 	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
-	return render(request, 'PendienteEnviar.html', {'pendientes':PendingToSend, 'Clientes': Clientes, 'contadorPendientes': ContadorPendientes, 'contadorFinalizados': ContadorFinalizados, 'contadorConEvidencias': ContadorConEvidencias, 'contadorSinEvidencias': ContadorSinEvidencias})
+	return render(request, 'PendienteEnviar.html', {'pendientes':PendingToSend,'Clientes': Clientes, 'contadorPendientes': ContadorPendientes, 'contadorFinalizados': ContadorFinalizados, 'contadorConEvidencias': ContadorConEvidencias, 'contadorSinEvidencias': ContadorSinEvidencias})
 
+def truncate(n, decimals=0):
+    multiplier = 10 ** decimals
+    return int(n * multiplier) / multiplier
 
 def GetContadores():
 	AllPending = list(View_PendientesEnviarCxC.objects.values("IsFacturaCliente", "Status", "IsEvidenciaDigital", "IsEvidenciaFisica").all())

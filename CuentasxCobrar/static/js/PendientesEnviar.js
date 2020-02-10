@@ -304,7 +304,7 @@ function FiltroCheckboxCliente(){
 //funcion limpiar modal subir facturas de pendientes de enviar
 
 //funcion para mostrar u ocultar el input del timpo de cambio
-function mostrarTipoCambio()
+/*function mostrarTipoCambio()
 {
   var found;
   var datos = adddatos();
@@ -324,7 +324,7 @@ function mostrarTipoCambio()
    $('#labelTipoCambio').show();
  }
 }
-
+*/
 
 
 
@@ -621,13 +621,13 @@ function getDatos(){
 
    });
 
-    $('#sub').html('<strong>$'+subtotal+'</strong>');
-    $('#iva').html('<strong>$'+Tiva+'</strong>');
-    $('#retencion').html('<strong>$'+TRetencion+'</strong>');
+    $('#sub').html('<strong>$'+subtotal.toFixed(2)+'</strong>');
+    $('#iva').html('<strong>$'+Tiva.toFixed(2)+'</strong>');
+    $('#retencion').html('<strong>$'+TRetencion.toFixed(2)+'</strong>');
     //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
-    $('#total').html('<strong>$'+truncarDecimales(total, 2)+'</strong>');
+    $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
     $('#Moneda').html('');
-    $('#totalCambio').html('<strong>$'+truncarDecimales(totalCambio, 2)+'<strong>');
+    $('#totalCambio').html('<strong>$'+totalCambio.toFixed(2)+'<strong>');
   }
 
   function saveFacturaFragmentada() {
@@ -843,14 +843,13 @@ function formatDataTable() {
      DiasCredito = $('input[name="isEvicencias"]').data("diascredito");
      TipoConcepto = $('input[name="isEvicencias"]').data("tipoconcepto");
          //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar"); 2950
-        console.log(!(full[2] == "Eaton" && TipoConcepto == "PEDIDO"));
-         if(!(full[2] == "Eaton" && TipoConcepto == "PEDIDO"))
+         if(full[2] != "Eaton")
          {
            return (full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
          }
          else
          {
-           return (full[9] == 'completo'.toUpperCase() || full[9] == 'entregado'.toUpperCase() &&  EvDigital != 'False'  && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
+           return ((full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase() || full[9] == 'entregado'.toUpperCase()) &&  (EvDigital != 'False'  && controlDesk != 'False') ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
          }
 
        }

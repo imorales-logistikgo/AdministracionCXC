@@ -37,7 +37,8 @@
 						<th hidden="hidden">Subtotal Servicios</th>
 						<th hidden="hidden">Retencion Servicios</th>
 						<th hidden="hidden">IVA Servicios</th>
-					
+						<th hidden="hidden">Tipo Concepto</th>
+
 					</tr>
 				</thead>
 				<tbody>
@@ -59,6 +60,7 @@
 						<td hidden="hidden" >${{pendiente.ServiciosSubtotal|safe|floatformat:"2"|intcomma}}</td>
 						<td hidden="hidden" >${{pendiente.ServiciosRetencion|safe|floatformat:"2"|intcomma}}</td>
 						<td hidden="hidden" >${{pendiente.ServiciosIVA|safe|floatformat:"2"|intcomma}}</td>
+						<td hidden="hidden">{{pendiente.TipoConcepto|safe}}</td>
 
 					</tr>
 					{%endfor%}

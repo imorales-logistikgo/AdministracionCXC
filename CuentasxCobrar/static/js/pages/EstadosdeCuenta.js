@@ -314,7 +314,7 @@ function showDatosObtenidos(){
  ]
 });
 
-  $('#AddCosto').val(truncarDecimales(total, 2));
+  $('#AddCosto').val(total.toFixed(2));
 }
 
 
