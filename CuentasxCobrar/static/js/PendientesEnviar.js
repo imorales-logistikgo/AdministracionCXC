@@ -346,8 +346,8 @@ function LimpiarModalSF()
   $('#seeFolioAndComen').hide();
   $('#Fragmentada').data("rutaarchivoXML", null);
   $('#Fragmentada').data("rutaarchivoXML", null);
-  $('#txtFolioServicios').val('')
-  $('#txtComentariosServicios').val('')
+  $('#txtFolioServicios').val('');
+  $('#txtComentariosServicios').val('');
 
 
 }
