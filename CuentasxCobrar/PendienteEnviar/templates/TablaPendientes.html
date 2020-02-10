@@ -1,5 +1,6 @@
 {% load humanize %}
 {% load static %}
+{% load Tags_EstadosDeCuenta %}
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
 	<div class="kt-container  kt-container--fluid ">
 		<div class="kt-subheader__toolbar">
@@ -46,10 +47,10 @@
 						<td style="font-weight: bold;">{{pendiente.Folio|safe}}</td>
 						<td>{{pendiente.NombreCliente|safe}}</td>
 						<td>{{pendiente.FechaDescarga|date:'Y/m/d'|safe}}</td>
-						<td>${{pendiente.Subtotal|safe|floatformat:"2"|intcomma}}</td>
-						<td>${{pendiente.IVA|safe|floatformat:"2"|intcomma}}</td>
-						<td>${{pendiente.Retencion|safe|floatformat:"2"|intcomma}}</td>
-						<td>${{pendiente.Total|safe|floatformat:"2"|intcomma}}</td>
+						<td>${{pendiente.Subtotal|truncate:2|intcomma}}</td>
+						<td>${{pendiente.IVA|truncate:2|intcomma}}</td>
+						<td>${{pendiente.Retencion|truncate:2|intcomma}}</td>
+						<td>${{pendiente.Total|truncate:2|intcomma}}</td>
 						<td>{{pendiente.Moneda|safe}}</td>
 						<td id="status">{{pendiente.Status|safe}}</td>
 						<!--<td><input id="isEvicencias" name="isEvicencias" type="hidden" value="{{pendiente.IsEvidenciaDigital}}"></td>-->
