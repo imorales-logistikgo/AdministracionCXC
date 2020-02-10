@@ -268,7 +268,7 @@ $("#FechaRevision").on('change', function(){
     format: 'yyyy/mm/dd',
     language: 'es'
   });
-    $('#FechaVencimiento').prop('disabled', true);
+    //$('#FechaVencimiento').prop('disabled', true);
   $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", Dcreditos) );
 });
 
@@ -621,6 +621,10 @@ function getDatos(){
 
    });
 
+    subtotal *= 100; subtotal = Math.round(subtotal) / 100;
+    Tiva *=100; Tiva = Math.round(Tiva) / 100;
+    TRetencion*=100; TRetencion = Math.round(TRetencion) / 100;
+    total*=100; total = Math.round(total) / 100;
     $('#sub').html('<strong>$'+subtotal.toFixed(2)+'</strong>');
     $('#iva').html('<strong>$'+Tiva.toFixed(2)+'</strong>');
     $('#retencion').html('<strong>$'+TRetencion.toFixed(2)+'</strong>');
