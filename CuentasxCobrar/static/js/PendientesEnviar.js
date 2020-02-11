@@ -255,7 +255,7 @@ $('input[name="TipoCambio"]').on('change', function(){
   getDatos();
 });
 
-$("#FechaRevision").on('change', function(){
+$(document).on('change','#FechaRevision', function(){
   //var diasCredito = $('input[name="checkPE"]').data("creditodias");
   if($("#FechaRevision").val() < $("#FechaFactura").val())
   {
@@ -268,7 +268,7 @@ $("#FechaRevision").on('change', function(){
     format: 'yyyy/mm/dd',
     language: 'es'
   });
-    $('#FechaVencimiento').prop('disabled', true);
+    $('#FechaVencimiento').prop('disabled', false);
   $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", Dcreditos) );
 });
 
@@ -466,7 +466,7 @@ function LimpiarModalSF()
                    }
                    else
                    {
-                     if(to != truncarDecimales(total, 2))
+                     if(to != truncarDecimales(Total_, 2))
                      {
                        $("#btnGuardarFactura").prop("disabled", true)
                        alertToastError("El total de la factura no coincide con el total calculado del sistema")
@@ -622,10 +622,17 @@ function getDatos(){
    });
 
     $('#sub').html('<strong>$'+subtotal.toFixed(2)+'</strong>');
-    $('#iva').html('<strong>$'+Tiva.toFixed(2)+'</strong>');
-    $('#retencion').html('<strong>$'+TRetencion.toFixed(2)+'</strong>');
+    var IVA_=(subtotal*.16).toFixed(2);
+    $('#iva').html('<strong>$'+IVA_+'</strong>');
+    //$('#iva').html('<strong>$'+Tiva.toFixed(2)+'</strong>');
+    //$('#retencion').html('<strong>$'+TRetencion.toFixed(2)+'</strong>');
+
+    var Retencion_= TRetencion =! 0 ? TRetencion.toFixed(2) :  (subtotal*.04).toFixed(2);
+
+    $('#retencion').html('<strong>$'+ Retencion_ +'</strong>');
     //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
-    $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
+    var Total_=((Number(subtotal)+Number(IVA_))- Number(Retencion_));
+    $('#total').html('<strong>$'+Total_+'</strong>');
     $('#Moneda').html('');
     $('#totalCambio').html('<strong>$'+totalCambio.toFixed(2)+'<strong>');
   }
