@@ -42,11 +42,11 @@
 						<td style="font-weight: bold;">{{Factura.Folio}}</td>
 						<td>{{Factura.Cliente}}</td>
 						<td>{{Factura.FechaFactura|date:'Y/m/d'}}</td>
-						<td>{{Factura.Subtotal|floatformat:"2"}}</td>
-						<td>{{Factura.IVA|floatformat:"2"}}</td>
-						<td>{{Factura.Retencion|floatformat:"2"}}</td>
-						<td>{{Factura.Total|floatformat:"2"}}</td>
-						<td>{{Factura.Saldo|floatformat:"2"}}</td>
+						<td>{{Factura.Subtotal|truncate:2}}</td>
+						<td>{{Factura.IVA|truncate:2}}</td>
+						<td>{{Factura.Retencion|truncate:2}}</td>
+						<td>{{Factura.Total|truncate:2}}</td>
+						<td>{{Factura.Saldo|truncate:2}}</td>
 						<td>{{Factura.Moneda}}</td>
 						<td>{{Factura.Status}}</td>
 						<td><a data-toggle="modal" href="#detallesCobro" class="btnDetalleCobro" data-backdrop="static">{{Folios|index:forloop.counter0|safe}}</a></td>

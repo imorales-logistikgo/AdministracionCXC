@@ -268,7 +268,11 @@ $(document).on('change','#FechaRevision', function(){
     format: 'yyyy/mm/dd',
     language: 'es'
   });
+<<<<<<< HEAD
     $('#FechaVencimiento').prop('disabled', false);
+=======
+    //$('#FechaVencimiento').prop('disabled', true);
+>>>>>>> 4380df88b3532710f3b1f3ebcb557ccf046250a9
   $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", Dcreditos) );
 });
 
@@ -346,8 +350,8 @@ function LimpiarModalSF()
   $('#seeFolioAndComen').hide();
   $('#Fragmentada').data("rutaarchivoXML", null);
   $('#Fragmentada').data("rutaarchivoXML", null);
-  $('#txtFolioServicios').val('')
-  $('#txtComentariosServicios').val('')
+  $('#txtFolioServicios').val('');
+  $('#txtComentariosServicios').val('');
 
 
 }
@@ -621,6 +625,10 @@ function getDatos(){
 
    });
 
+    subtotal *= 100; subtotal = Math.round(subtotal) / 100;
+    Tiva *=100; Tiva = Math.round(Tiva) / 100;
+    TRetencion*=100; TRetencion = Math.round(TRetencion) / 100;
+    total = subtotal + Tiva + TRetencion;
     $('#sub').html('<strong>$'+subtotal.toFixed(2)+'</strong>');
     var IVA_=(subtotal*.16).toFixed(2);
     $('#iva').html('<strong>$'+IVA_+'</strong>');

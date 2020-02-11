@@ -1,4 +1,5 @@
 {% load static %}
+{% load Tags_EstadosDeCuenta %}
 <table class="table table-striped table-bordered" id="TableReporteCanceladas" style="width: 100%">
 	<thead>
 		<tr>
@@ -17,7 +18,7 @@
 			<td>{{Factura.Cliente}}</td>
 			<td>{{Factura.FechaFactura|date:'Y/m/d'}}</td>
 			<td>{{Factura.FechaBaja|date:'Y/m/d'}}</td>
-			<td>{{Factura.Total|floatformat:"2"}}</td>
+			<td>{{Factura.Total|truncate:2}}</td>
 			<td>{{Factura.Viajes}}</td>
 		</tr>
 		{%endfor%}
