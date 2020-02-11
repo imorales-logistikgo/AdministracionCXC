@@ -29,7 +29,7 @@ def GetContadores():
 	ContadorTodos = len(list(filter(lambda x: x["IsFacturaCliente"] == False, AllPending)))
 	ContadorPendientes = len(list(filter(lambda x: x["Status"] == "PENDIENTE", AllPending)))
 	ContadorFinalizados = len(list(filter(lambda x: x["Status"] == "FINALIZADO", AllPending)))
-	ContadorConEvidencias = len(list(filter(lambda x: x["IsEvidenciaFisica"] == True and x["IsEvidenciaDigital"] == True, AllPending)))
+	ContadorConEvidencias = len(list(filter(lambda x: x["IsEvidenciaFisica"] == True and x["IsEvidenciaDigital"] == True and x["IsFacturaCliente"] == False, AllPending)))
 	ContadorSinEvidencias = ContadorTodos - ContadorConEvidencias
 	return ContadorTodos, ContadorPendientes, ContadorFinalizados, ContadorConEvidencias, ContadorSinEvidencias
 

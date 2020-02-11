@@ -10,6 +10,7 @@ var controlDesk;
 var DiasCredito;
 var Dcreditos;
 var TipoConcepto;
+var Total_;
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
@@ -19,11 +20,14 @@ formatDataTable();
 
 //on click select row checkbox
         $(document).on( 'change', 'input[name="checkPE"]', function () {
-          Dcreditos = $(this).data("creditodias");
           var input = 'input[name="checkPE"]';
           var btnSubir = '#BtnSubirFacturaPendietnesEnviar';
           if($(this).is(':checked'))
           {
+          //  var table = $('#TablePendientesEnviar').DataTable();
+          //  var d= table.row($(this).parents('tr')).data()[15];
+            Dcreditos = $(this).data("creditodias");
+            //Dcreditos=d;
             FiltroCheckboxCliente();
             adddatos();
           var a =  ContadorCheck(input, btnSubir);
@@ -67,7 +71,7 @@ $('input[name="Fragmentada"]').on("change", function()
 //on click para el boton del modal subir factura
 $(document).on('click', '#BtnSubirFacturaPendietnesEnviar', function(){
   getDatos();
-  mostrarTipoCambio();
+  //mostrarTipoCambio();
 });
 
 //verificar si el folio ya existe en la base de datos
@@ -268,11 +272,7 @@ $(document).on('change','#FechaRevision', function(){
     format: 'yyyy/mm/dd',
     language: 'es'
   });
-<<<<<<< HEAD
     $('#FechaVencimiento').prop('disabled', false);
-=======
-    //$('#FechaVencimiento').prop('disabled', true);
->>>>>>> 4380df88b3532710f3b1f3ebcb557ccf046250a9
   $("#FechaVencimiento").datepicker('setDate', calculoFechaVencimiento("#FechaRevision", Dcreditos) );
 });
 
@@ -449,7 +449,7 @@ function LimpiarModalSF()
                  //Tservicios
                  if($('input[name="Fragmentada"]').is(':checked'))
                  {
-                   if(to != viaje)
+                   if(to != viaje.toFixed(2))
                    {
                      $("#btnGuardarFactura").prop("disabled", true)
                      alertToastError("El total de la factura no coincide con el total calculado del sistema")
@@ -470,7 +470,7 @@ function LimpiarModalSF()
                    }
                    else
                    {
-                     if(to != truncarDecimales(Total_, 2))
+                     if(to != total.toFixed(2))
                      {
                        $("#btnGuardarFactura").prop("disabled", true)
                        alertToastError("El total de la factura no coincide con el total calculado del sistema")
@@ -557,7 +557,7 @@ function getDatos(){
       $('#alertaViajeFragmentada').css("display", "block");
        viaje = total-Tservicios;
       $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
-      $('#totalViaje').html('<span>'+viaje+'</span>');
+      $('#totalViaje').html('<span>'+viaje.toFixed(2)+'</span>');
     }
   }
   if(datos[i][9] === "USD")
@@ -625,7 +625,18 @@ function getDatos(){
 
    });
 
-    subtotal *= 100; subtotal = Math.round(subtotal) / 100;
+   subtotal *= 100; subtotal = Math.round(subtotal) / 100;
+   Tiva *=100; Tiva = Math.round(Tiva) / 100;
+   TRetencion*=100; TRetencion = Math.round(TRetencion) / 100;
+   total = ((subtotal + Tiva)- (TRetencion));
+   $('#sub').html('<strong>$'+subtotal.toFixed(2)+'</strong>');
+   $('#iva').html('<strong>$'+Tiva.toFixed(2)+'</strong>');
+   $('#retencion').html('<strong>$'+TRetencion.toFixed(2)+'</strong>');
+   //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
+   $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
+   $('#Moneda').html('');
+   $('#totalCambio').html('<strong>$'+totalCambio.toFixed(2)+'<strong>');
+  /*  subtotal *= 100; subtotal = Math.round(subtotal) / 100;
     Tiva *=100; Tiva = Math.round(Tiva) / 100;
     TRetencion*=100; TRetencion = Math.round(TRetencion) / 100;
     total = subtotal + Tiva + TRetencion;
@@ -639,10 +650,10 @@ function getDatos(){
 
     $('#retencion').html('<strong>$'+ Retencion_ +'</strong>');
     //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
-    var Total_=((Number(subtotal)+Number(IVA_))- Number(Retencion_));
+    Total_=((Number(subtotal)+Number(IVA_))- Number(Retencion_));
     $('#total').html('<strong>$'+Total_+'</strong>');
     $('#Moneda').html('');
-    $('#totalCambio').html('<strong>$'+totalCambio.toFixed(2)+'<strong>');
+    $('#totalCambio').html('<strong>$'+totalCambio.toFixed(2)+'<strong>');*/
   }
 
   function saveFacturaFragmentada() {

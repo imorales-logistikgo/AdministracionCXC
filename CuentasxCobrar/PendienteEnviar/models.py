@@ -79,7 +79,7 @@ class View_PendientesEnviarCxC(models.Model):
     IsEvidenciaFisica = models.BooleanField()
     Proyecto = models.CharField(max_length=30)
     IsFacturaCliente = models.BooleanField()
-
+    DiasCredito = models.IntegerField()
     class Meta:
         managed = False
         db_table = "View_PendientesEnviarCxC"
