@@ -76,13 +76,13 @@ $(document).on('click', '#BtnSubirFacturaPendietnesEnviar', function(){
 
 //verificar si el folio ya existe en la base de datos
 $('#txtFolioFactura').on('change', function() {
-  var folioFac = $('#txtFolioFactura').val();
+  var folioFac = $('#txtFolioFactura').val().replace(/ /g, "").trim();
   fnCheckFolio(folioFac);
 });
 
 //verificar si el folio ya existe en la base de datos para la fragmentacion
 $('#txtFolioServicios').on('change', function(){
-  var folioFacServ = $('#txtFolioServicios').val();
+  var folioFacServ = $('#txtFolioServicios').val().replace(/ /g, "").trim();
   fnCheckFolio(folioFacServ);
 });
 
@@ -657,7 +657,7 @@ function getDatos(){
   }
 
   function saveFacturaFragmentada() {
-    var strFolioServicios = $('#txtFolioServicios').val();
+    var strFolioServicios = $('#txtFolioServicios').val().replace(/ /g, "").trim();
     var strComentariosServicios = $('#txtComentariosServicios').val();
     var RutaXML = $('.uploaded-files-fragmentadas #RutaXML').attr('href');
     var RutaPDF = $('.uploaded-files-fragmentadas #RutaPDF').attr('href');
@@ -670,7 +670,7 @@ function getDatos(){
   }
 
 
-  function saveFactura(IsFacturaServicios = false, Total = total, Subt=subtotal, IV = Tiva, Ret = TRetencion, FolioFactura = $('#txtFolioFactura').val(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href')) {
+  function saveFactura(IsFacturaServicios = false, Total = total, Subt=subtotal, IV = Tiva, Ret = TRetencion, FolioFactura = $('#txtFolioFactura').val().replace(/ /g, "").trim(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href')) {
     jParams = {
       FolioFactura: FolioFactura,
       Cliente: cliente,
