@@ -80,6 +80,7 @@ class View_PendientesEnviarCxC(models.Model):
     Proyecto = models.CharField(max_length=30)
     IsFacturaCliente = models.BooleanField()
     DiasCredito = models.IntegerField()
+    IsControlDesk = models.BooleanField()
     class Meta:
         managed = False
         db_table = "View_PendientesEnviarCxC"

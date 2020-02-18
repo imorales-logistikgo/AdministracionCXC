@@ -11,6 +11,7 @@ var DiasCredito;
 var Dcreditos;
 var TipoConcepto;
 var Total_;
+var folio_ = [];
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
@@ -100,11 +101,8 @@ $('#btnGuardarFactura').on('click', function(){
         if($('#txtFolioFactura').val() != "" && $('#txtFolioServicios').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "" && $('input[name="TipoCambio"]').val() != "")
         {
           WaitMe_Show('#WaitModalPE');
-          //if($('#chkFragmentada').is(':checked')){
-            saveFacturaFragmentada();
-          //}
-        //  else
-          //  saveFactura();
+            checkHasFactura();
+            //saveFacturaFragmentada();
         }
         else
         {
@@ -129,11 +127,8 @@ $('#btnGuardarFactura').on('click', function(){
       if($('#txtFolioFactura').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "" && $('input[name="TipoCambio"]').val() != "")
       {
         WaitMe_Show('#WaitModalPE');
-        //if($('#chkFragmentada').is(':checked')){
-        //  saveFacturaFragmentada();
-        //}
-        //else
-          saveFactura();
+        checkHasFactura();
+          //saveFactura();
       }
       else
       {
@@ -352,7 +347,7 @@ function LimpiarModalSF()
   $('#Fragmentada').data("rutaarchivoXML", null);
   $('#txtFolioServicios').val('');
   $('#txtComentariosServicios').val('');
-
+  folio_ = [];
 
 }
 
@@ -531,6 +526,7 @@ function getDatos(){
  subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0, totalViaje=0;
  for (var i=0; i<datos.length; i++)
  {
+  folio_.push(datos[i][0]);
   moneda = datos[i][9];
   if(datos[i][9] === "MXN")
   {
@@ -809,6 +805,39 @@ var fnCheckFolio = function (fol) {
     console.log("no success!");
   });
 }
+
+
+var checkHasFactura = function () {
+  //WaitMe_ShowBtn('#btnGuardarFactura')
+  fetch("/PendientesEnviar/CheckHasFactura?Folio=" + JSON.stringify(folio_), {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    return response.clone().json();
+  }).then(function(data){
+    console.log(data);
+    if(data.Resp) {
+      Swal.fire({
+        type: 'error',
+        title: 'Algun viaje seleccionado ya tiene factura',
+        showConfirmButton: false,
+        timer: 2500
+      })
+      WaitMe_Hide('#WaitModalPE');
+    }
+    else {
+      $('input[name="Fragmentada"]').is(':checked') ? saveFacturaFragmentada() : saveFactura();
+    //  saveFactura();
+    }
+  }).catch(function(ex){
+    console.log("no success!");
+  });
+}
+
 
 
 var fnGetPendientesEnviar = function () {

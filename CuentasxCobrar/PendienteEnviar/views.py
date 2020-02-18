@@ -112,3 +112,12 @@ def SavePartidasxFactura(request):
 def CheckFolioDuplicado(request):
 	IsDuplicated = FacturasxCliente.objects.filter(Folio = request.GET["Folio"]).exclude(Status = "CANCELADA").exists()
 	return JsonResponse({'IsDuplicated' : IsDuplicated})
+
+def CheckHasFactura(request):
+	Folios = json.loads(request.GET["Folio"])
+	HasFactura = View_PendientesEnviarCxC.objects.filter(Folio__in = Folios).values_list("IsFacturaCliente", flat=True)
+	if True in HasFactura:
+		Resp = True
+	else:
+		Resp = False
+	return JsonResponse({'Resp': Resp})
