@@ -112,6 +112,7 @@ class FacturasxCliente(models.Model):
     IsFragmentada = models.BooleanField(default=False)
     IDUsuarioAlta = models.ForeignKey(AdmonUsuarios, on_delete=models.CASCADE, db_column = 'IDUsuarioAlta', related_name = "IDUsuarioAltaFactura")
     IDUsuarioBaja = models.ForeignKey(AdmonUsuarios, on_delete=models.CASCADE, db_column = 'IDUsuarioBaja', related_name = "IDUsuarioBajaFactura", null=True)
+    Reajuste = models.DecimalField(default=0, max_digits=30, decimal_places=5)
 
     class Meta:
         db_table = "FacturasxCliente"
@@ -126,6 +127,8 @@ class Partida(models.Model):
     Retencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     Total = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     IsActiva = models.BooleanField(default=True)
+    Reajuste = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+
 
     class Meta:
         db_table = "Partida"

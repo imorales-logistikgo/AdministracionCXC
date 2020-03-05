@@ -146,3 +146,24 @@ input[name="checkEC"]:checked
   padding-right: 0px !important;
   /*display: initial;*/
 }
+
+#modalReajusteCss
+{
+  background-color: #d9dce65c;
+}
+
+#modalReajusteCssFooter{
+  background-color: #d9dce65c;
+  border-top: 3px solid #006ef7;
+}
+
+#folioReajuste_
+{
+  position: fixed;
+  right: 560px;
+}
+
+#reajusteServicios, #h3Servicios
+{
+  display: none;
+}

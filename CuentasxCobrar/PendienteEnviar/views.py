@@ -80,6 +80,7 @@ def SaveFactura(request):
 	newFactura.RutaPDF = jParams["RutaPDF"]
 	newFactura.IsFragmentada = jParams["IsFragmentada"]
 	newFactura.IDUsuarioAlta = AdmonUsuarios.objects.get(idusuario = request.user.idusuario)
+	newFactura.Reajuste = jParams["Reajuste"]
 	newFactura.save()
 	return HttpResponse(newFactura.IDFactura)
 
@@ -91,10 +92,15 @@ def SavePartidasxFactura(request):
 		Viaje = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = IDPendiente)
 		newPartida = Partida()
 		newPartida.FechaAlta = datetime.datetime.now()
-		newPartida.Subtotal = Viaje.Subtotal
-		newPartida.IVA = Viaje.IVA
-		newPartida.Retencion = Viaje.Retencion
-		newPartida.Total = Viaje.Total
+		newPartida.Subtotal = Viaje.ServiciosSubtotal if (jParams["IsFacturaServicios"]) else Viaje.Subtotal
+		newPartida.IVA = Viaje.ServiciosIVA if (jParams["IsFacturaServicios"]) else Viaje.IVA
+		newPartida.Retencion = Viaje.ServiciosRetencion if (jParams["IsFacturaServicios"]) else Viaje.Retencion
+		newPartida.Total = Viaje.ServiciosTotal if (jParams["IsFacturaServicios"]) else Viaje.Total
+		partidaReajuste = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
+		if Viaje.IDPendienteEnviar == jParams["IDFolioReajuste"]:
+			newPartida.Reajuste = partidaReajuste.Reajuste
+		else:
+			newPartida.Reajuste = 0
 		newPartida.save()
 		newRelacionFacturaxPartida = RelacionFacturaxPartidas()
 		newRelacionFacturaxPartida.IDFacturaxCliente = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
@@ -121,3 +127,19 @@ def CheckHasFactura(request):
 	else:
 		Resp = False
 	return JsonResponse({'Resp': Resp})
+
+def UpdatePartidas(request):
+	idF = 185,187,189,191,193,195,197,198,202,211,212,215,217,219,221,256,261,263,267,284,288,407,432,435,441,444,445,447,592,594,595,598
+	#idF = 181,183
+	#FacturasFragmentadas = FacturasxCliente.objects.filter(IDFactura__in = idF).values_list("IDFactura")
+	Relacion = RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente__in = idF).values("IDPendienteEnviar", "IDPartida")
+	for r in Relacion:
+		PendientesEnviar_ = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = r["IDPendienteEnviar"])
+		Partida_ = Partida.objects.get(IDPartida = r["IDPartida"])
+		if Partida_:
+			Partida_.SubTotal = PendientesEnviar_.ServiciosSubtotal
+			Partida_.IVA = PendientesEnviar_.ServiciosIVA
+			Partida_.Retencion = PendientesEnviar_.ServiciosRetencion
+			Partida_.Total = PendientesEnviar_.ServiciosTotal
+			Partida_.save()
+	return HttpResponse("")

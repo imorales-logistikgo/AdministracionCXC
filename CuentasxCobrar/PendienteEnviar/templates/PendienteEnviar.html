@@ -369,6 +369,7 @@ kt-menu__item--active
 																					<th>IVAServicios</th>
 																					<th>Total Real</th>
 																					<th>Moneda</th>
+																					<th></th>
 																					<th>Total Cambio</th>
 																				</tr>
 																			</thead>
@@ -384,6 +385,7 @@ kt-menu__item--active
 																					<td id="IVAServicios"></td>
 																					<td id="total"></td>
 																					<td id="Moneda"></td>
+																					<td></td>
 																					<td id="totalCambio"></td>
 																				</tr>
 																			</tfoot>
@@ -408,31 +410,99 @@ kt-menu__item--active
 									<!--end modal subir facturas-->
 
 
-									<!-- modal ver evidencias -->
-									<div class="modal fade" id="ModalVerEvidencias" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-										<div class="modal-dialog modal-md" role="document">
+
+									<!-- modal reajuste -->
+									<div class="modal fade" id="ModalReajuste" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered modal-md" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
-													<h5 class="modal-title" >Evidencias</h5>
+													<h5 class="modal-title" >Reajuste</h5>
+													<label class="col-6 col-form-label kt-badge kt-badge--primary kt-badge--inline kt-badge--pill kt-badge--rounded" id="folioReajuste_"></label>
 													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 														<span aria-hidden="true">&times;</span>
 													</button>
 												</div>
-												<div class="modal-body">
-													<div class="container">
-														<div class="row">
-															<a href="http://www.google.com.mx" target="_blank"><embed src='{% static "img\logo-cobrar.png" %}' height="100px" width="150px"></a>
-														</div>
+												<div class="modal-body" id="modalReajusteCss">
+														<h3>Viaje:</h3>
+													<div class="container py-3" id="reajusteViaje">
+															<div class="row">
+																<div class="col-md-8">
+																	<strong>SubTotal:</strong>
+																</div>
+																<div class="col-md-4">
+																	<input type="number" class="form-control col-xs-2" name="SubtotalReajuste" id="SubtotalReajuste" step="0.1" disabled>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-md-8">
+																	<strong>IVA:</strong>
+																</div>
+																<div class="col-md-4">
+																	<input type="number" class="form-control col-xs-2" name="IVAReajuste" id="IVAReajuste" step="0.1" disabled>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-md-8">
+																	<strong>Retencion:</strong>
+																</div>
+																<div class="col-md-4">
+																	<input type="number" class="form-control col-xs-2" name="RetencionReajuste" id="RetencionReajuste" step="0.1" disabled>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-md-8">
+																	<strong>Total:</strong>
+																</div>
+																<div class="col-md-4">
+																	<input type="number" class="form-control col-xs-2" name="TotalReajuste" id="TotalReajuste" step="0.1">
+																</div>
+															</div>
+													</div>
+													<h3 id="h3Servicios">Servicios:</h3>
+													<div class="container py-4" id="reajusteServicios">
+															<div class="row">
+																<div class="col-md-8">
+																	<strong>SubTotal:</strong>
+																</div>
+																<div class="col-md-4">
+																	<input type="number" class="form-control col-xs-2" name="SubtotalReajusteServicios" id="SubtotalReajusteServicios" step="0.1" disabled>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-md-8">
+																	<strong>IVA:</strong>
+																</div>
+																<div class="col-md-4">
+																	<input type="number" class="form-control col-xs-2" name="IVAReajusteServicios" id="IVAReajusteServicios" step="0.1" disabled>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-md-8">
+																	<strong>Retencion:</strong>
+																</div>
+																<div class="col-md-4">
+																	<input type="number" class="form-control col-xs-2" name="RetencionReajusteServicios" id="RetencionReajusteServicios" step="0.1" disabled>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-md-8">
+																	<strong>Total:</strong>
+																</div>
+																<div class="col-md-4">
+																	<input type="number" class="form-control col-xs-2" name="TotalReajusteServicios" id="TotalReajusteServicios" step="0.1">
+																</div>
+															</div>
 													</div>
 												</div>
 
-												<div class="modal-footer">
+												<div class="modal-footer" id="modalReajusteCssFooter">
+													<button type="button" id="btnGuardarReajuste" class="btn btn-success btn-elevate" disabled>Guardar</button>
 													<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 												</div>
 											</div>
 										</div>
-
-									<!-- end modal ver evidencias -->
+										</div>
+									<!-- end modal reajuste -->
 
 									{% endblock %}
 

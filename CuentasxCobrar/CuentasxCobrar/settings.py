@@ -172,7 +172,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
+#SECURE_SSL_REDIRECT = True
 STATIC_URL = '/static/'
 LOGIN_URL = "/Usuario/Login/"
 AUTH_USER_MODEL = 'users.User'

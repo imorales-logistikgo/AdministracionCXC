@@ -56,10 +56,10 @@
 						<td id="status">{{pendiente.Status|safe}}</td>
 						<!--<td><input id="isEvicencias" name="isEvicencias" type="hidden" value="{{pendiente.IsEvidenciaDigital}}"></td>-->
 						<td><input name="isEvicencias" type="hidden"  data-idpendienteenviar="{{pendiente.IDPendienteEnviar|safe}}" data-evidenciadigital="{{pendiente.IsEvidenciaDigital|safe}}" data-evidenciafisica="{{pendiente.IsEvidenciaFisica|safe}}" data-diascredito="{{pendiente.DiasCredito|safe}}" data-iscontroldesk = "{{pendiente.IsControlDesk|safe}}" data-tipoconcepto="{{pendiente.TipoConcepto|safe}}"></td>
-						<td hidden="hidden" >${{pendiente.ServiciosTotal|safe|floatformat:"2"|intcomma}}</td>
-						<td hidden="hidden" >${{pendiente.ServiciosSubtotal|safe|floatformat:"2"|intcomma}}</td>
-						<td hidden="hidden" >${{pendiente.ServiciosRetencion|safe|floatformat:"2"|intcomma}}</td>
-						<td hidden="hidden" >${{pendiente.ServiciosIVA|safe|floatformat:"2"|intcomma}}</td>
+						<td hidden="hidden" >{{pendiente.ServiciosTotal|safe|floatformat:"2"|intcomma}}</td>
+						<td hidden="hidden" >{{pendiente.ServiciosSubtotal|safe|floatformat:"2"|intcomma}}</td>
+						<td hidden="hidden" >{{pendiente.ServiciosRetencion|safe|floatformat:"2"|intcomma}}</td>
+						<td hidden="hidden" >{{pendiente.ServiciosIVA|safe|floatformat:"2"|intcomma}}</td>
 						<td hidden="hidden">{{pendiente.DiasCredito|safe}}</td>
 
 					</tr>

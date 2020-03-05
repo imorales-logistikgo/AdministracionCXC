@@ -1,3 +1,4 @@
+
 //var TestFile = null;
 var cliente;
 var idcliente;
@@ -12,12 +13,39 @@ var Dcreditos;
 var TipoConcepto;
 var Total_;
 var folio_ = [];
+var totalReajuste_ =0;
+var diferenciaRejuste = 0;
+var diferenciaRejusteServ = 0;
+var idFolioReajuste;
+var totalReajusteServicios_;
+var totalViaje;
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
 $(document).ready(function() {
 //Tabla Pendientes de enviar
 formatDataTable();
+
+//obtener datos para el modal de reajustar cantidades viaje y servicios
+//$(document).on('click', '#folioReajuste', getDatosModalreajuste);
+
+$(document).on('change', '#TotalReajuste', function(){
+  var newTotalReajuste = $('#TotalReajuste').val();
+  newTotalReajuste > (Number(totalReajuste_) + Number(1)) || newTotalReajuste < (Number(totalReajuste_) - Number(1)) ?  alertToastError("No se puede ajustar más o menos de $1") : recalculoAjuste(newTotalReajuste);
+});
+
+$(document).on('change', '#TotalReajusteServicios', function(){
+    var newTotalReajusteServ = $('#TotalReajusteServicios').val();
+    newTotalReajusteServ > (Number(totalReajusteServicios_) + Number(1)) || newTotalReajusteServ < (Number(totalReajusteServicios_) - Number(1)) ?  alertToastError("No se puede ajustar más o menos de $1") : recalculoAjusteServ(newTotalReajusteServ);
+});
+
+$(document).on('click', '#btnGuardarReajuste',function(){
+  $(document).off('click','#folioReajuste');
+  $('a[id = "folioReajuste"]').removeAttr("href");
+  $('#ModalReajuste').modal('hide');
+});
+
+
 
 //on click select row checkbox
         $(document).on( 'change', 'input[name="checkPE"]', function () {
@@ -44,29 +72,10 @@ formatDataTable();
 
 $('input[name="Fragmentada"]').on("change", function()
 {
-
-  document.querySelector('#divFragmentada').innerHTML +=
-  `<div class="kt-portlet__body"><div class"kt-uppy" id="Fragmentada"><div class="kt-uppy__dashboard"><div class="kt-uppy__progress"></div></div></div></div>`
-  var divID = "#Fragmentada";
-  if($(this).is(':checked'))
-  {
-      getDatos();
-    $('#see').show();
-    $('#seeAlert').show();
-    $('#seeFolioAndComen').show();
-
-    var verEv = ".uploaded-files-fragmentadas";
-        KTUppyEvidencias.init(divID, verEv, Tservicios);
-  }
-  else
-  {
-      getDatos();
-      $('#alertaViajeFragmentada').css("display", "none");
-    $(divID).remove();
-    $('#see').hide();
-    $('#seeAlert').hide();
-    $('#seeFolioAndComen').hide();
-  }
+  $('#alertaViajeFragmentada').css("display", "block");
+  viaje = total-Number(Tservicios);
+  $('#totalViaje').html('<span>'+viaje.toFixed(2)+'</span>');
+  sendDataModalServ();
 });
 
 //on click para el boton del modal subir factura
@@ -242,6 +251,7 @@ $('#kt_modal_2').on('shown.bs.modal', function(){
 //  $("#FechaVencimiento").datepicker('setDate', 'today' );
 
 				//KTUppy.init()
+        $(document).on('click', '#folioReajuste', getDatosModalreajuste);
       });
 
 //limpiar modal
@@ -512,7 +522,7 @@ function adddatos(){
   $("input[name=checkPE]:checked").each(function () {
     var table = $('#TablePendientesEnviar').DataTable();
     var datosRow = table.row($(this).parents('tr')).data();
-    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11], datosRow[12], datosRow[13], datosRow[14], datosRow[7], datosRow[8]]);
+    arrSelect.push([datosRow[1], datosRow[4], datosRow[5], datosRow[6], datosRow[11] != "" ? datosRow[11]:0, datosRow[12] != "" ?datosRow[12]:0, datosRow[13] != "" ? datosRow[13]: 0, datosRow[14] != "" ? datosRow[14]:0, datosRow[7], datosRow[8], $($(this).parents('tr')[0]).data('idpendienteenviar')]);
   });
   return arrSelect;
 }
@@ -523,7 +533,7 @@ function getDatos(){
  var datos = adddatos();
  datos.length == 1 ? $('#chkFragmentada').prop('disabled', false):$('#chkFragmentada').prop('disabled', true);
  var newData = [];
- subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios = 0, totalViaje=0;
+ subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios=0, totalViaje=0;
  for (var i=0; i<datos.length; i++)
  {
   folio_.push(datos[i][0]);
@@ -533,11 +543,10 @@ function getDatos(){
     var sub = parseFloat(datos[i][1].replace(/(\$)|(,)/g,''));
     var iva = parseFloat(datos[i][2].replace(/(\$)|(,)/g,''));
     var retencion = parseFloat(datos[i][3].replace(/(\$)|(,)/g,''));
-    var servicios = parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
-    var SubServicios = parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
-    var RetServicios = parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
-    var IVServicios = parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
-    var tot = parseFloat(datos[i][8].replace(/(\$)|(,)/g,''));
+    var servicios = typeof(datos[i][4]) == "number" ? datos[i][4] : parseFloat(datos[i][4].replace(/(\$)|(,)/g,''));
+    var SubServicios = typeof(datos[i][5]) == "number" ? datos[i][5] : parseFloat(datos[i][5].replace(/(\$)|(,)/g,''));
+    var RetServicios = typeof(datos[i][6]) == "number" ? datos[i][6] : parseFloat(datos[i][6].replace(/(\$)|(,)/g,''));
+    var IVServicios = typeof(datos[i][7]) == "number" ? datos[i][7] : parseFloat(datos[i][7].replace(/(\$)|(,)/g,''));
     subtotal = subtotal + sub;
     Tiva = Tiva + iva;
     TRetencion = TRetencion + retencion;
@@ -548,13 +557,13 @@ function getDatos(){
     IServicios = IVServicios;
     datos[i].push("n/a");
 
-    if($('input[name="Fragmentada"]').is(':checked'))
+  /*  if($('input[name="Fragmentada"]').is(':checked'))
     {
       $('#alertaViajeFragmentada').css("display", "block");
-       viaje = total-Tservicios;
-      $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
+       viaje = total-Number(Tservicios);
+      $('#totalServicios').html('<span>$'+datos[i][4]+'</span>');
       $('#totalViaje').html('<span>'+viaje.toFixed(2)+'</span>');
-    }
+    }*/
   }
   if(datos[i][9] === "USD")
   {
@@ -582,13 +591,13 @@ function getDatos(){
         IServicios = IVServicios;
         totalCambio = totalCambio + totCambio;
 
-        if($('input[name="Fragmentada"]').is(':checked'))
+      /*  if($('input[name="Fragmentada"]').is(':checked'))
         {
           $('#alertaViajeFragmentada').css("display", "block");
            viaje = total-Tservicios;
           $('#totalServicios').html('<span>'+datos[i][4]+'</span>');
           $('#totalViaje').html('<span>'+viaje+'</span>');
-        }
+        }*/
 
       }
     }
@@ -602,7 +611,10 @@ function getDatos(){
      columnDefs: [
      {
        "targets": 0,
-       "className": "dt-head-center dt-body-center bold"
+       "className": "dt-head-center dt-body-center bold",
+       "mRender": function (data, type, full){
+           return `<a href="#ModalReajuste" id="folioReajuste" data-toggle="modal" data-backdrop="static" data-keyboard="false">${full[0]}</a>`
+         }
      },
      {
        "targets": [1,2,3],
@@ -614,8 +626,13 @@ function getDatos(){
        "visible": false
      },
      {
-       "targets": [8,9,10],
+       "targets": [8,9,11],
        "className": "dt-head-center dt-body-center"
+     },
+     {
+       "targets": [10],
+       "className": "dt-head-center dt-body-center",
+       "visible": false
      },
      ]
 
@@ -658,15 +675,15 @@ function getDatos(){
     var RutaXML = $('.uploaded-files-fragmentadas #RutaXML').attr('href');
     var RutaPDF = $('.uploaded-files-fragmentadas #RutaPDF').attr('href');
     var Total = Tservicios;
-    var Subt = subtotal - SBServicios;
-    var IV = Tiva - IServicios;
-    var Ret = TRetencion - RServicios;
-    saveFactura(false, total-Tservicios, Subt, IV, Ret /*- Tservicios*/);
-    saveFactura(true, Total, Subt= SBServicios, IV = IServicios,Ret= RServicios, strFolioServicios, strComentariosServicios, RutaXML, RutaPDF);
+    var Subt = subtotal > Number(SBServicios) ? subtotal-Number(SBServicios) : Number(SBServicios)-subtotal;
+    var IV = Tiva > Number(IServicios) ? Tiva-Number(IServicios) : Number(IServicios)-Tiva;
+    var Ret = TRetencion > Number(RServicios) ? TRetencion-Number(RServicios) : Number(RServicios)-TRetencion;
+    saveFactura(false, viaje, Subt, IV, Ret, Reajuste = diferenciaRejuste/*- Tservicios*/);
+    saveFactura(true, Total, Subt= SBServicios, IV = IServicios,Ret= RServicios,  Reajuste = diferenciaRejusteServ, strFolioServicios, strComentariosServicios, RutaXML, RutaPDF);
   }
 
 
-  function saveFactura(IsFacturaServicios = false, Total = total, Subt=subtotal, IV = Tiva, Ret = TRetencion, FolioFactura = $('#txtFolioFactura').val().replace(/ /g, "").trim(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href')) {
+  function saveFactura(IsFacturaServicios = false, Total = total, Subt=subtotal, IV = Tiva, Ret = TRetencion, Reajuste = diferenciaRejuste, FolioFactura = $('#txtFolioFactura').val().replace(/ /g, "").trim(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href')) {
     jParams = {
       FolioFactura: FolioFactura,
       Cliente: cliente,
@@ -684,8 +701,8 @@ function getDatos(){
       Comentarios: Comentarios,
       IsFragmentada: $('#chkFragmentada').is(':checked'),
       IDCliente: idcliente,
+      Reajuste: Reajuste,
     }
-
     fetch("/PendientesEnviar/SaveFactura", {
       method: "POST",
       credentials: "same-origin",
@@ -716,13 +733,13 @@ function getDatos(){
     }
 
   }).then(function(IDFactura){
-    SavePartidasxFactura(IDFactura);
+    SavePartidasxFactura(IDFactura, IsFacturaServicios);
   }).catch(function(ex){
     console.log("no success!");
   });
 }
 
-function SavePartidasxFactura(IDFactura) {
+function SavePartidasxFactura(IDFactura, IsFacturaServicios) {
   var arrPendientes = [];
   var currentIDConcepto = 0;
   $("#TablePendientesEnviar input[name=checkPE]:checked").each(function () {
@@ -730,9 +747,12 @@ function SavePartidasxFactura(IDFactura) {
     if(!arrPendientes.includes(currentIDConcepto))
       arrPendientes.push(currentIDConcepto);
   });
+
   jParams = {
     IDFactura: IDFactura,
     arrPendientes: arrPendientes,
+    IDFolioReajuste: idFolioReajuste == undefined ? 0 : idFolioReajuste,
+    IsFacturaServicios: IsFacturaServicios,
   }
 
   fetch("/PendientesEnviar/SavePartidasxFactura", {
@@ -934,11 +954,113 @@ function formatDataTable() {
     {
       "width": "5%",
       "className": "dt-head-center dt-body-center",
-      "visible": false,
       "targets": 10,
       "mRender": function (data, type, full) {
-        return (full[9] == 'finalizado'.toUpperCase() && EvDigital != 'False'   && EvFisica != 'False' ? '<a class="kt-badge kt-badge--info kt-badge--inline text-white" data-toggle="modal" data-target="#ModalVerEvidencias" data-backdrop="static" data-keyboard="false"><i class="flaticon2-image-file"></i></a>':'');
+        return (EvDigital != 'False' && EvFisica != 'False' ? 'Si':'No');
       }
     }]
   } );
 }
+
+function getDatosModalreajuste()
+{
+  if($('input[name="Fragmentada"]').is(':checked'))
+  {
+    $('#btnGuardarReajuste').prop('disabled', true);
+    $('#h3Servicios').css('display', 'none');
+    $('#reajusteServicios').css('display', 'none');
+    tab = $('#ResumTable').DataTable();
+    var dataReajuste = tab.row($(this).parents('tr')).data();
+    idFolioReajuste = dataReajuste[10];
+    $('#h3Servicios').css('display', 'block');
+    $('#reajusteServicios').css('display', 'block');
+    $('#SubtotalReajusteServicios').val(typeof(dataReajuste[5]) != "number" ? parseFloat(dataReajuste[5].replace(/(\$)|(,)/g,'')) : parseFloat(dataReajuste[5]));
+    $('#IVAReajusteServicios').val(typeof(dataReajuste[7]) != "number" ? parseFloat(dataReajuste[7].replace(/(\$)|(,)/g,'')) : parseFloat(dataReajuste[7]));
+    $('#RetencionReajusteServicios').val(typeof(dataReajuste[6]) != "number" ? parseFloat(dataReajuste[6].replace(/(\$)|(,)/g,'')) : parseFloat(dataReajuste[6]));
+    var totReServ = $('#TotalReajusteServicios').val(typeof(dataReajuste[4]) != "number" ? parseFloat(dataReajuste[4].replace(/(\$)|(,)/g,'')) : parseFloat(dataReajuste[4]));
+    totalReajusteServicios_ = $(totReServ).val();
+
+    $('#folioReajuste_').html('<strong id="ajusteFolio">'+dataReajuste[0]+'</strong>')
+    $('#SubtotalReajuste').val(parseFloat(dataReajuste[1].replace(/(\$)|(,)/g,'')));
+    $('#IVAReajuste').val(parseFloat(dataReajuste[2].replace(/(\$)|(,)/g,'')));
+    $('#RetencionReajuste').val(parseFloat(dataReajuste[3].replace(/(\$)|(,)/g,'')));
+    var totRe = $('#TotalReajuste').val(parseFloat(dataReajuste[8].replace(/(\$)|(,)/g,'')) - totalReajusteServicios_);
+  }
+  else
+  {
+    $('#btnGuardarReajuste').prop('disabled', true);
+    $('#h3Servicios').css('display', 'none');
+    $('#reajusteServicios').css('display', 'none');
+    tab = $('#ResumTable').DataTable();
+    var dataReajuste = tab.row($(this).parents('tr')).data();
+    idFolioReajuste = dataReajuste[10];
+    $('#folioReajuste_').html('<strong id="ajusteFolio">'+dataReajuste[0]+'</strong>')
+    $('#SubtotalReajuste').val(parseFloat(dataReajuste[1].replace(/(\$)|(,)/g,'')));
+    $('#IVAReajuste').val(parseFloat(dataReajuste[2].replace(/(\$)|(,)/g,'')));
+    $('#RetencionReajuste').val(parseFloat(dataReajuste[3].replace(/(\$)|(,)/g,'')));
+    var totRe = $('#TotalReajuste').val(parseFloat(dataReajuste[8].replace(/(\$)|(,)/g,'')));
+  }
+
+
+  totalReajuste_ = $(totRe).val();
+}
+
+function recalculoAjuste(newTotalReajuste_)
+{
+    if($('input[name="Fragmentada"]').is(':checked'))
+    {
+      $('#btnGuardarReajuste').prop('disabled', false)
+      diferenciaRejuste = (Number(newTotalReajuste_) - Number(totalReajuste_)).toFixed(2);
+      var calTotal = ((viaje-totalReajuste_) + Number(newTotalReajuste_));
+      viaje = calTotal;
+      $('#totalViaje').html('<strong>$'+viaje.toFixed(2)+'</strong>');
+    }
+    else
+    {
+      $('#btnGuardarReajuste').prop('disabled', false)
+      diferenciaRejuste = (Number(newTotalReajuste_) - Number(totalReajuste_)).toFixed(2);
+      var calTotal = ((total-totalReajuste_) + Number(newTotalReajuste_));
+      total = calTotal;
+      $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
+    }
+
+}
+
+function recalculoAjusteServ(newTotalReajusteServ_)
+{
+  $('#btnGuardarReajuste').prop('disabled', false)
+  diferenciaRejusteServ = (Number(newTotalReajusteServ_) - Number(totalReajusteServicios_)).toFixed(2);
+  var calTotal = ((Tservicios-totalReajusteServicios_) + Number(newTotalReajusteServ_));
+  Tservicios = calTotal;
+  $('#totalServicios').html('<strong>$'+Tservicios.toFixed(2)+'</strong>');
+  sendDataModalServ();
+}
+
+function sendDataModalServ()
+{
+  document.querySelector('#divFragmentada').innerHTML +=
+  `<div class="kt-portlet__body"><div class"kt-uppy" id="Fragmentada"><div class="kt-uppy__dashboard"><div class="kt-uppy__progress"></div></div></div></div>`
+  var divID = "#Fragmentada";
+  if($('input[name="Fragmentada"]').is(':checked'))
+  {
+    $('#totalServicios').html('<span>$'+Tservicios+'</span>');
+    //getDatos();
+    $('#see').show();
+    $('#seeAlert').show();
+    $('#seeFolioAndComen').show();
+
+    var verEv = ".uploaded-files-fragmentadas";
+    //var contenedor = "hola";
+    KTUppyEvidencias.init(divID, verEv, Tservicios);
+  }
+  else
+  {
+    getDatos();
+    $('#alertaViajeFragmentada').css("display", "none");
+    $(divID).remove();
+    $('#see').hide();
+    $('#seeAlert').hide();
+    $('#seeFolioAndComen').hide();
+  }
+}
+//folioReajuste
