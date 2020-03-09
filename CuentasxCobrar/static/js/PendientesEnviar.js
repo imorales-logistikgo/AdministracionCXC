@@ -64,6 +64,10 @@ $(document).on('click', '#BtnCloseModalReajuste, #closeBtnModalR', function(){
 
 });
 
+/*$(document).on('click', "#TotalReajuste", function() {
+  ('#TotalReajusteServicios').prop('disabled', true);
+});*/
+
 //on click select row checkbox XDDT1N150120ET000222
         $(document).on( 'change', 'input[name="checkPE"]', function () {
           var input = 'input[name="checkPE"]';
@@ -1031,7 +1035,7 @@ function recalculoAjuste(newTotalReajuste_)
     {
       $('#btnGuardarReajuste').prop('disabled', false)
       diferenciaRejuste = (Number(newTotalReajuste_) - Number(totalReajuste_)).toFixed(2);
-      var calTotal = ((viaje-totalReajuste_) + Number(newTotalReajuste_));
+      var calTotal = ((oldTotalViaje-totalReajuste_) + Number(newTotalReajuste_));
       viaje = calTotal;
       $('#totalViaje').html('<strong>$'+viaje.toFixed(2)+'</strong>');
     }
@@ -1039,7 +1043,7 @@ function recalculoAjuste(newTotalReajuste_)
     {
       $('#btnGuardarReajuste').prop('disabled', false)
       diferenciaRejuste = (Number(newTotalReajuste_) - Number(totalReajuste_)).toFixed(2);
-      var calTotal = ((total-totalReajuste_) + Number(newTotalReajuste_));
+      var calTotal = ((oldTotal-totalReajuste_) + Number(newTotalReajuste_));
       total = calTotal;
       $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
     }
@@ -1050,7 +1054,7 @@ function recalculoAjusteServ(newTotalReajusteServ_)
 {
   $('#btnGuardarReajuste').prop('disabled', false)
   diferenciaRejusteServ = (Number(newTotalReajusteServ_) - Number(totalReajusteServicios_)).toFixed(2);
-  var calTotal = ((Tservicios-totalReajusteServicios_) + Number(newTotalReajusteServ_));
+  var calTotal = ((oldTotalServ-totalReajusteServicios_) + Number(newTotalReajusteServ_));
   Tservicios = calTotal;
   $('#totalServicios').html('<strong>$'+Tservicios.toFixed(2)+'</strong>');
   sendDataModalServ();

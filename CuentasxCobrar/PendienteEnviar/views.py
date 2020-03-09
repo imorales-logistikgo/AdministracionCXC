@@ -3,6 +3,7 @@ from django.shortcuts import render
 from PendienteEnviar.models import View_PendientesEnviarCxC, FacturasxCliente, Partida, RelacionFacturaxPartidas, PendientesEnviar, Ext_PendienteEnviar_Precio, RelacionConceptoxProyecto
 from usersadmon.models import Cliente, AdmonUsuarios
 from bkg_viajes.models import Bro_Viajes
+from XD_Viajes.models import XD_Viajes
 from django.core import serializers
 from .forms import FacturaForm
 from django.template.loader import render_to_string
@@ -100,7 +101,10 @@ def SavePartidasxFactura(request):
 		partidaReajuste = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
 		if Viaje.IDPendienteEnviar == jParams["IDFolioReajuste"]:
 			newPartida.Reajuste = partidaReajuste.Reajuste
-			SaveReajusteBkg(Viaje.IDPendienteEnviar, partidaReajuste.Reajuste)
+			if Viaje.Proyecto == 'BKG':
+				SaveReajusteBkg(Viaje.IDPendienteEnviar, partidaReajuste.Reajuste)
+			elif Viaje.Proyecto == 'XD':
+				SaveReajusteXD(Viaje.IDPendienteEnviar, partidaReajuste.Reajuste)
 		else:
 			newPartida.Reajuste = 0
 		newPartida.save()
@@ -125,6 +129,16 @@ def SaveReajusteBkg(IDPEe, reajuste):
 		IDBkg.PrecioTotal = round(newTotalBkg, 2)
 		IDBkg.save()
 	return HttpResponse("")
+
+def SaveReajusteXD(IDPEe, reajusteXD):
+	IDConceptoPE = RelacionConceptoxProyecto.objects.get(IDPendienteEnviar = IDPEe)
+	IDXD = XD_Viajes.objects.get(XD_IDViaje = IDConceptoPE.IDConcepto)
+	if IDXD:
+		newTotalXD = Decimal.from_float(IDXD.PrecioTotal) + reajusteXD
+		IDXD.PrecioTotal = round(newTotalXD, 2)
+		IDXD.save()
+	return HttpResponse("")
+
 
 def CheckFolioDuplicado(request):
 	IsDuplicated = FacturasxCliente.objects.filter(Folio = request.GET["Folio"]).exclude(Status = "CANCELADA").exists()
