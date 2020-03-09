@@ -1,7 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from PendienteEnviar.models import View_PendientesEnviarCxC, FacturasxCliente, Partida, RelacionFacturaxPartidas, PendientesEnviar, Ext_PendienteEnviar_Precio
+from PendienteEnviar.models import View_PendientesEnviarCxC, FacturasxCliente, Partida, RelacionFacturaxPartidas, PendientesEnviar, Ext_PendienteEnviar_Precio, RelacionConceptoxProyecto
 from usersadmon.models import Cliente, AdmonUsuarios
+from bkg_viajes.models import Bro_Viajes
 from django.core import serializers
 from .forms import FacturaForm
 from django.template.loader import render_to_string
@@ -99,6 +100,7 @@ def SavePartidasxFactura(request):
 		partidaReajuste = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
 		if Viaje.IDPendienteEnviar == jParams["IDFolioReajuste"]:
 			newPartida.Reajuste = partidaReajuste.Reajuste
+			SaveReajusteBkg(Viaje.IDPendienteEnviar, partidaReajuste.Reajuste)
 		else:
 			newPartida.Reajuste = 0
 		newPartida.save()
@@ -115,6 +117,15 @@ def SavePartidasxFactura(request):
 	return JsonResponse({'htmlRes' : htmlRes})
 
 
+def SaveReajusteBkg(IDPEe, reajuste):
+	IDConceptoPE = RelacionConceptoxProyecto.objects.get(IDPendienteEnviar = IDPEe)
+	IDBkg = Bro_Viajes.objects.get(IDBro_Viaje = IDConceptoPE.IDConcepto)
+	if IDBkg:
+		newTotalBkg = Decimal.from_float(IDBkg.PrecioTotal) + reajuste
+		IDBkg.PrecioTotal = round(newTotalBkg, 2)
+		IDBkg.save()
+	return HttpResponse("")
+
 def CheckFolioDuplicado(request):
 	IsDuplicated = FacturasxCliente.objects.filter(Folio = request.GET["Folio"]).exclude(Status = "CANCELADA").exists()
 	return JsonResponse({'IsDuplicated' : IsDuplicated})
@@ -129,17 +140,19 @@ def CheckHasFactura(request):
 	return JsonResponse({'Resp': Resp})
 
 def UpdatePartidas(request):
-	idF = 185,187,189,191,193,195,197,198,202,211,212,215,217,219,221,256,261,263,267,284,288,407,432,435,441,444,445,447,592,594,595,598
+	bkg =  Bro_Viajes.objects.get(IDBro_Viaje = 23018)
+	print(bkg.PrecioTotal)
+#	idF = 185,187,189,191,193,195,197,198,202,211,212,215,217,219,221,256,261,263,267,284,288,407,432,435,441,444,445,447,592,594,595,598
 	#idF = 181,183
 	#FacturasFragmentadas = FacturasxCliente.objects.filter(IDFactura__in = idF).values_list("IDFactura")
-	Relacion = RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente__in = idF).values("IDPendienteEnviar", "IDPartida")
-	for r in Relacion:
-		PendientesEnviar_ = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = r["IDPendienteEnviar"])
-		Partida_ = Partida.objects.get(IDPartida = r["IDPartida"])
-		if Partida_:
-			Partida_.SubTotal = PendientesEnviar_.ServiciosSubtotal
-			Partida_.IVA = PendientesEnviar_.ServiciosIVA
-			Partida_.Retencion = PendientesEnviar_.ServiciosRetencion
-			Partida_.Total = PendientesEnviar_.ServiciosTotal
-			Partida_.save()
+#	Relacion = RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente__in = idF).values("IDPendienteEnviar", "IDPartida")
+#	for r in Relacion:
+#		PendientesEnviar_ = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = r["IDPendienteEnviar"])
+#		Partida_ = Partida.objects.get(IDPartida = r["IDPartida"])
+#		if Partida_:
+#			Partida_.SubTotal = PendientesEnviar_.ServiciosSubtotal
+#			Partida_.IVA = PendientesEnviar_.ServiciosIVA
+#			Partida_.Retencion = PendientesEnviar_.ServiciosRetencion
+#			Partida_.Total = PendientesEnviar_.ServiciosTotal
+#			Partida_.save()
 	return HttpResponse("")

@@ -19,6 +19,10 @@ var diferenciaRejusteServ = 0;
 var idFolioReajuste;
 var totalReajusteServicios_;
 var totalViaje;
+var oldTotal;
+var oldTotalViaje;
+var oldTotalServ;
+//var newTotalReajuste;
 //var idpendienteenviar;
 var table;
 var subtotal = 0, Tiva=0, TRetencion=0, total=0, Tservicios = 0, viaje=0, IServicios=0, RServicios=0, SBServicios=0;
@@ -45,9 +49,22 @@ $(document).on('click', '#btnGuardarReajuste',function(){
   $('#ModalReajuste').modal('hide');
 });
 
+$(document).on('click', '#BtnCloseModalReajuste, #closeBtnModalR', function(){
+  if($('input[name="Fragmentada"]').is(':checked'))
+  {
+    viaje = oldTotalViaje;
+    Tservicios = oldTotalServ;
+    $('#totalViaje').html('<strong>$'+viaje.toFixed(2)+'</strong>');
+    $('#totalServicios').html('<strong>$'+Tservicios.toFixed(2)+'</strong>');
+  }
+  else{
+    total = oldTotal;
+    $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
+  }
 
+});
 
-//on click select row checkbox
+//on click select row checkbox XDDT1N150120ET000222
         $(document).on( 'change', 'input[name="checkPE"]', function () {
           var input = 'input[name="checkPE"]';
           var btnSubir = '#BtnSubirFacturaPendietnesEnviar';
@@ -454,7 +471,7 @@ function LimpiarModalSF()
                  //Tservicios
                  if($('input[name="Fragmentada"]').is(':checked'))
                  {
-                   if(to != viaje.toFixed(2))
+                  /* if(to != viaje.toFixed(2))
                    {
                      $("#btnGuardarFactura").prop("disabled", true)
                      alertToastError("El total de la factura no coincide con el total calculado del sistema")
@@ -462,36 +479,36 @@ function LimpiarModalSF()
                       uppyDashboard.cancelAll()
                         $('.uploaded-files ol').remove();
 
-                    }
-                    else
-                    {
+                    }*/
+                  //  else
+                  //  {
                      $("#btnGuardarFactura").prop("disabled", false)
                      const urlPDF = response.body
                      $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
                      document.querySelector('.uploaded-files').innerHTML +=
                      `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
                      $('#chkFragmentada').prop('disabled', true);
-                    }
+                    //}
                    }
                    else
                    {
-                     if(to != total.toFixed(2))
+                  /*   if(to != total.toFixed(2))
                      {
                        $("#btnGuardarFactura").prop("disabled", true)
                        alertToastError("El total de la factura no coincide con el total calculado del sistema")
                         //uppyDashboard.reset()
                         uppyDashboard.cancelAll()
 
-                      }
-                      else
-                      {
+                      }*/
+                    //  else
+                    //  {
                        $("#btnGuardarFactura").prop("disabled", false)
                        const urlPDF = response.body
                        $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
                        document.querySelector('.uploaded-files').innerHTML +=
                        `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
                         $('#chkFragmentada').prop('disabled', true);
-                      }
+                    //  }
                    }
                    //console.log($('#kt_uppy_1').data("rutaarchivoXML"))
                  }
@@ -985,6 +1002,8 @@ function getDatosModalreajuste()
     $('#IVAReajuste').val(parseFloat(dataReajuste[2].replace(/(\$)|(,)/g,'')));
     $('#RetencionReajuste').val(parseFloat(dataReajuste[3].replace(/(\$)|(,)/g,'')));
     var totRe = $('#TotalReajuste').val(parseFloat(dataReajuste[8].replace(/(\$)|(,)/g,'')) - totalReajusteServicios_);
+    oldTotalViaje = viaje;
+    oldTotalServ = Tservicios;
   }
   else
   {
@@ -999,6 +1018,7 @@ function getDatosModalreajuste()
     $('#IVAReajuste').val(parseFloat(dataReajuste[2].replace(/(\$)|(,)/g,'')));
     $('#RetencionReajuste').val(parseFloat(dataReajuste[3].replace(/(\$)|(,)/g,'')));
     var totRe = $('#TotalReajuste').val(parseFloat(dataReajuste[8].replace(/(\$)|(,)/g,'')));
+    oldTotal = total;
   }
 
 
