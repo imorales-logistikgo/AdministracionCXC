@@ -34,11 +34,13 @@ formatDataTable();
 //$(document).on('click', '#folioReajuste', getDatosModalreajuste);
 
 $(document).on('change', '#TotalReajuste', function(){
+  $('input[name="Fragmentada"]').is(':checked') ? $('#TotalReajusteServicios').prop('disabled', true) : "";
   var newTotalReajuste = $('#TotalReajuste').val();
   newTotalReajuste > (Number(totalReajuste_) + Number(1)) || newTotalReajuste < (Number(totalReajuste_) - Number(1)) ?  alertToastError("No se puede ajustar más o menos de $1") : recalculoAjuste(newTotalReajuste);
 });
 
 $(document).on('change', '#TotalReajusteServicios', function(){
+  $('#TotalReajuste').prop('disabled', true)
     var newTotalReajusteServ = $('#TotalReajusteServicios').val();
     newTotalReajusteServ > (Number(totalReajusteServicios_) + Number(1)) || newTotalReajusteServ < (Number(totalReajusteServicios_) - Number(1)) ?  alertToastError("No se puede ajustar más o menos de $1") : recalculoAjusteServ(newTotalReajusteServ);
 });
@@ -52,6 +54,8 @@ $(document).on('click', '#btnGuardarReajuste',function(){
 $(document).on('click', '#BtnCloseModalReajuste, #closeBtnModalR', function(){
   if($('input[name="Fragmentada"]').is(':checked'))
   {
+    $('#TotalReajuste').prop('disabled', false);
+    $('#TotalReajusteServicios').prop('disabled', false)
     viaje = oldTotalViaje;
     Tservicios = oldTotalServ;
     $('#totalViaje').html('<strong>$'+viaje.toFixed(2)+'</strong>');
@@ -107,13 +111,14 @@ $(document).on('click', '#BtnSubirFacturaPendietnesEnviar', function(){
 
 //verificar si el folio ya existe en la base de datos
 $('#txtFolioFactura').on('change', function() {
-  var folioFac = $('#txtFolioFactura').val().replace(/ /g, "").trim();
+  var folioFac = $('#txtFolioFactura').val().replace(/ /g, "").trim().toUpperCase();
+  console.log(folioFac);
   fnCheckFolio(folioFac);
 });
 
 //verificar si el folio ya existe en la base de datos para la fragmentacion
 $('#txtFolioServicios').on('change', function(){
-  var folioFacServ = $('#txtFolioServicios').val().replace(/ /g, "").trim();
+  var folioFacServ = $('#txtFolioServicios').val().replace(/ /g, "").trim().toUpperCase();
   fnCheckFolio(folioFacServ);
 });
 
@@ -475,7 +480,7 @@ function LimpiarModalSF()
                  //Tservicios
                  if($('input[name="Fragmentada"]').is(':checked'))
                  {
-                  /* if(to != viaje.toFixed(2))
+                   if(to != viaje.toFixed(2))
                    {
                      $("#btnGuardarFactura").prop("disabled", true)
                      alertToastError("El total de la factura no coincide con el total calculado del sistema")
@@ -483,36 +488,36 @@ function LimpiarModalSF()
                       uppyDashboard.cancelAll()
                         $('.uploaded-files ol').remove();
 
-                    }*/
-                  //  else
-                  //  {
+                    }
+                    else
+                    {
                      $("#btnGuardarFactura").prop("disabled", false)
                      const urlPDF = response.body
                      $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
                      document.querySelector('.uploaded-files').innerHTML +=
                      `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
                      $('#chkFragmentada').prop('disabled', true);
-                    //}
+                    }
                    }
                    else
                    {
-                  /*   if(to != total.toFixed(2))
+                     if(to != total.toFixed(2))
                      {
                        $("#btnGuardarFactura").prop("disabled", true)
                        alertToastError("El total de la factura no coincide con el total calculado del sistema")
                         //uppyDashboard.reset()
                         uppyDashboard.cancelAll()
 
-                      }*/
-                    //  else
-                    //  {
+                      }
+                      else
+                      {
                        $("#btnGuardarFactura").prop("disabled", false)
                        const urlPDF = response.body
                        $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
                        document.querySelector('.uploaded-files').innerHTML +=
                        `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
                         $('#chkFragmentada').prop('disabled', true);
-                    //  }
+                      }
                    }
                    //console.log($('#kt_uppy_1').data("rutaarchivoXML"))
                  }
@@ -691,7 +696,7 @@ function getDatos(){
   }
 
   function saveFacturaFragmentada() {
-    var strFolioServicios = $('#txtFolioServicios').val().replace(/ /g, "").trim();
+    var strFolioServicios = $('#txtFolioServicios').val().replace(/ /g, "").trim().toUpperCase();
     var strComentariosServicios = $('#txtComentariosServicios').val();
     var RutaXML = $('.uploaded-files-fragmentadas #RutaXML').attr('href');
     var RutaPDF = $('.uploaded-files-fragmentadas #RutaPDF').attr('href');
@@ -704,7 +709,7 @@ function getDatos(){
   }
 
 
-  function saveFactura(IsFacturaServicios = false, Total = total, Subt=subtotal, IV = Tiva, Ret = TRetencion, Reajuste = diferenciaRejuste, FolioFactura = $('#txtFolioFactura').val().replace(/ /g, "").trim(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href')) {
+  function saveFactura(IsFacturaServicios = false, Total = total, Subt=subtotal, IV = Tiva, Ret = TRetencion, Reajuste = diferenciaRejuste, FolioFactura = $('#txtFolioFactura').val().replace(/ /g, "").trim().toUpperCase(), Comentarios = $('#txtComentarios').val(), RutaXML = $('.uploaded-files #RutaXML').attr('href'), RutaPDF = $('.uploaded-files #RutaPDF').attr('href')) {
     jParams = {
       FolioFactura: FolioFactura,
       Cliente: cliente,
@@ -817,7 +822,8 @@ function SavePartidasxFactura(IDFactura, IsFacturaServicios) {
 
 
 var fnCheckFolio = function (fol) {
-  WaitMe_ShowBtn('#btnGuardarFactura')
+  WaitMe_ShowBtn('#btnGuardarFactura');
+  $('#btnGuardarFactura').prop('disabled', true);
   fetch("/PendientesEnviar/CheckFolioDuplicado?Folio=" + fol, {
     method: "GET",
     credentials: "same-origin",

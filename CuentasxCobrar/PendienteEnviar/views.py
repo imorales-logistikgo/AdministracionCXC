@@ -94,10 +94,10 @@ def SavePartidasxFactura(request):
 		Viaje = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = IDPendiente)
 		newPartida = Partida()
 		newPartida.FechaAlta = datetime.datetime.now()
-		newPartida.Subtotal = Viaje.ServiciosSubtotal if (jParams["IsFacturaServicios"]) else Viaje.Subtotal
-		newPartida.IVA = Viaje.ServiciosIVA if (jParams["IsFacturaServicios"]) else Viaje.IVA
-		newPartida.Retencion = Viaje.ServiciosRetencion if (jParams["IsFacturaServicios"]) else Viaje.Retencion
-		newPartida.Total = Viaje.ServiciosTotal if (jParams["IsFacturaServicios"]) else Viaje.Total
+		newPartida.Subtotal = ((0 if(Viaje.ServiciosSubtotal is None) else Viaje.ServiciosSubtotal) if (jParams["IsFacturaServicios"]) else Viaje.Subtotal)
+		newPartida.IVA = ((0 if (Viaje.ServiciosIVA is None) else Viaje.ServiciosIVA) if (jParams["IsFacturaServicios"]) else Viaje.IVA)
+		newPartida.Retencion = ((0 if(Viaje.ServiciosRetencion is None) else Viaje.ServiciosRetencion) if (jParams["IsFacturaServicios"]) else Viaje.Retencion)
+		newPartida.Total = ((0 if (Viaje.ServiciosTotal is None) else Viaje.ServiciosTotal) if (jParams["IsFacturaServicios"]) else Viaje.Total)
 		partidaReajuste = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
 		if Viaje.IDPendienteEnviar == jParams["IDFolioReajuste"]:
 			newPartida.Reajuste = partidaReajuste.Reajuste
