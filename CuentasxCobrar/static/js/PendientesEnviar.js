@@ -36,13 +36,29 @@ formatDataTable();
 $(document).on('change', '#TotalReajuste', function(){
   $('input[name="Fragmentada"]').is(':checked') ? $('#TotalReajusteServicios').prop('disabled', true) : "";
   var newTotalReajuste = $('#TotalReajuste').val();
-  newTotalReajuste > (Number(totalReajuste_) + Number(1)) || newTotalReajuste < (Number(totalReajuste_) - Number(1)) ?  alertToastError("No se puede ajustar más o menos de $1") : recalculoAjuste(newTotalReajuste);
+  if (newTotalReajuste > (Number(totalReajuste_) + Number(1)) || newTotalReajuste < (Number(totalReajuste_) - Number(1)) || newTotalReajuste < 0){
+    alertToastError("No se puede ajustar más o menos de $1");
+    $('#btnGuardarReajuste').prop('disabled', true);
+  }
+  else{
+    recalculoAjuste(newTotalReajuste);
+    $('#btnGuardarReajuste').prop('disabled', false);
+  }
+  //newTotalReajuste > (Number(totalReajuste_) + Number(1)) || newTotalReajuste < (Number(totalReajuste_) - Number(1)) || newTotalReajuste < 0 ?  alertToastError("No se puede ajustar más o menos de $1") : recalculoAjuste(newTotalReajuste);
 });
 
 $(document).on('change', '#TotalReajusteServicios', function(){
-  $('#TotalReajuste').prop('disabled', true)
+  $('#TotalReajuste').prop('disabled', true);
     var newTotalReajusteServ = $('#TotalReajusteServicios').val();
-    newTotalReajusteServ > (Number(totalReajusteServicios_) + Number(1)) || newTotalReajusteServ < (Number(totalReajusteServicios_) - Number(1)) ?  alertToastError("No se puede ajustar más o menos de $1") : recalculoAjusteServ(newTotalReajusteServ);
+    if(newTotalReajusteServ > (Number(totalReajusteServicios_) + Number(1)) || newTotalReajusteServ < (Number(totalReajusteServicios_) - Number(1)) || newTotalReajusteServ < 0){
+      alertToastError("No se puede ajustar más o menos de $1");
+      $('#btnGuardarReajuste').prop('disabled', true);
+    }
+    else{
+      recalculoAjusteServ(newTotalReajusteServ);
+      $('#btnGuardarReajuste').prop('disabled', false);
+    }
+    //newTotalReajusteServ > (Number(totalReajusteServicios_) + Number(1)) || newTotalReajusteServ < (Number(totalReajusteServicios_) - Number(1)) || newTotalReajusteServ < 0 ? alertToastError("No se puede ajustar más o menos de $1") : recalculoAjusteServ(newTotalReajusteServ);
 });
 
 $(document).on('click', '#btnGuardarReajuste',function(){

@@ -123,20 +123,24 @@ def SavePartidasxFactura(request):
 
 def SaveReajusteBkg(IDPEe, reajuste):
 	IDConceptoPE = RelacionConceptoxProyecto.objects.get(IDPendienteEnviar = IDPEe)
-	IDBkg = Bro_Viajes.objects.get(IDBro_Viaje = IDConceptoPE.IDConcepto)
-	if IDBkg:
+	if Bro_Viajes.objects.filter(IDBro_Viaje = IDConceptoPE.IDConcepto).exists():
+		IDBkg = Bro_Viajes.objects.get(IDBro_Viaje = IDConceptoPE.IDConcepto)
 		newTotalBkg = Decimal.from_float(IDBkg.PrecioTotal) + reajuste
 		IDBkg.PrecioTotal = round(newTotalBkg, 2)
 		IDBkg.save()
+	else:
+		pass
 	return HttpResponse("")
 
 def SaveReajusteXD(IDPEe, reajusteXD):
 	IDConceptoPE = RelacionConceptoxProyecto.objects.get(IDPendienteEnviar = IDPEe)
-	IDXD = XD_Viajes.objects.get(XD_IDViaje = IDConceptoPE.IDConcepto)
-	if IDXD:
+	if XD_Viajes.objects.filter(XD_IDViaje = IDConceptoPE.IDConcepto).exists():
+		IDXD = XD_Viajes.objects.get(XD_IDViaje = IDConceptoPE.IDConcepto)
 		newTotalXD = Decimal.from_float(IDXD.PrecioTotal) + reajusteXD
 		IDXD.PrecioTotal = round(newTotalXD, 2)
 		IDXD.save()
+	else:
+		pass
 	return HttpResponse("")
 
 
