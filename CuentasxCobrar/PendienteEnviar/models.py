@@ -93,6 +93,7 @@ class FacturasxCliente(models.Model):
     Folio = models.CharField(max_length=50)
     NombreCortoCliente = models.CharField(max_length=100)
     IDCliente = models.IntegerField(default=0)
+    FechaAlta = models.DateTimeField()
     FechaFactura = models.DateTimeField()
     FechaRevision = models.DateTimeField()
     FechaVencimiento = models.DateTimeField()
