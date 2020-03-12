@@ -48,6 +48,7 @@ $(document).on('change', '#TotalReajusteServicios', function(){
 $(document).on('click', '#btnGuardarReajuste',function(){
   $(document).off('click','#folioReajuste');
   $('a[id = "folioReajuste"]').removeAttr("href");
+  $('#chkFragmentada').prop('disabled', true);
   $('#ModalReajuste').modal('hide');
 });
 
@@ -112,7 +113,6 @@ $(document).on('click', '#BtnSubirFacturaPendietnesEnviar', function(){
 //verificar si el folio ya existe en la base de datos
 $('#txtFolioFactura').on('change', function() {
   var folioFac = $('#txtFolioFactura').val().replace(/ /g, "").trim().toUpperCase();
-  console.log(folioFac);
   fnCheckFolio(folioFac);
 });
 
@@ -384,7 +384,8 @@ function LimpiarModalSF()
   $('#txtFolioServicios').val('');
   $('#txtComentariosServicios').val('');
   folio_ = [];
-
+  diferenciaRejuste = 0;
+  diferenciaRejusteServ = 0;
 }
 
 
