@@ -4,5 +4,6 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path("ReporteMaster/", views.GetReporteMaster, name='ReporteMaster'),
+    path("", views.GetReporteMaster, name='ReporteMaster'),
+    path('FilterBy', views.GetFacturasByFilters, name='GetFacturasByFilters'),
 ]

@@ -1,0 +1,46 @@
+{% load humanize %}
+
+<table class="table table-striped table-bordered" id="TablaReporteMasterC">
+				<thead>
+					<tr>
+						<th>Folio</th>
+						<th>Cliente</th>
+						<th>Fecha Descarga</th>
+						<th>Moneda</th>
+						<th>Estatus</th>
+						<th>Ev Digital</th>
+						<th>Ev Fisica</th>
+						<th>Proyecto</th>
+						<th>Concepto</th>
+						<th>Precio Subtotal</th>
+						<th>Precio IVA</th>
+						<th>Precio Retencion</th>
+						<th>Precio Total</th>
+            <th>Tiene factura cliente</th>
+						<th>Factura Cliente</th>
+						<th>Estatus Factura</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for Master in MasterReporte %}
+					<tr>
+						<td>{{Master.Folio|safe}}</td>
+						<td>{{Master.NombreCortoCliente|safe}}</td>
+						<td>{{Master.FechaDescarga|date:'Y/m/d'|safe}}</td>
+						<td>{{Master.Moneda|safe}}</td>
+						<td>{{Master.Status|safe}}</td>
+						<td>{{Master.IsEvidenciaDigital|safe}}</td>
+						<td>{{Master.IsEvidenciaFisica|safe}}</td>
+						<td>{{Master.Proyecto|safe}}</td>
+						<td>{{Master.TipoConcepto|safe}}</td>
+						<td>${{Master.PrecioSubtotal|default:0|intcomma|safe}}</td>
+						<td>${{Master.PrecioIVA|default:0|intcomma|safe}}</td>
+						<td>${{Master.PrecioRetencion|default:0|intcomma|safe}}</td>
+						<td>${{Master.PrecioTotal|default:0|intcomma|safe}}</td>
+            <td>{{Master.IsFacturaCliente|safe}}</td>
+            <td>{{Master.FolioFactCliente|default:""|safe}}</td>
+            <td>{{Master.StatusFacCliente|default:""|safe}}</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+	</table>

@@ -3,7 +3,7 @@ class AuthRouter:
     A router to control all database operations on models in the
     auth and contenttypes applications.
     """
-    route_app_labels = {'usersadmon', 'EstadosdeCuenta', 'PendienteEnviar'}
+    route_app_labels = {'usersadmon', 'EstadosdeCuenta', 'PendienteEnviar', 'ReporteMaster'}
     route_app_labels_bkg = {'bkg_viajes'}
     route_app_labels_XD = {'XD_Viajes'}
 
