@@ -585,7 +585,7 @@ function formatDataTableFacturas(){
       "className": "text-center",
       "targets": 13,
       "mRender": function (data, type, full) {
-       return (fragmentada != 'True' &&  full[10] === 'pendiente'.toUpperCase() ? '<button type ="button" class="BtnEliminarFactura btn btn-danger btn-elevate btn-pill btn-sm" data-idfact="'+idfac+'"><i class="flaticon-delete"></i></button>':'');
+       return (fragmentada != 'True' &&  full[10] == 'pendiente'.toUpperCase() ? '<button type ="button" class="BtnEliminarFactura btn btn-danger btn-elevate btn-pill btn-sm" data-idfact="'+idfac+'"><i class="flaticon-delete"></i></button>':'');
      }
    }
    ]

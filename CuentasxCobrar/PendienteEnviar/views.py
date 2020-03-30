@@ -151,7 +151,7 @@ def CheckFolioDuplicado(request):
 
 def CheckHasFactura(request):
 	Folios = json.loads(request.GET["Folio"])
-	HasFactura = View_PendientesEnviarCxC.objects.filter(Folio__in = Folios).values_list("IsFacturaCliente", flat=True)
+	HasFactura = View_PendientesEnviarCxC.objects.filter(IDPendienteEnviar__in = Folios).values_list("IsFacturaCliente", flat=True)
 	if True in HasFactura:
 		Resp = True
 	else:

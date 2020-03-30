@@ -579,7 +579,7 @@ function getDatos(){
  subtotal = 0, Tiva=0, TRetencion=0, total=0, moneda, totalCambio=0, Tservicios=0, totalViaje=0;
  for (var i=0; i<datos.length; i++)
  {
-  folio_.push(datos[i][0]);
+  folio_.push(datos[i][10]);
   moneda = datos[i][9];
   if(datos[i][9] === "MXN")
   {
