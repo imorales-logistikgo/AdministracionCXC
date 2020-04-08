@@ -115,7 +115,7 @@ $(document).on('click', '#BtnCloseModalReajuste, #closeBtnModalR', function(){
 $('input[name="Fragmentada"]').on("change", function()
 {
   $('#alertaViajeFragmentada').css("display", "block");
-  viaje = total-Number(Tservicios);
+  viaje = total > Number(Tservicios) ? total-Number(Tservicios):Number(Tservicios)-total;
   $('#totalViaje').html('<span>'+viaje.toFixed(2)+'</span>');
   sendDataModalServ();
 });
