@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import math
 from decimal import *
+import hashlib
 @login_required
 
 
@@ -159,8 +160,10 @@ def CheckHasFactura(request):
 	return JsonResponse({'Resp': Resp})
 
 def UpdatePartidas(request):
-	bkg =  Bro_Viajes.objects.get(IDBro_Viaje = 23018)
-	print(bkg.PrecioTotal)
+	h = hashlib.new("sha512", b"Lgk123456*$")
+	string = h.hexdigest()
+	#bkg =  Bro_Viajes.objects.get(IDBro_Viaje = 23018)
+	#print(bkg.PrecioTotal)
 #	idF = 185,187,189,191,193,195,197,198,202,211,212,215,217,219,221,256,261,263,267,284,288,407,432,435,441,444,445,447,592,594,595,598
 	#idF = 181,183
 	#FacturasFragmentadas = FacturasxCliente.objects.filter(IDFactura__in = idF).values_list("IDFactura")

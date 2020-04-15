@@ -197,8 +197,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 #SECURE_SSL_REDIRECT = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 STATIC_URL = '/static/'
 LOGIN_URL = "/Usuario/Login/"
 AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = '/PendientesEnviar/'
-SESSION_COOKIE_AGE = 21600
+#SESSION_COOKIE_AGE = 21600
