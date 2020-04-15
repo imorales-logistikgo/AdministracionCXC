@@ -11,11 +11,12 @@ from django.db.models import Q
 @login_required
 
 def EstadosdeCuenta(request):
-	FacturasPendiente = View_FacturasxCliente.objects.filter(Status = "PENDIENTE")
-	FacturasAbonada = View_FacturasxCliente.objects.filter(Status = "ABONADA")
-	result = FacturasPendiente | FacturasAbonada
+	Facturas = View_FacturasxCliente.objects.filter(Status__in = ("PENDIENTE", "ABONADA"), FechaFactura__month = datetime.datetime.now().month)
+	FacturasPendiente = View_FacturasxCliente.objects.filter(Status = "PENDIENTE", FechaFactura__month = datetime.datetime.now().month)
+	FacturasAbonada = View_FacturasxCliente.objects.filter(Status = "ABONADA", FechaFactura__month = datetime.datetime.now().month)
+	#result = FacturasPendiente | FacturasAbonada
 	Folios = list()
-	for Factura in result:
+	for Factura in Facturas:
 		FoliosCobro= ""
 		for Cobro in RelacionCobrosFacturasxCliente.objects.filter(IDFactura = Factura.IDFactura).select_related('IDCobro'):
 			FoliosCobro += Cobro.IDCobro.Folio + ", "
@@ -24,7 +25,7 @@ def EstadosdeCuenta(request):
 	ContadoresPendientes = len(list(FacturasPendiente))
 	ContadoresAbonadas = len(list(FacturasAbonada))
 	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
-	return render(request,  'EstadosdeCuenta.html', {'Facturas': result, 'Clientes': Clientes, 'Folios': Folios, 'ContadoresPendientes': ContadoresPendientes, 'ContadoresAbonadas': ContadoresAbonadas})
+	return render(request,  'EstadosdeCuenta.html', {'Facturas': Facturas, 'Clientes': Clientes, 'Folios': Folios, 'ContadoresPendientes': ContadoresPendientes, 'ContadoresAbonadas': ContadoresAbonadas})
 
 
 
@@ -96,6 +97,7 @@ def SaveCobroxCliente(request):
 	newCobro.TipoCambio = jParams["TipoCambio"]
 	newCobro.NombreCortoCliente = jParams["Cliente"]
 	newCobro.IDCliente = jParams["IDCliente"]
+	newCobro.IDUsuarioAlta = request.user.idusuario
 	newCobro.save()
 	return HttpResponse(newCobro.IDCobro)
 
@@ -121,7 +123,7 @@ def SaveCobroxFactura(request):
 		Factura = FacturasxCliente.objects.get(IDFactura = Cobro["IDFactura"])
 		Factura.Saldo -= Decimal(Cobro["Total"])
 		newRelacionCobroxFactura.IDFactura = Factura
-		newRelacionCobroxFactura.IDUsuarioAlta = 1
+		newRelacionCobroxFactura.IDUsuarioAlta = request.user.idusuario
 		if truncate(float(Factura.Saldo), 2) == 0:
 			Factura.Status = "COBRADA"
 		else:

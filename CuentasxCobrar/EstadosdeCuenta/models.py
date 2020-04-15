@@ -47,6 +47,10 @@ class CobrosxCliente(models.Model):
     TipoCambio = models.DecimalField(default=1, max_digits=10, decimal_places=5)
     NombreCortoCliente = models.CharField(max_length=100)
     IDCliente = models.IntegerField(default=0)
+    Status = models.CharField(db_column = 'Status', max_length=15, default = "")
+    IDUsuarioAlta = models.IntegerField(default=0)
+    IDUsuarioBaja = models.IntegerField(default=0)
+    FechaBaja = models.DateTimeField()
 
     class Meta:
         db_table="CobrosxCliente"

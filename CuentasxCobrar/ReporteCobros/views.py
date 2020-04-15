@@ -1,11 +1,12 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from EstadosdeCuenta.models import CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
-from usersadmon.models import Cliente
+from usersadmon.models import Cliente, AdmonUsuarios
 from django.template.loader import render_to_string
 import json, datetime
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.db import transaction
 @login_required
 
 def ReporteCobros(request):
@@ -40,6 +41,30 @@ def GetCobrosByFilters(request):
 		Folios.append(FoliosFactura)
 	htmlRes = render_to_string('TablaReporteCobros.html', {'Cobros':Cobros, "Folios": Folios}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
+
+
+
+def CancelarCobro(request):
+	try:
+		with transaction.atomic(using='users'):
+			IDCobro = json.loads(request.body.decode('utf-8'))["IDCobro"]
+			for Factura in RelacionCobrosFacturasxCliente.objects.filter(IDCobro = IDCobro).select_related('IDFactura'):
+				Factura.IDFactura.Saldo += Factura.IDCobroxFactura.Total
+				if Factura.IDFactura.Saldo == Factura.IDFactura.Total:
+					Factura.IDFactura.Status = "PENDIENTE"
+				else:
+					Factura.IDFactura.Status = "ABONADA"
+				Factura.IDFactura.save()
+			Cobro = CobrosxCliente.objects.get(IDCobro = IDCobro)
+			Cobro.Status = "CANCELADA"
+			Cobro.IDUsuarioBaja =  request.user.idusuario
+			Cobro.FechaBaja = datetime.datetime.now()
+			Cobro.save()
+			return HttpResponse(status=200)
+	except:
+		transaction.rollback(using='users')
+		return HttpResponse(status=400)
+
 
 
 

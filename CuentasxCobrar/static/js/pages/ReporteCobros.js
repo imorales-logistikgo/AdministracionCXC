@@ -1,9 +1,27 @@
+var idCobro;
 $(document).ready(function(){
-
-
   formatTableCobros();
 
   $(document).on('click', '.btnDetalleCobro', fnGetDetalleCobro);
+
+//boton eliminar cobro
+  $(document).on('click', '.btnEliminarCobro', function(){
+  Swal.fire({
+   title: '¿Estas Seguro?',
+   text: "Estas a un click de eliminar un cobro importante",
+   type: 'warning',
+   showCancelButton: true,
+   confirmButtonColor: '#3085d6',
+   cancelButtonColor: '#d33',
+   confirmButtonText: 'Aceptar'
+  }).then((result) => {
+   if (result.value)
+   {
+     WaitMe_Show('#TbPading');
+     fnCancelarCobro($(this).data('idcobro'), $(this));
+   }
+  })
+  });
 
   //rago fecha para el Filtro
   $('input[name="FiltroFechaReporteCobros"]').daterangepicker({
@@ -103,6 +121,18 @@ function formatTableCobros() {
       "width": "12px",
       "className": "dt-head-center dt-body-right"
     },
+    {
+      "targets": 5,
+      "width": "5px",
+      "mRender": function (data, type, full) {
+        idCobro = $('input[name="IDCobro"]').data("cobroid");
+        return (full[6] != 'CANCELADA' ? `<button type ="button" class="btnEliminarCobro btn btn-danger btn-elevate btn-pill btn-sm" data-idcobro="${idCobro}" title="Eliminar"><i class="flaticon-delete"></i></button>`:'');
+      }
+    },
+    {
+      "targets": 6,
+      "visible" : false
+    }
     ]
   });
 }
@@ -126,5 +156,48 @@ var fnGetDetalleCobro = function () {
     $('#divTableDetallesCobro').html(data.htmlRes);
   }).catch(function(ex){
     console.log("no success!");
+  });
+}
+
+var fnCancelarCobro = function (IDCobro, row) {
+  var res;
+  jParams = {
+    IDCobro: IDCobro,
+  }
+  fetch("/ReporteCobros/CancelarCobro", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken"),
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(jParams)
+  }).then(function(response){
+    if(response.status == 200)
+    {
+      res = true;
+      Swal.fire(
+        'Eliminado!',
+        'Eliminado con exito',
+        'success'
+        )
+      var table = $('#TableReporteCobros').DataTable()
+      table.row($(row).parents('tr')).remove().draw();
+      WaitMe_Hide('#TbPading');
+    }
+    else if(response.status == 500 || response.status == 400)
+    {
+      Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: 'Error al eliminar el cobro',
+      })
+      res = false;
+      WaitMe_Hide('#TbPading');
+    }
+  }).catch(function(ex){
+    res = false;
+    WaitMe_Hide('#TbPading');
   });
 }
