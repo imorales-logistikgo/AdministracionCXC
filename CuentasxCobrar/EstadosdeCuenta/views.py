@@ -47,7 +47,8 @@ def GetFacturasByFilters(request):
 	for Factura in Facturas:
 		FoliosCobro= ""
 		for Cobro in RelacionCobrosFacturasxCliente.objects.filter(IDFactura = Factura.IDFactura):
-			FoliosCobro += Cobro.IDCobro.Folio + ", "
+			if Cobro.IDCobro.Status != 'CANCELADA':
+				FoliosCobro += Cobro.IDCobro.Folio + ", "
 		FoliosCobro = FoliosCobro[:-2]
 		Folios.append(FoliosCobro)
 	htmlRes = render_to_string('TablaEstadosCuenta.html', {'Facturas':Facturas, 'Folios': Folios}, request = request,)
