@@ -147,9 +147,10 @@ def GetDetallesCobro(request):
 	Facturas = list()
 	for FacturaxCobro in FacturasxCobro:
 		Cobro = {}
-		Cobro["FolioCobro"] = FacturaxCobro.IDCobro.Folio
-		Cobro["FechaCobro"] = FacturaxCobro.IDCobro.FechaCobro
-		Cobro["Total"] = FacturaxCobro.IDCobroxFactura.Total
-		Facturas.append(Cobro)
+		if FacturaxCobro.IDCobro.Status != 'CANCELADA':
+			Cobro["FolioCobro"] = FacturaxCobro.IDCobro.Folio
+			Cobro["FechaCobro"] = FacturaxCobro.IDCobro.FechaCobro
+			Cobro["Total"] = FacturaxCobro.IDCobroxFactura.Total
+			Facturas.append(Cobro)
 	htmlRes = render_to_string('TablaDetallesCobro.html', {'Facturas':Facturas}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
