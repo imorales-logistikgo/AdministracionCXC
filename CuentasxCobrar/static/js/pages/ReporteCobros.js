@@ -8,6 +8,13 @@ $(document).ready(function(){
   $(document).on('click', '.btnEliminarCobro', function(){
   Swal.fire({
    title: '¿Estas Seguro?',
+   input: 'text',
+   inputAttributes: {
+    required: true,
+    placeholder: "Motivo de la eliminación",
+    id: "motivoEliminacion"
+  },
+   validationMessage: 'Ingresa el motivo de la eliminación',
    text: "Estas a un click de eliminar un cobro importante",
    type: 'warning',
    showCancelButton: true,
@@ -163,6 +170,7 @@ var fnCancelarCobro = function (IDCobro, row) {
   var res;
   jParams = {
     IDCobro: IDCobro,
+    MotivoEliminacion:$('#motivoEliminacion').val()
   }
   fetch("/ReporteCobros/CancelarCobro", {
     method: "POST",

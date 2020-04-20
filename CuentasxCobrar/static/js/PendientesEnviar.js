@@ -1000,7 +1000,7 @@ function formatDataTable() {
       "className": "dt-head-center dt-body-center",
       "targets": 10,
       "mRender": function (data, type, full) {
-        return (EvDigital != 'False' && EvFisica != 'False' ? 'Si':'No');
+        return (EvDigital != 'False' ? (EvFisica != 'False' || EvFisica == 'False') && full[2] == "Eaton" ? 'Si': full[2] != "Eaton" && EvFisica != 'False' ? 'Si':'No' :'No');
       }
     }]
   } );

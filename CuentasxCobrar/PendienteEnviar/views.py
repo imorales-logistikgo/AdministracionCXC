@@ -17,8 +17,8 @@ import hashlib
 
 
 def GetPendientesEnviar(request):
-	PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1 AND IsFacturaCliente = 0 AND Moneda = %s", ['FINALIZADO','MXN'])
-	#PendingToSend = View_PendientesEnviarCxC.objects.filter(IsEvidenciaDigital = True, IsEvidenciaFisica = True, IsFacturaCliente = False, Status__in = ["FINALIZADO", "COMPLETO", "ENTREGADO"])
+	#PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1 AND IsFacturaCliente = 0 AND Moneda = %s", ['FINALIZADO','MXN'])
+	PendingToSend = View_PendientesEnviarCxC.objects.filter(IsEvidenciaDigital = True, IsEvidenciaFisica__in = (True, False), IsFacturaCliente = False, Status__in = ["FINALIZADO", "COMPLETO", "ENTREGADO"], FechaDescarga__month = datetime.datetime.now().month, FechaDescarga__year = datetime.datetime.now().year)
 	ContadorTodos, ContadorPendientes, ContadorFinalizados, ContadorConEvidencias, ContadorSinEvidencias = GetContadores()
 	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
 	return render(request, 'PendienteEnviar.html', {'pendientes':PendingToSend,'Clientes': Clientes, 'contadorPendientes': ContadorPendientes, 'contadorFinalizados': ContadorFinalizados, 'contadorConEvidencias': ContadorConEvidencias, 'contadorSinEvidencias': ContadorSinEvidencias})

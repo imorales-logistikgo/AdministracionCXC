@@ -150,6 +150,7 @@ function leerxml(xml)
     var req = new XMLHttpRequest();
        req.open('GET', newXML, false);
        req.send(null);
+       console.log(req);
        if (req.status == 200)
        {
            var resp = req.responseXML;

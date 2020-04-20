@@ -48,6 +48,7 @@ def CancelarCobro(request):
 	try:
 		with transaction.atomic(using='users'):
 			IDCobro = json.loads(request.body.decode('utf-8'))["IDCobro"]
+			Motivo = json.loads(request.body.decode('utf-8'))["MotivoEliminacion"]
 			for Factura in RelacionCobrosFacturasxCliente.objects.filter(IDCobro = IDCobro).select_related('IDFactura'):
 				Factura.IDFactura.Saldo += Factura.IDCobroxFactura.Total
 				if Factura.IDFactura.Saldo == Factura.IDFactura.Total:
@@ -59,6 +60,7 @@ def CancelarCobro(request):
 			Cobro.Status = "CANCELADA"
 			Cobro.IDUsuarioBaja =  request.user.idusuario
 			Cobro.FechaBaja = datetime.datetime.now()
+			Cobro.MotivoEliminacion = Motivo
 			Cobro.save()
 			return HttpResponse(status=200)
 	except:

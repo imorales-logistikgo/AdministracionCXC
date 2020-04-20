@@ -11,7 +11,7 @@ from django.db.models import Q
 @login_required
 
 def EstadosdeCuenta(request):
-	Facturas = View_FacturasxCliente.objects.filter(Status__in = ("PENDIENTE", "ABONADA"), FechaFactura__month = datetime.datetime.now().month)
+	Facturas = View_FacturasxCliente.objects.filter(Status__in = ("PENDIENTE", "ABONADA"), FechaFactura__month = datetime.datetime.now().month, FechaFactura__year = datetime.datetime.now().year)
 	FacturasPendiente = View_FacturasxCliente.objects.filter(Status = "PENDIENTE")
 	FacturasAbonada = View_FacturasxCliente.objects.filter(Status = "ABONADA")
 	#result = FacturasPendiente | FacturasAbonada
@@ -19,7 +19,8 @@ def EstadosdeCuenta(request):
 	for Factura in Facturas:
 		FoliosCobro= ""
 		for Cobro in RelacionCobrosFacturasxCliente.objects.filter(IDFactura = Factura.IDFactura).select_related('IDCobro'):
-			FoliosCobro += Cobro.IDCobro.Folio + ", "
+			if Cobro.IDCobro.Status != 'CANCELADA':
+				FoliosCobro += Cobro.IDCobro.Folio + ", "
 		FoliosCobro = FoliosCobro[:-2]
 		Folios.append(FoliosCobro)
 	ContadoresPendientes = len(list(FacturasPendiente))

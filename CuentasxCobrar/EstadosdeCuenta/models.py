@@ -49,8 +49,9 @@ class CobrosxCliente(models.Model):
     IDCliente = models.IntegerField(default=0)
     Status = models.CharField(db_column = 'Status', max_length=15, default = "")
     IDUsuarioAlta = models.IntegerField(default=0)
-    IDUsuarioBaja = models.IntegerField(default=0)
+    IDUsuarioBaja = models.IntegerField()
     FechaBaja = models.DateTimeField()
+    MotivoEliminacion = models.CharField(max_length=500)
 
     class Meta:
         db_table="CobrosxCliente"
