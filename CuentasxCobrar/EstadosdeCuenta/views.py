@@ -8,6 +8,7 @@ from decimal import Decimal
 import json, datetime, math
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.db import transaction
 @login_required
 
 def EstadosdeCuenta(request):
@@ -58,19 +59,26 @@ def GetFacturasByFilters(request):
 
 def CancelarFactura(request):
 	IDFactura = json.loads(request.body.decode('utf-8'))["IDFactura"]
+	Motivo = json.loads(request.body.decode('utf-8'))["MotivoEliminacion"]
 	conRelacionFacturaxPartidas = RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = IDFactura)
-	if conRelacionFacturaxPartidas:
-		conRelacionFacturaxPartidas[0].IDFacturaxCliente.Status = 'CANCELADA'
-		conRelacionFacturaxPartidas[0].IDFacturaxCliente.IDUsuarioBaja = AdmonUsuarios.objects.get(idusuario = request.user.idusuario)
-		conRelacionFacturaxPartidas[0].IDFacturaxCliente.save()
-		for Partida in conRelacionFacturaxPartidas:
-			Partida.IDPartida.IsActiva = False
-			Partida.IDPartida.FechaBaja = datetime.datetime.now()
-			Ext_Precio = Ext_PendienteEnviar_Precio.objects.get(IDPendienteEnviar = Partida.IDPendienteEnviar)
-			Ext_Precio.IsFacturaCliente = False
-			Ext_Precio.save()
-			Partida.IDPartida.save()
-	return HttpResponse("")
+	try:
+		with transaction.atomic(using='users'):
+			if conRelacionFacturaxPartidas:
+				conRelacionFacturaxPartidas[0].IDFacturaxCliente.Status = 'CANCELADA'
+				conRelacionFacturaxPartidas[0].IDFacturaxCliente.IDUsuarioBaja = AdmonUsuarios.objects.get(idusuario = request.user.idusuario)
+				conRelacionFacturaxPartidas[0].IDFacturaxCliente.MotivoEliminacion = Motivo
+				conRelacionFacturaxPartidas[0].IDFacturaxCliente.save()
+				for Partida in conRelacionFacturaxPartidas:
+					Partida.IDPartida.IsActiva = False
+					Partida.IDPartida.FechaBaja = datetime.datetime.now()
+					Ext_Precio = Ext_PendienteEnviar_Precio.objects.get(IDPendienteEnviar = Partida.IDPendienteEnviar)
+					Ext_Precio.IsFacturaCliente = False
+					Ext_Precio.save()
+					Partida.IDPartida.save()
+				return HttpResponse(status=200)
+	except:
+		transaction.rollback(using='users')
+		return HttpResponse(status=400)
 
 
 
@@ -136,8 +144,8 @@ def SaveCobroxFactura(request):
 
 
 
-def GetDetallesCobro(request):
-	IDFactura = json.loads(request.body.decode('utf-8'))["IDFactura"]
+#def GetDetallesCobro(request):
+#	IDFactura = json.loads(request.body.decode('utf-8'))["IDFactura"]
 
 
 

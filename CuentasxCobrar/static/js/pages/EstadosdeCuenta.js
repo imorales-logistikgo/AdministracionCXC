@@ -43,6 +43,13 @@ $(document).on( 'click', '.BtnEliminarFactura', function () {
   title: '¿Estas Seguro?',
   text: "Estas a un click de eliminar algo importante",
   type: 'warning',
+  input: 'text',
+  inputAttributes: {
+    required: true,
+    placeholder: "Motivo de la eliminación",
+    id: "motivoEliminacion"
+  },
+  validationMessage: 'Ingresa el motivo de la eliminación',
   showCancelButton: true,
   confirmButtonColor: '#3085d6',
   cancelButtonColor: '#d33',
@@ -485,6 +492,7 @@ var fnCancelarFactura = async function (IDFactura) {
   var res = false;
   jParams = {
     IDFactura: IDFactura,
+    MotivoEliminacion: $('#motivoEliminacion').val()
   }
   WaitMe_Show('#divTablaFacturas');
   await fetch("/EstadosdeCuenta/CancelarFactura", {
@@ -501,7 +509,7 @@ var fnCancelarFactura = async function (IDFactura) {
     {
       res = true;
     }
-    else if(response.status == 500)
+    else if(response.status == 500 || response.status == 400)
     {
       res = false;
     }

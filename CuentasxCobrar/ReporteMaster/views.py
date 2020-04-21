@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 import json, datetime
 
 def GetReporteMaster(request):
-	MasterReporte = View_Master_Cliente.objects.all()
+	MasterReporte = View_Master_Cliente.objects.filter(FechaDescarga__month = datetime.datetime.now().month, FechaDescarga__year = datetime.datetime.now().year)
 	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
 	return render(request, 'ReporteMaster.html', {'MasterReporte':MasterReporte, 'Clientes':Clientes})
 
