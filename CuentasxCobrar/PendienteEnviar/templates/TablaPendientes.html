@@ -48,10 +48,17 @@
 						<td style="font-weight: bold;">{{pendiente.Folio|safe}}</td>
 						<td>{{pendiente.NombreCliente|safe}}</td>
 						<td>{{pendiente.FechaDescarga|date:'Y/m/d'|safe}}</td>
-						<td>${{pendiente.Subtotal|intcomma}}</td>
+						{% if pendiente.IsFacturaParcial == 1 %}
+						<td>${{pendiente.BalanceSubTotal|intcomma}}</td>
+						<td>${{pendiente.BalanceIva|intcomma}}</td>
+						<td>${{pendiente.BalanceRetencion|intcomma}}</td>
+						<td>${{pendiente.BalanceTotal|intcomma}}</td>
+						{% else %}
+						<td>${{pendiente.Subtotal}}</td>
 						<td>${{pendiente.IVA|intcomma}}</td>
 						<td>${{pendiente.Retencion|intcomma}}</td>
 						<td>${{pendiente.Total|intcomma}}</td>
+						{% endif %}
 						<td>{{pendiente.Moneda|safe}}</td>
 						<td id="status">{{pendiente.Status|safe}}</td>
 						<!--<td><input id="isEvicencias" name="isEvicencias" type="hidden" value="{{pendiente.IsEvidenciaDigital}}"></td>-->

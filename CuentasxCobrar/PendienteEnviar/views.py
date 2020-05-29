@@ -92,32 +92,97 @@ def SaveFactura(request):
 
 def SavePartidasxFactura(request):
 	jParams = json.loads(request.body.decode('utf-8'))
-	for IDPendiente in jParams["arrPendientes"]:
-		Viaje = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = IDPendiente)
-		newPartida = Partida()
-		newPartida.FechaAlta = datetime.datetime.now()
-		newPartida.Subtotal = ((0 if(Viaje.ServiciosSubtotal is None) else Viaje.ServiciosSubtotal) if (jParams["IsFacturaServicios"]) else Viaje.Subtotal)
-		newPartida.IVA = ((0 if (Viaje.ServiciosIVA is None) else Viaje.ServiciosIVA) if (jParams["IsFacturaServicios"]) else Viaje.IVA)
-		newPartida.Retencion = ((0 if(Viaje.ServiciosRetencion is None) else Viaje.ServiciosRetencion) if (jParams["IsFacturaServicios"]) else Viaje.Retencion)
-		newPartida.Total = ((0 if (Viaje.ServiciosTotal is None) else Viaje.ServiciosTotal) if (jParams["IsFacturaServicios"]) else Viaje.Total)
-		partidaReajuste = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
-		if Viaje.IDPendienteEnviar == jParams["IDFolioReajuste"]:
-			newPartida.Reajuste = partidaReajuste.Reajuste
-			if Viaje.Proyecto == 'BKG':
-				SaveReajusteBkg(Viaje.IDPendienteEnviar, partidaReajuste.Reajuste)
-			elif Viaje.Proyecto == 'XD':
-				SaveReajusteXD(Viaje.IDPendienteEnviar, partidaReajuste.Reajuste)
-		else:
-			newPartida.Reajuste = 0
-		newPartida.save()
-		newRelacionFacturaxPartida = RelacionFacturaxPartidas()
-		newRelacionFacturaxPartida.IDFacturaxCliente = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
-		newRelacionFacturaxPartida.IDPartida = newPartida
-		newRelacionFacturaxPartida.IDPendienteEnviar = PendientesEnviar.objects.get(IDPendienteEnviar = IDPendiente)
-		newRelacionFacturaxPartida.save()
-		Ext_Precio = Ext_PendienteEnviar_Precio.objects.get(IDPendienteEnviar = IDPendiente)
-		Ext_Precio.IsFacturaCliente = True
-		Ext_Precio.save()
+	print(jParams["arrParcial"])
+	if len(jParams["arrParcial"]) is 0:
+		print("yes")
+		for IDPendiente in jParams["arrPendientes"]:
+			Viaje = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = IDPendiente)
+			newPartida = Partida()
+			newPartida.FechaAlta = datetime.datetime.now()
+			newPartida.Subtotal = (((0 if(Viaje.ServiciosSubtotal is None) else Viaje.ServiciosSubtotal) if (jParams["IsFacturaServicios"]) else Viaje.Subtotal)) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceSubTotal
+			newPartida.IVA = (((0 if (Viaje.ServiciosIVA is None) else Viaje.ServiciosIVA) if (jParams["IsFacturaServicios"]) else Viaje.IVA)) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceIva
+			newPartida.Retencion = (((0 if(Viaje.ServiciosRetencion is None) else Viaje.ServiciosRetencion) if (jParams["IsFacturaServicios"]) else Viaje.Retencion)) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceRetencion
+			newPartida.Total = (((0 if (Viaje.ServiciosTotal is None) else Viaje.ServiciosTotal) if (jParams["IsFacturaServicios"]) else Viaje.Total)) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceTotal
+			partidaReajuste = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
+			if Viaje.IDPendienteEnviar == jParams["IDFolioReajuste"]:
+				newPartida.Reajuste = partidaReajuste.Reajuste
+				if Viaje.Proyecto == 'BKG':
+					SaveReajusteBkg(Viaje.IDPendienteEnviar, partidaReajuste.Reajuste)
+				elif Viaje.Proyecto == 'XD':
+					SaveReajusteXD(Viaje.IDPendienteEnviar, partidaReajuste.Reajuste)
+			else:
+				newPartida.Reajuste = 0
+			newPartida.save()
+			newRelacionFacturaxPartida = RelacionFacturaxPartidas()
+			newRelacionFacturaxPartida.IDFacturaxCliente = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
+			newRelacionFacturaxPartida.IDPartida = newPartida
+			newRelacionFacturaxPartida.IDPendienteEnviar = PendientesEnviar.objects.get(IDPendienteEnviar = IDPendiente)
+			newRelacionFacturaxPartida.save()
+			Ext_Precio = Ext_PendienteEnviar_Precio.objects.get(IDPendienteEnviar = IDPendiente)
+			Ext_Precio.BalanceSubTotal=0
+			Ext_Precio.BalanceIva=0
+			Ext_Precio.BalanceRetencion=0
+			Ext_Precio.BalanceTotal=0
+			Ext_Precio.IsFacturaCliente = True
+			Ext_Precio.save()
+	else:
+		print("not")
+		for IDPen in jParams["arrPendientes"]:
+			folioPendiente=Ext_PendienteEnviar_Precio.objects.get(IDPendienteEnviar = IDPen)
+			for parcial in jParams["arrParcial"]:
+				if IDPen==parcial["IDViaje"]:
+					subtotalParcial=float(parcial["Subtotal"])
+					ivaParcial=float(parcial["iva"])
+					retencionParcial=float(parcial["retencion"])
+					totalParcial=float(parcial["total"])
+					print(folioPendiente.IsFacturaParcial)
+					if(folioPendiente.IsFacturaParcial is None or folioPendiente.IsFacturaParcial==False):
+						print("factura normal")
+						partidaP=Partida()
+						partidaP.FechaAlta=datetime.datetime.now()
+						print(truncate(folioPendiente.PrecioSubtotal,2))
+						print(subtotalParcial)
+						partidaP.Subtotal=folioPendiente.PrecioSubtotal if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else float(subtotalParcial)
+						partidaP.IVA=folioPendiente.PrecioIVA if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else float(ivaParcial)
+						partidaP.Retencion=folioPendiente.PrecioRetencion if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else float(retencionParcial)
+						partidaP.Total=folioPendiente.PrecioTotal if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else float(totalParcial)
+						partidaP.save()
+						newRelacionFacturaParcial=RelacionFacturaxPartidas()
+						newRelacionFacturaParcial.IDFacturaxCliente=FacturasxCliente.objects.get(IDFactura=jParams["IDFactura"])
+						newRelacionFacturaParcial.IDPartida=partidaP
+						newRelacionFacturaParcial.IDPendienteEnviar=PendientesEnviar.objects.get(IDPendienteEnviar=parcial["IDViaje"])
+						newRelacionFacturaParcial.save()
+						folioPendiente.IsFacturaCliente=True if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else False
+						folioPendiente.IsFacturaParcial=False if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else True
+						folioPendiente.BalanceSubTotal=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else truncate(float(folioPendiente.PrecioSubtotal)-float(subtotalParcial),2)
+						folioPendiente.BalanceIva=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else truncate(float(folioPendiente.PrecioIVA)-float(ivaParcial),2)
+						folioPendiente.BalanceRetencion=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else truncate(float(folioPendiente.PrecioRetencion)-float(retencionParcial),2)
+						folioPendiente.BalanceTotal=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2)else truncate(float(folioPendiente.PrecioTotal)-float(totalParcial),2)
+						folioPendiente.save()
+					else:
+						print(folioPendiente)
+						print("factura ya parcial")
+						print(truncate(folioPendiente.BalanceSubTotal,2))
+						print(float(subtotalParcial))
+						partidaParcial=Partida()
+						partidaParcial.FechaAlta=datetime.datetime.now()
+						partidaParcial.Subtotal=folioPendiente.BalanceSubTotal if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(subtotalParcial)
+						partidaParcial.IVA=folioPendiente.BalanceIva if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(ivaParcial)
+						partidaParcial.Retencion=folioPendiente.BalanceRetencion if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(retencionParcial)
+						partidaParcial.Total=folioPendiente.BalanceTotal if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(totalParcial)
+						partidaParcial.save()
+						newRelacionFacParcial=RelacionFacturaxPartidas()
+						newRelacionFacParcial.IDFacturaxCliente=FacturasxCliente.objects.get(IDFactura=jParams["IDFactura"])
+						newRelacionFacParcial.IDPartida=partidaParcial
+						newRelacionFacParcial.IDPendienteEnviar=PendientesEnviar.objects.get(IDPendienteEnviar=parcial["IDViaje"])
+						newRelacionFacParcial.save()
+						folioPendiente.IsFacturaCliente=True if subtotalParcial==float(folioPendiente.BalanceSubTotal) else False
+						folioPendiente.BalanceSubTotal=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(folioPendiente.BalanceSubTotal)-float(subtotalParcial)
+						folioPendiente.BalanceIva=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(folioPendiente.BalanceIva)-float(ivaParcial)
+						folioPendiente.BalanceRetencion=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(folioPendiente.BalanceRetencion)-float(retencionParcial)
+						folioPendiente.BalanceTotal=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal)else float(folioPendiente.BalanceTotal)-float(totalParcial)
+						folioPendiente.save()
+
 	PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1", ['FINALIZADO'])
 	htmlRes = render_to_string('TablaPendientes.html', {'pendientes':PendingToSend}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})

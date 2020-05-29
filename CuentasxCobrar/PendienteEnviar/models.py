@@ -41,6 +41,11 @@ class Ext_PendienteEnviar_Precio(models.Model):
     PrecioTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     #PrecioServicios = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     IsFacturaCliente = models.BooleanField(default=False)
+    IsFacturaParcial = models.BooleanField(default=False)
+    BalanceSubTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    BalanceIva = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    BalanceRetencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    BalanceTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     class Meta:
         db_table="Ext_PendienteEnviar_Precio"
         managed= False
@@ -81,6 +86,11 @@ class View_PendientesEnviarCxC(models.Model):
     IsFacturaCliente = models.BooleanField()
     DiasCredito = models.IntegerField()
     IsControlDesk = models.BooleanField()
+    IsFacturaParcial = models.BooleanField(default=False)
+    BalanceSubTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    BalanceIva = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    BalanceRetencion = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    BalanceTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     class Meta:
         managed = False
         db_table = "View_PendientesEnviarCxC"

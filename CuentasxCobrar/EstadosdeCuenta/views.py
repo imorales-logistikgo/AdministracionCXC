@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from PendienteEnviar.models import RelacionConceptoxProyecto,  PendientesEnviar, Ext_PendienteEnviar_Precio, View_PendientesEnviarCxC, RelacionFacturaxPartidas, FacturasxCliente
+from PendienteEnviar.models import RelacionConceptoxProyecto,  PendientesEnviar, Ext_PendienteEnviar_Precio, View_PendientesEnviarCxC, RelacionFacturaxPartidas, FacturasxCliente, Partida
 from EstadosdeCuenta.models import View_FacturasxCliente, CobrosxCliente, CobrosxFacturas, RelacionCobrosFacturasxCliente
 from usersadmon.models import Cliente, AdmonUsuarios
 from django.template.loader import render_to_string
@@ -87,8 +87,17 @@ def GetDetallesFactura(request):
 	IDFactura = request.GET["IDFactura"]
 	conRelacionFacturaxPartidas = RelacionFacturaxPartidas.objects.filter(IDFacturaxCliente = IDFactura)
 	if conRelacionFacturaxPartidas:
-		for Partida in conRelacionFacturaxPartidas:
-			ListaViajes.append(View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = Partida.IDPendienteEnviar.IDPendienteEnviar))
+		for Partidas in conRelacionFacturaxPartidas:
+			arr = {}
+			ViewPen = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = Partidas.IDPendienteEnviar.IDPendienteEnviar)
+			arr["Folio"] = ViewPen.Folio
+			arr["FechaDescarga"] = ViewPen.FechaDescarga
+			PartidaInd = Partida.objects.get(IDPartida = Partidas.IDPartida.IDPartida)
+			arr["SubTotal"] = PartidaInd.Subtotal
+			arr["Iva"] = PartidaInd.IVA
+			arr["Retencion"]=PartidaInd.Retencion
+			arr["Total"]=PartidaInd.Total
+			ListaViajes.append(arr)
 	htmlRes = render_to_string('TablaDetallesFactura.html', {'Pendientes':ListaViajes}, request = request,)
 	return JsonResponse({'htmlRes' : htmlRes})
 
