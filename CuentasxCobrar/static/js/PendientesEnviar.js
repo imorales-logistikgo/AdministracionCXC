@@ -1299,7 +1299,7 @@ var subtotal=+datosRowParcial[i][1].replace(/(\$)|(,)/g,'');
 var iva=+datosRowParcial[i][2].replace(/(\$)|(,)/g,'');
 var retencion=+datosRowParcial[i][3].replace(/(\$)|(,)/g,'');
 var total=(subtotal+iva)-retencion;
-arrSe.push({'IDViaje':IDViajePE,'Subtotal':truncarDecimales(subtotal,2),'iva':iva,'retencion':retencion,'total':total})
+arrSe.push({'IDViaje':IDViajePE,'Subtotal':truncarDecimales(subtotal,2),'iva':truncarDecimales(iva,2),'retencion':truncarDecimales(retencion,2),'total':total})
 }
 console.log(arrSe);
 

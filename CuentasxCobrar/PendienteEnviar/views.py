@@ -142,10 +142,10 @@ def SavePartidasxFactura(request):
 						partidaP.FechaAlta=datetime.datetime.now()
 						print(truncate(folioPendiente.PrecioSubtotal,2))
 						print(subtotalParcial)
-						partidaP.Subtotal=folioPendiente.PrecioSubtotal if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else float(subtotalParcial)
-						partidaP.IVA=folioPendiente.PrecioIVA if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else float(ivaParcial)
-						partidaP.Retencion=folioPendiente.PrecioRetencion if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else float(retencionParcial)
-						partidaP.Total=folioPendiente.PrecioTotal if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else float(totalParcial)
+						partidaP.Subtotal=folioPendiente.PrecioSubtotal if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else subtotalParcial
+						partidaP.IVA=folioPendiente.PrecioIVA if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else ivaParcial
+						partidaP.Retencion=folioPendiente.PrecioRetencion if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else retencionParcial
+						partidaP.Total=folioPendiente.PrecioTotal if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else (subtotalParcial+ivaParcial)-retencionParcial
 						partidaP.save()
 						newRelacionFacturaParcial=RelacionFacturaxPartidas()
 						newRelacionFacturaParcial.IDFacturaxCliente=FacturasxCliente.objects.get(IDFactura=jParams["IDFactura"])
@@ -154,10 +154,10 @@ def SavePartidasxFactura(request):
 						newRelacionFacturaParcial.save()
 						folioPendiente.IsFacturaCliente=True if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else False
 						folioPendiente.IsFacturaParcial=False if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else True
-						folioPendiente.BalanceSubTotal=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else truncate(float(folioPendiente.PrecioSubtotal)-float(subtotalParcial),2)
-						folioPendiente.BalanceIva=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else truncate(float(folioPendiente.PrecioIVA)-float(ivaParcial),2)
-						folioPendiente.BalanceRetencion=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else truncate(float(folioPendiente.PrecioRetencion)-float(retencionParcial),2)
-						folioPendiente.BalanceTotal=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2)else truncate(float(folioPendiente.PrecioTotal)-float(totalParcial),2)
+						folioPendiente.BalanceSubTotal=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else truncate(folioPendiente.PrecioSubtotal,2)-subtotalParcial
+						folioPendiente.BalanceIva=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else truncate(folioPendiente.PrecioIVA,2)-ivaParcial
+						folioPendiente.BalanceRetencion=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2) else truncate(folioPendiente.PrecioRetencion,2)-retencionParcial
+						folioPendiente.BalanceTotal=0 if subtotalParcial==truncate(folioPendiente.PrecioSubtotal,2)else truncate(folioPendiente.PrecioTotal,2)-((subtotalParcial+ivaParcial)-retencionParcial)
 						folioPendiente.save()
 					else:
 						print(folioPendiente)
@@ -166,10 +166,10 @@ def SavePartidasxFactura(request):
 						print(float(subtotalParcial))
 						partidaParcial=Partida()
 						partidaParcial.FechaAlta=datetime.datetime.now()
-						partidaParcial.Subtotal=folioPendiente.BalanceSubTotal if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(subtotalParcial)
-						partidaParcial.IVA=folioPendiente.BalanceIva if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(ivaParcial)
-						partidaParcial.Retencion=folioPendiente.BalanceRetencion if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(retencionParcial)
-						partidaParcial.Total=folioPendiente.BalanceTotal if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(totalParcial)
+						partidaParcial.Subtotal=folioPendiente.BalanceSubTotal if subtotalParcial==float(folioPendiente.BalanceSubTotal) else subtotalParcial
+						partidaParcial.IVA=folioPendiente.BalanceIva if subtotalParcial==float(folioPendiente.BalanceSubTotal) else ivaParcial
+						partidaParcial.Retencion=folioPendiente.BalanceRetencion if subtotalParcial==float(folioPendiente.BalanceSubTotal) else retencionParcial
+						partidaParcial.Total=folioPendiente.BalanceTotal if subtotalParcial==float(folioPendiente.BalanceSubTotal) else (subtotalParcial+ivaParcial)-retencionParcial
 						partidaParcial.save()
 						newRelacionFacParcial=RelacionFacturaxPartidas()
 						newRelacionFacParcial.IDFacturaxCliente=FacturasxCliente.objects.get(IDFactura=jParams["IDFactura"])
@@ -177,10 +177,10 @@ def SavePartidasxFactura(request):
 						newRelacionFacParcial.IDPendienteEnviar=PendientesEnviar.objects.get(IDPendienteEnviar=parcial["IDViaje"])
 						newRelacionFacParcial.save()
 						folioPendiente.IsFacturaCliente=True if subtotalParcial==float(folioPendiente.BalanceSubTotal) else False
-						folioPendiente.BalanceSubTotal=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(folioPendiente.BalanceSubTotal)-float(subtotalParcial)
-						folioPendiente.BalanceIva=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(folioPendiente.BalanceIva)-float(ivaParcial)
-						folioPendiente.BalanceRetencion=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(folioPendiente.BalanceRetencion)-float(retencionParcial)
-						folioPendiente.BalanceTotal=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal)else float(folioPendiente.BalanceTotal)-float(totalParcial)
+						folioPendiente.BalanceSubTotal=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(folioPendiente.BalanceSubTotal)-subtotalParcial
+						folioPendiente.BalanceIva=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(folioPendiente.BalanceIva)-ivaParcial
+						folioPendiente.BalanceRetencion=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal) else float(folioPendiente.BalanceRetencion)-retencionParcial
+						folioPendiente.BalanceTotal=0 if subtotalParcial==float(folioPendiente.BalanceSubTotal)else float(folioPendiente.BalanceTotal)-(subtotalParcial+ivaParcial)-retencionParcial
 						folioPendiente.save()
 
 	PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1", ['FINALIZADO'])
