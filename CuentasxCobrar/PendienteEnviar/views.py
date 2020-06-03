@@ -92,7 +92,6 @@ def SaveFactura(request):
 
 def SavePartidasxFactura(request):
 	jParams = json.loads(request.body.decode('utf-8'))
-	print(jParams["arrParcial"])
 	if len(jParams["arrParcial"]) is 0:
 		print("yes")
 		for IDPendiente in jParams["arrPendientes"]:
