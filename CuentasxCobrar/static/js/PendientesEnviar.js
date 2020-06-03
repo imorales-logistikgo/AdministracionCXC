@@ -119,7 +119,7 @@ $('input[name="Fragmentada"]').on("change", function()
   $('#alertaViajeFragmentada').css("display", "block");
   viaje = total > Number(Tservicios) ? total-Number(Tservicios):Number(Tservicios)-total;
   $('#totalViaje').html('<span>'+viaje.toFixed(2)+'</span>');
-    $("#chkFragmentada").prop('checked') ? $("#checkFacturaParcial").prop('disabled',true) : $("#checkFacturaParcial").prop('disabled',false) ;
+    $("#chkFragmentada").prop('checked') ? $(".check").prop('disabled',true) : $(".check").prop('disabled',false) ;
   sendDataModalServ();
 });
 
@@ -181,7 +181,7 @@ $('#btnGuardarFactura').on('click', function(){
     {
       if($('#txtFolioFactura').val() != "" && $('#FechaRevision').val() != "" && $('#FechaFactura').val() != "" && $('#FechaVencimiento').val() != "" && $('input[name="TipoCambio"]').val() != "")
       {
-        if($("#checkFacturaParcial").prop("checked")==true)
+        if(contar()>0)
         {
           getDatosParciales();
           WaitMe_Show('#WaitModalPE');
@@ -416,7 +416,6 @@ function LimpiarModalSF()
   folio_ = [];
   diferenciaRejuste = 0;
   diferenciaRejusteServ = 0;
-  $("#checkFacturaParcial").prop('disabled',false);
   arrSe=[];
 
 }
@@ -551,7 +550,7 @@ function LimpiarModalSF()
                        document.querySelector('.uploaded-files').innerHTML +=
                        `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
                         $('#chkFragmentada').prop('disabled', true);
-                        $('#checkFacturaParcial').prop('disabled',true);
+                        $('.check').prop('disabled',true);
                         $(".cfParcial").prop('disabled',true);
                       }
                    }
@@ -576,19 +575,19 @@ function LimpiarModalSF()
 			KTUppy.init();
 		});
 
-$("#checkFacturaParcial").click(function(){
-  var datos = adddatos();
-  if(datos.length == 1) {
-    if($(this).prop('checked')){
-      $("#chkFragmentada").prop('checked',false);
-      $("#chkFragmentada").prop('disabled',true);
-    }
-    else if ($("#checkFacturaParcial").prop('checked')==false) {
-      $("#chkFragmentada").prop('disabled',false);
-
-
-    }
-    }//  if($(this).prop('checked')){
+// $("#checkFacturaParcial").click(function(){
+//   var datos = adddatos();
+//   if(datos.length == 1) {
+//     if($(this).prop('checked')){
+//       $("#chkFragmentada").prop('checked',false);
+//       $("#chkFragmentada").prop('disabled',true);
+//     }
+//     else if ($("#checkFacturaParcial").prop('checked')==false) {
+//       $("#chkFragmentada").prop('disabled',false);
+//
+//
+//     }
+//     }//  if($(this).prop('checked')){
 //   $("#chkFragmentada").prop('disabled',true);
 // }else{
 //   $("#checkFacturaParcial").prop('disabled',true);
@@ -602,27 +601,8 @@ $("#checkFacturaParcial").click(function(){
 //   datos.length == 1 ? $('#chkFragmentada').prop('disabled', false):$('#chkFragmentada').prop('disabled', true);
 //}
 
-});
+//});
 
-//funcion para bloquear y desbloquear input de la tabla de viajes en
-$(document).on('change',"#checkFacturaParcial",function(){
-if($("#checkFacturaParcial").prop('checked')!=true){
-  getDatos();
-  $('.uploaded-files ol').remove();
-  $('#kt_uppy_1').data("rutaarchivoXML", null);
-  $('#kt_uppy_1').data("rutaarchivoPDF", null);
-  $("#folioReajuste").prop('disabled',false);
-  $(".cfParcial").prop('disabled',true);
-}else{
-$(".cfParcial").prop('disabled',false);
-$("#folioReajuste").prop('disabled',true);
-}
-});
-
-// $(document).on('click',".cfParcial",function(){
-//   getDatos();
-//
-// });
 
 
 $(document).on("change","#subtotalParcial,#ivaParcial,#retencionParcial",function(){
@@ -635,7 +615,7 @@ $(document).on("change","#subtotalParcial,#ivaParcial,#retencionParcial",functio
     var datosRowParcial = tableParcial.row($(this).parents('tr')).data();
   var IDViajeV= +$(this).data("idsubtotalparcial").replace(/(\$)|(,)/g,'');
   var SubtTotalPar = +$(this).val();
-  if(SubtTotalPar<=IDViajeV && SubtTotalPar>0){
+  if(SubtTotalPar<=IDViajeV && SubtTotalPar>=0){
     datosRowParcial[1]=("$"+SubtTotalPar);
     Sumasubtotal+=SubtTotalPar;
   }else{
@@ -653,7 +633,7 @@ $(document).on("change","#subtotalParcial,#ivaParcial,#retencionParcial",functio
   //IDFactura = $(this).data('idfact');idretencionparcial
   var IvaBase= +$(this).data("idivaparcial").replace(/(\$)|(,)/g,'');
   var IvaTotalPar = parseFloat($(this).val());
-  if(IvaTotalPar<=IvaBase && IvaTotalPar>0){
+  if(IvaTotalPar<=IvaBase && IvaTotalPar>=0){
     datosRowParcial[2]=("$"+IvaTotalPar);
     SumaIva+=IvaTotalPar;
   }else{
@@ -698,14 +678,70 @@ $(document).on("change","#subtotalParcial,#ivaParcial,#retencionParcial",functio
 
 });
 
+$(document).on('click','tr .check',function(){
+if($(this).prop("checked")){
+$(this).closest('tr').find(".cfParcial").prop("disabled",false);
+}else{
+$(this).closest('tr').find(".cfParcial").prop("disabled",true);
+var subtotal=$(this).closest('tr').find(".fParcial").data("idsubtotalparcial").replace(/(\$)|(,)/g,'');
+var iva=$(this).closest('tr').find(".fParcialIva").data("idivaparcial").replace(/(\$)|(,)/g,'');
+var retencion=$(this).closest('tr').find(".fParcialRetencion").data("idretencionparcial").replace(/(\$)|(,)/g,'');
+$(this).closest('tr').find(".fParcial").val(subtotal);
+$(this).closest('tr').find(".fParcialIva").val(iva);
+$(this).closest('tr').find(".fParcialRetencion").val(retencion);
+recalculo();
+}
 
 
-
+});
 
 
   });
 
+var contar= function verificarFacturaParcial(){
+var contador=0;
+$('.check').each(function(){
+if($(this).prop("checked")){
+  contador++;
+}
+});
+return contador;
+}
 
+function recalculo(){
+  var Sumasubtotal=0;
+  var SumaIva=0;
+  var SumaRetencion=0;
+
+  $('.fParcial').each(function() {
+  var SubtTotalPar = +$(this).val();
+    Sumasubtotal+=SubtTotalPar;
+  //arrPagos.push({'Total': Total, 'IDFactura': IDFactura});
+  });
+
+  $('.fParcialIva').each(function() {
+  var IvaTotalPar = parseFloat($(this).val());
+    SumaIva+=IvaTotalPar;
+  });
+
+  $('.fParcialRetencion').each(function() {
+  var RetencionTotalPar = parseFloat($(this).val());
+    SumaRetencion+=RetencionTotalPar
+  });
+  // $('#iva').html('<strong>$'+Tiva.toFixed(2)+'</strong>');
+  // $('#retencion').html('<strong>$'+TRetencion.toFixed(2)+'</strong>');
+  // //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
+  // $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
+  subtotal=Sumasubtotal;
+  Tiva=SumaIva;
+  TRetencion=SumaRetencion;
+  $('#sub').html('<strong>$'+subtotal.toFixed(2)+'</strong>');
+  $('#iva').html('<strong>$'+Tiva.toFixed(2)+'</strong>');
+  $('#retencion').html('<strong>$'+TRetencion.toFixed(2)+'</strong>');
+  total=(subtotal+Tiva)-TRetencion;
+  $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
+
+}
 
 
 
@@ -848,7 +884,16 @@ function getDatos(){
      {
        "targets": [10],
        "className": "dt-head-center dt-body-center",
-       "visible": false
+       "mRender": function (data, type, full){
+           return `<div class="col-3">
+               <span class="kt-switch kt-switch--sm kt-switch--outline kt-switch--icon kt-switch--success">
+                 <label>
+                   <input type="checkbox" name="FacturaParcial" class="check">
+                   <span></span>
+                 </label>
+               </span>
+           </div>`
+         }
      },
      ]
 
