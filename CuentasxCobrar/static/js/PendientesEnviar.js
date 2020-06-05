@@ -120,6 +120,7 @@ $('input[name="Fragmentada"]').on("change", function()
   viaje = total > Number(Tservicios) ? total-Number(Tservicios):Number(Tservicios)-total;
   $('#totalViaje').html('<span>'+viaje.toFixed(2)+'</span>');
     $("#chkFragmentada").prop('checked') ? $(".check").prop('disabled',true) : $(".check").prop('disabled',false) ;
+    $(".check").prop('checked') ? $(".check").prop("checked",false): $(".check").prop("disabled",true);
   sendDataModalServ();
 });
 
@@ -402,7 +403,6 @@ function LimpiarModalSF()
   $('.uploaded-files-fragmentadas ol').remove();
   $('#Fragmentada').remove();
   $('input[name="Fragmentada"]').prop('checked', false);
-  $('input[name="FacturaParcial"]').prop('checked', false);
   $('#see').hide();
   $('#seeAlert').hide();
   //ids = [];
@@ -416,6 +416,7 @@ function LimpiarModalSF()
   folio_ = [];
   diferenciaRejuste = 0;
   diferenciaRejusteServ = 0;
+  $('.check').prop('disabled',false);
   arrSe=[];
 
 }
@@ -610,11 +611,13 @@ $(document).on("change","#subtotalParcial,#ivaParcial,#retencionParcial",functio
   var SumaIva=0;
   var SumaRetencion=0;
 
+
   $('.fParcial').each(function() {
     var tableParcial=$('#ResumTable').DataTable();
     var datosRowParcial = tableParcial.row($(this).parents('tr')).data();
   var IDViajeV= +$(this).data("idsubtotalparcial").replace(/(\$)|(,)/g,'');
   var SubtTotalPar = +$(this).val();
+
   if(SubtTotalPar<=IDViajeV && SubtTotalPar>=0){
     datosRowParcial[1]=("$"+SubtTotalPar);
     Sumasubtotal+=SubtTotalPar;
@@ -660,13 +663,7 @@ $(document).on("change","#subtotalParcial,#ivaParcial,#retencionParcial",functio
     alertToastError("Ingresa un valor menor al mostrado");
 
   }
-
-  //arrPagos.push({'Total': Total, 'IDFactura': IDFactura});
   });
-  // $('#iva').html('<strong>$'+Tiva.toFixed(2)+'</strong>');
-  // $('#retencion').html('<strong>$'+TRetencion.toFixed(2)+'</strong>');
-  // //$('#servicios').html('<strong>$'+Tservicios+'</strong>');
-  // $('#total').html('<strong>$'+total.toFixed(2)+'</strong>');
   subtotal=Sumasubtotal;
   Tiva=SumaIva;
   TRetencion=SumaRetencion;
@@ -678,10 +675,15 @@ $(document).on("change","#subtotalParcial,#ivaParcial,#retencionParcial",functio
 
 });
 
-$(document).on('click','tr .check',function(){
+$(document).on('change','tr .check',function(){
 if($(this).prop("checked")){
+$('#chkFragmentada').prop('disabled', true);
 $(this).closest('tr').find(".cfParcial").prop("disabled",false);
 }else{
+var datos = adddatos();
+if(datos.length==1){
+$('#chkFragmentada').prop('disabled', false);
+}
 $(this).closest('tr').find(".cfParcial").prop("disabled",true);
 var subtotal=$(this).closest('tr').find(".fParcial").data("idsubtotalparcial").replace(/(\$)|(,)/g,'');
 var iva=$(this).closest('tr').find(".fParcialIva").data("idivaparcial").replace(/(\$)|(,)/g,'');
@@ -1347,5 +1349,12 @@ var total=(subtotal+iva)-retencion;
 arrSe.push({'IDViaje':IDViajePE,'Subtotal':truncarDecimales(subtotal,2),'iva':truncarDecimales(iva,2),'retencion':truncarDecimales(retencion,2),'total':total})
 }
 console.log(arrSe);
+
+}
+
+function regu(e){
+var expr=/^([0-9])*$/
+var expre=expr.test(e);
+console.log(expre);
 
 }

@@ -96,13 +96,16 @@ def SavePartidasxFactura(request):
 		print("yes")
 		for IDPendiente in jParams["arrPendientes"]:
 			Viaje = View_PendientesEnviarCxC.objects.get(IDPendienteEnviar = IDPendiente)
+			factura=FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
+			print(factura)
 			newPartida = Partida()
 			newPartida.FechaAlta = datetime.datetime.now()
-			newPartida.Subtotal = (((0 if(Viaje.ServiciosSubtotal is None) else Viaje.ServiciosSubtotal) if (jParams["IsFacturaServicios"]) else Viaje.Subtotal)) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceSubTotal
-			newPartida.IVA = (((0 if (Viaje.ServiciosIVA is None) else Viaje.ServiciosIVA) if (jParams["IsFacturaServicios"]) else Viaje.IVA)) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceIva
-			newPartida.Retencion = (((0 if(Viaje.ServiciosRetencion is None) else Viaje.ServiciosRetencion) if (jParams["IsFacturaServicios"]) else Viaje.Retencion)) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceRetencion
-			newPartida.Total = (((0 if (Viaje.ServiciosTotal is None) else Viaje.ServiciosTotal) if (jParams["IsFacturaServicios"]) else Viaje.Total)) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceTotal
-			partidaReajuste = FacturasxCliente.objects.get(IDFactura = jParams["IDFactura"])
+			newPartida.Subtotal = (((0 if(Viaje.ServiciosSubtotal is None) else Viaje.ServiciosSubtotal) if (jParams["IsFacturaServicios"]) else (Viaje.Subtotal-Viaje.ServiciosSubtotal if(factura.IsFragmentada) else Viaje.Subtotal))) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceSubTotal
+			newPartida.IVA = (((0 if (Viaje.ServiciosIVA is None) else Viaje.ServiciosIVA) if (jParams["IsFacturaServicios"]) else (Viaje.IVA-Viaje.ServiciosIVA if(factura.IsFragmentada) else Viaje.IVA))) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceIva
+			newPartida.Retencion = (((0 if(Viaje.ServiciosRetencion is None) else Viaje.ServiciosRetencion) if (jParams["IsFacturaServicios"]) else (Viaje.Retencion-Viaje.ServiciosRetencion if(factura.IsFragmentada) else Viaje.Retencion))) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceRetencion
+			newPartida.Total = (((0 if (Viaje.ServiciosTotal is None) else Viaje.ServiciosTotal) if (jParams["IsFacturaServicios"]) else (Viaje.Total-Viaje.ServiciosTotal if(factura.IsFragmentada) else Viaje.Total))) if (Viaje.IsFacturaParcial is None or Viaje.IsFacturaParcial==False) else Viaje.BalanceTotal
+			partidaReajuste = factura
+			print(partidaReajuste)
 			if Viaje.IDPendienteEnviar == jParams["IDFolioReajuste"]:
 				newPartida.Reajuste = partidaReajuste.Reajuste
 				if Viaje.Proyecto == 'BKG':

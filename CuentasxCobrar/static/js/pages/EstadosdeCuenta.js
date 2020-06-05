@@ -583,7 +583,7 @@ function formatDataTableFacturas(){
       "width": "3%",
       "targets": 12,
       "mRender": function (data, type, full) {
-        return full[12] == 'true' ? 'Si':'No';
+        return full[12] == 'True' ? 'Si':'No';
       }
     },
     {
