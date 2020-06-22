@@ -78,7 +78,7 @@ input[name="checkEC"]:checked
   display: none;
 }
 #fragmentada{
-  padding-left: 400px;
+  padding-left: 500px;
 }
 
 @media only screen and (min-width: 1300px) {
@@ -166,4 +166,8 @@ input[name="checkEC"]:checked
 #reajusteServicios, #h3Servicios
 {
   display: none;
+}
+
+.ajustarAnchoModal .modal-lg {
+    max-width: 900px;
 }

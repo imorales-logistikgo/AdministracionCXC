@@ -317,7 +317,7 @@ $('#kt_modal_2').on('hidden.bs.modal', function(){
 });
 
 $('input[name="TipoCambio"]').on('change', function(){
-  getDatos();
+  MonedaActual()=='MXN' ? calculoUSD()   :  getDatos();
 });
 
 $(document).on('change','#FechaRevision', function(){
@@ -836,6 +836,7 @@ function getDatos(){
     var h = [datos];
     $('#ResumTable').DataTable({
      destroy: true,
+     //fixedHeader: true,
      //scrollX: true,
      //scrollY: "300px",
      data: h[0],
@@ -890,7 +891,7 @@ function getDatos(){
            return `<div class="col-3">
                <span class="kt-switch kt-switch--sm kt-switch--outline kt-switch--icon kt-switch--success">
                  <label>
-                   <input type="checkbox" name="FacturaParcial" class="check">
+                   <input type="checkbox" name="FacturaParcial" class="check" style="width:90px;">
                    <span></span>
                  </label>
                </span>
@@ -1356,5 +1357,49 @@ function regu(e){
 var expr=/^([0-9])*$/
 var expre=expr.test(e);
 console.log(expre);
+}
+
+var MonedaActual= function (){
+  var data= adddatos();
+  var resp;
+  if(data[0][9]=='MXN'){
+    resp='MXN'
+  }
+  return resp;
+}
+
+var  calculoUSD = ()=>{
+var tipoCambio=+$("#txtTipoCambio").val();
+ tipoCambio==1?moneda="MXN": moneda="USD";
+  var Sumasubtotal=0;
+  var SumaIva=0;
+  var SumaRetencion=0;
+
+  $('.fParcial').each(function() {
+  var SubtTotalPar = +$(this).val();
+    Sumasubtotal+=SubtTotalPar;
+
+  });
+
+  $('.fParcialIva').each(function() {
+  var IvaTotalPar = parseFloat($(this).val());
+    SumaIva+=IvaTotalPar;
+  });
+
+  $('.fParcialRetencion').each(function() {
+  var RetencionTotalPar = parseFloat($(this).val());
+    SumaRetencion+=RetencionTotalPar
+  });
+  subtotal=+(Sumasubtotal/tipoCambio).toFixed(2);
+  Tiva=+(SumaIva/tipoCambio).toFixed(2);
+  TRetencion=+(SumaRetencion/tipoCambio).toFixed(2);
+  $('#sub').html('<strong>$'+subtotal+'</strong>');
+  $('#iva').html('<strong>$'+Tiva+'</strong>');
+  $('#retencion').html('<strong>$'+TRetencion+'</strong>');
+  total=+((subtotal+Tiva)-TRetencion).toFixed(2);
+  $('#total').html('<strong>$'+total+'</strong>');
+
+
+
 
 }
