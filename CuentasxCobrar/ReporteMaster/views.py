@@ -51,6 +51,10 @@ def PEToList(Facturas):
 		Reporte["PrecioTotal"] = Fact.PrecioTotal
 		Reporte["IsFacturaCliente"] = Fact.IsFacturaCliente
 		Reporte["FolioFactCliente"] = Fact.FolioFactCliente
+		Reporte["SubtotalFactura"] = Fact.SubtotalFactura
+		Reporte["IvaFactura"] = Fact.IvaFactura
+		Reporte["RetencionFactura"] = Fact.RetencionFactura
+		Reporte["TotalFactura"] = Fact.TotalFactura
 		Reporte["StatusFacCliente"] = Fact.StatusFacCliente
 		ListData.append(Reporte)
 	return ListData

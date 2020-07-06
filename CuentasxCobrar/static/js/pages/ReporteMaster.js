@@ -98,8 +98,16 @@ function formatTableReporteMasterCXC()
         }
       },
       {
-        "targets": [14,15],
+        "targets": [14],
         "className": "dt-head-center dt-body-center"
+      },
+      {
+        "targets": [15,16,17,18],
+        "className": "dt-head-center dt-body-center",
+      },
+      {
+        "targets": [19],
+        "className": "dt-head-center dt-body-center",
       }
     ]
     });

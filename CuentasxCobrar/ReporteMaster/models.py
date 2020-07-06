@@ -19,6 +19,10 @@ class View_Master_Cliente(models.Model):
     PrecioTotal = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     IsFacturaCliente = models.BooleanField()
     FolioFactCliente = models.CharField(max_length=50)
+    SubtotalFactura = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    IvaFactura = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    RetencionFactura = models.DecimalField(default=0, max_digits=30, decimal_places=5)
+    TotalFactura = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     StatusFacCliente = models.CharField(max_length=50)
 
     class Meta:

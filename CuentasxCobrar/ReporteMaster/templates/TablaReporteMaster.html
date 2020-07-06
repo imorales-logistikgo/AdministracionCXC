@@ -18,6 +18,10 @@
 						<th>Precio Total</th>
             <th>Tiene factura cliente</th>
 						<th>Factura Cliente</th>
+						<th>Subtotal factura</th>
+						<th>Iva Factura</th>
+						<th>Retencion Factura</th>
+						<th>Total Factura</th>
 						<th>Estatus Factura</th>
 					</tr>
 				</thead>
@@ -39,6 +43,10 @@
 						<td>${{Master.PrecioTotal|default:0|intcomma|safe}}</td>
             <td>{{Master.IsFacturaCliente|safe}}</td>
             <td>{{Master.FolioFactCliente|default:""|safe}}</td>
+						<td>${{Master.SubtotalFactura|default:0|intcomma|safe}}</td>
+						<td>${{Master.IvaFactura|default:0|intcomma|safe}}</td>
+						<td>${{Master.RetencionFactura|default:0|intcomma|safe}}</td>
+						<td>${{Master.TotalFactura|default:0|intcomma|safe}}</td>
             <td>{{Master.StatusFacCliente|default:""|safe}}</td>
 					</tr>
 					{%endfor%}
