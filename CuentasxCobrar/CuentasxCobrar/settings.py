@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'users',
     'usersadmon',
     'bkg_viajes',
-    'XD_Viajes'
+    'XD_Viajes',
+    'reporteTotales'
 ]
 
 MIDDLEWARE = [

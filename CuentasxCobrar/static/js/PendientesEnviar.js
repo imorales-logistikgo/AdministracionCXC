@@ -836,6 +836,7 @@ function getDatos(){
     var h = [datos];
     $('#ResumTable').DataTable({
      destroy: true,
+     paging:false,
      //fixedHeader: true,
      //scrollX: true,
      //scrollY: "300px",

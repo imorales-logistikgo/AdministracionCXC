@@ -13,9 +13,11 @@
 <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
 	<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
 		<div class="kt-portlet kt-portlet--fit kt-portlet--head-noborder" id="TbPading">
+			{%if request.user.roles != "Contabilidad" %}
 			<div class="kt-subheader__wrapper">
 				<button type="button" id="BtnSubirCobros" class="btn btn-brand btn-elevate btn-pill btn-elevate-air btn-sm float-right" data-toggle="modal" data-target="#modalSubirCobro" data-backdrop="static" data-keyboard="false" disabled>Subir Cobro</button>
 			</div></br>
+			{%endif%}
 			<table class="table table-striped table-bordered nowrap" id="TableEstadosdeCuenta" style="width: 100%">
 				<thead>
 					<tr>
@@ -43,11 +45,11 @@
 						<td style="font-weight: bold;">{{Factura.Folio}}</td>
 						<td>{{Factura.Cliente}}</td>
 						<td>{{Factura.FechaFactura|date:'Y/m/d'}}</td>
-						<td>{{Factura.Subtotal|truncate:2}}</td>
-						<td>{{Factura.IVA|truncate:2}}</td>
-						<td>{{Factura.Retencion|truncate:2}}</td>
-						<td>{{Factura.Total|truncate:2}}</td>
-						<td>{{Factura.Saldo|truncate:2}}</td>
+						<td>{{Factura.Subtotal}}</td>
+						<td>{{Factura.IVA}}</td>
+						<td>{{Factura.Retencion}}</td>
+						<td>{{Factura.Total}}</td>
+						<td>{{Factura.Saldo}}</td>
 						<td>{{Factura.Moneda}}</td>
 						<td>{{Factura.Status}}</td>
 						<td><a data-toggle="modal" href="#detallesCobro" class="btnDetalleCobro" data-backdrop="static">{{Folios|index:forloop.counter0|safe}}</a></td>

@@ -132,9 +132,13 @@ function formatTableCobros() {
       "targets": 5,
       "width": "5px",
       "mRender": function (data, type, full) {
+        if(UserRol!="Contabilidad"){
         idCobro = $('input[name="IDCobro"]').data("cobroid");
         return (full[6] != 'CANCELADA' ? `<button type ="button" class="btnEliminarCobro btn btn-danger btn-elevate btn-pill btn-sm" data-idcobro="${idCobro}" title="Eliminar"><i class="flaticon-delete"></i></button>`:'');
+      }else{
+        return""
       }
+    }
     },
     {
       "targets": 6,

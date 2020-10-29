@@ -1,0 +1,29 @@
+{% load humanize %}
+
+<table class="table table-striped table-bordered" id="TablaReporteTotalesModal">
+				<thead>
+					<tr>
+						<th>Cliente</th>
+						<th>Total vencido</th>
+						<th>Total Por Vencer</th>
+            <th>Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for Master in totalesModal %}
+					<tr>
+						<td>{{Master.nombreCliente|safe}}</td>
+						<td>${{Master.totalVencido|default:0|intcomma|safe}}</td>
+						<td>${{Master.totalxVencer|default:0|intcomma|safe}}</td>
+						<td>${{Master.sumTotal|default:0|intcomma|safe}}</td>
+            <!-- <td>{{Master.IsFacturaCliente|safe}}</td>
+            <td>{{Master.FolioFactCliente|default:""|safe}}</td>
+						<td>${{Master.SubtotalFactura|default:0|intcomma|safe}}</td>
+						<td>${{Master.IvaFactura|default:0|intcomma|safe}}</td>
+						<td>${{Master.RetencionFactura|default:0|intcomma|safe}}</td>
+						<td>${{Master.TotalFactura|default:0|intcomma|safe}}</td>
+            <td>{{Master.StatusFacCliente|default:""|safe}}</td> -->
+					</tr>
+					{%endfor%}
+				</tbody>
+	</table>

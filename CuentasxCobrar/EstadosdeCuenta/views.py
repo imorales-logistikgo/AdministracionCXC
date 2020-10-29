@@ -27,7 +27,7 @@ def EstadosdeCuenta(request):
 	ContadoresPendientes = len(list(FacturasPendiente))
 	ContadoresAbonadas = len(list(FacturasAbonada))
 	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
-	return render(request,  'EstadosdeCuenta.html', {'Facturas': Facturas, 'Clientes': Clientes, 'Folios': Folios, 'ContadoresPendientes': ContadoresPendientes, 'ContadoresAbonadas': ContadoresAbonadas})
+	return render(request,  'EstadosdeCuenta.html', {'Facturas': Facturas, 'Clientes': Clientes, 'Folios': Folios, 'ContadoresPendientes': ContadoresPendientes, 'ContadoresAbonadas': ContadoresAbonadas,'Rol':request.user.roles})
 
 
 

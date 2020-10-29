@@ -1,0 +1,41 @@
+{% load humanize %}
+
+<table class="table table-striped table-bordered" id="TablaReporteTotales">
+				<thead>
+					<tr>
+						<th>Folio Factura</th>
+						<th>Cliente</th>
+						<th>Fecha Factura</th>
+            <th>Moneda</th>
+						<th>Subtotal</th>
+						<th>Iva</th>
+						<th>Retencion</th>
+						<th>Total</th>
+						<th>Estatus</th>
+						<th>FolioViaje</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for Master in reportTotal %}
+					<tr>
+						<td>{{Master.Folio|safe}}</td>
+						<td>{{Master.NombreCortoCliente|safe}}</td>
+						<td>{{Master.FechaFactura|date:'Y/m/d'|safe}}</td>
+						<td>{{Master.Moneda|safe}}</td>
+						<td>${{Master.Subtotal|default:0|intcomma|safe}}</td>
+						<td>${{Master.IVA|default:0|intcomma|safe}}</td>
+						<td>${{Master.Retencion|default:0|intcomma|safe}}</td>
+						<td>${{Master.Total|default:0|intcomma|safe}}</td>
+						<td>{{Master.Status|safe}}</td>
+						<td>{{Master.FolioxFactura|safe}}</td>
+            <!-- <td>{{Master.IsFacturaCliente|safe}}</td>
+            <td>{{Master.FolioFactCliente|default:""|safe}}</td>
+						<td>${{Master.SubtotalFactura|default:0|intcomma|safe}}</td>
+						<td>${{Master.IvaFactura|default:0|intcomma|safe}}</td>
+						<td>${{Master.RetencionFactura|default:0|intcomma|safe}}</td>
+						<td>${{Master.TotalFactura|default:0|intcomma|safe}}</td>
+            <td>{{Master.StatusFacCliente|default:""|safe}}</td> -->
+					</tr>
+					{%endfor%}
+				</tbody>
+	</table>

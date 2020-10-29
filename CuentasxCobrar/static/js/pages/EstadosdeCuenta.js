@@ -11,6 +11,8 @@ $(document).ready(function()
   var idfac;
   var totConv=0;
 //tabla estados de cuenta
+
+
 formatDataTableFacturas();
 
 $(document).on('click', '.btnDetalleCobro', fnGetDetalleCobro);
@@ -591,8 +593,12 @@ function formatDataTableFacturas(){
       "className": "text-center",
       "targets": 13,
       "mRender": function (data, type, full) {
+        if(UserRol!="Contabilidad"){
         evXML = $('input[name="EvidenciaXML"]').data("evidenciaxml");
         return '<a href="'+evXML+'" target="_blank" class="BtnVerXML btn btn-primary btn-elevate btn-pill btn-sm"><i class="flaticon2-file"></i></a>';
+      }else{
+        return ""
+      }
       }
     },
     {
@@ -600,8 +606,12 @@ function formatDataTableFacturas(){
       "className": "text-center",
       "targets": 14,
       "mRender": function (data, type, full) {
+        if(UserRol!="Contabilidad"){
        return (fragmentada != 'True' &&  full[10] == 'pendiente'.toUpperCase() ? '<button type ="button" class="BtnEliminarFactura btn btn-danger btn-elevate btn-pill btn-sm" data-idfact="'+idfac+'"><i class="flaticon-delete"></i></button>':'');
+     }else{
+       return ""
      }
+   }
    }
    ]
  });

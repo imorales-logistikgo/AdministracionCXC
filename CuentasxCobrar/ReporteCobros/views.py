@@ -19,7 +19,7 @@ def ReporteCobros(request):
 		FoliosFactura = FoliosFactura[:-2]
 		Folios.append(FoliosFactura)
 	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
-	return render(request, 'ReporteCobros.html', {'Cobros': Cobros, 'Clientes': Clientes, "Folios": Folios})
+	return render(request, 'ReporteCobros.html', {'Cobros': Cobros, 'Clientes': Clientes, "Folios": Folios,'Rol':request.user.roles})
 
 
 
