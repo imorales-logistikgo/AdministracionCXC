@@ -1189,7 +1189,7 @@ function formatDataTable() {
          //idpendienteenviar = $('input[name="isEvicencias"]').data("idpendienteenviar"); 2950
          if(full[2] != "Eaton")
          {
-           return (full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase() &&  EvDigital != 'False'  && EvFisica != 'False' && controlDesk != 'False' ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
+           return ((full[9] == 'finalizado'.toUpperCase() || full[9] == 'completo'.toUpperCase()) &&  ((EvDigital != 'False')) ? '<input type="checkbox" name="checkPE" data-creditodias="'+DiasCredito+'" id="estiloCheckbox"/>': '');
          }
          else
          {

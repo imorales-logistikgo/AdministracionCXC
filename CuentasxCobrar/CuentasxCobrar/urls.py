@@ -28,6 +28,7 @@ urlpatterns = [
     path('ReporteMaster/', include('ReporteMaster.urls')),
     path('reporteTotales/', include('reporteTotales.urls')),
     path('Usuario/', include('users.urls')),
+    path('NotasCredito/', include('NotasCredito.urls')),
 ]
 
 if settings.DEBUG:

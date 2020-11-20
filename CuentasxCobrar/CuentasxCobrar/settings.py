@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'usersadmon',
     'bkg_viajes',
     'XD_Viajes',
-    'reporteTotales'
+    'reporteTotales',
+    'NotasCredito'
 ]
 
 MIDDLEWARE = [

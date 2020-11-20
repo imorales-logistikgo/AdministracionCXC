@@ -150,7 +150,7 @@ class RelacionFacturaxPartidas(models.Model):
     IDRelacionFacturaxPartidas = models.AutoField(primary_key=True)
     IDFacturaxCliente = models.ForeignKey(FacturasxCliente, on_delete=models.CASCADE, db_column = 'IDFacturaxCliente')
     IDPartida = models.ForeignKey(Partida, on_delete=models.CASCADE, db_column = 'IDPartida')
-    IDPendienteEnviar = models.ForeignKey(PendientesEnviar, on_delete=models.CASCADE, db_column = 'IDPendienteEnviar')
+    IDPendienteEnviar = models.ForeignKey(PendientesEnviar,default=None, on_delete=models.CASCADE, db_column = 'IDPendienteEnviar')
 
     class Meta:
         db_table = "RelacionFacturaxPartidas"
