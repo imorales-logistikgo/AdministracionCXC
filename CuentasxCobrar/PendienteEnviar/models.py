@@ -125,6 +125,7 @@ class FacturasxCliente(models.Model):
     IDUsuarioBaja = models.ForeignKey(AdmonUsuarios, on_delete=models.CASCADE, db_column = 'IDUsuarioBaja', related_name = "IDUsuarioBajaFactura", null=True)
     Reajuste = models.DecimalField(default=0, max_digits=30, decimal_places=5)
     MotivoEliminacion = models.CharField(max_length=500)
+    TotalXML = models.DecimalField(default=0, max_digits=30, decimal_places=5)
 
     class Meta:
         db_table = "FacturasxCliente"

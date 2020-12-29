@@ -1,4 +1,6 @@
 from django.db import models
+
+from NotasCredito.models import NotasCredito
 from PendienteEnviar.models import PendientesEnviar, FacturasxCliente
 
 
@@ -18,6 +20,7 @@ class View_FacturasxCliente(models.Model):
     IsAutorizada = models.BooleanField()
     Moneda = models.CharField(max_length=10)
     IsFragmentada = models.BooleanField()
+    TotalXML = models.DecimalField(max_digits=30, decimal_places=5)
 
     class Meta:
         db_table = "View_FacturasxCliente"
@@ -58,12 +61,24 @@ class CobrosxCliente(models.Model):
 
 
 
-class RelacionCobrosFacturasxCliente(models.Model):
-    IDRelacionCobroFacturasxCliente = models.AutoField(primary_key=True)
-    IDCobro = models.ForeignKey(CobrosxCliente, on_delete=models.CASCADE, db_column = 'IDCobro')
-    IDCobroxFactura = models.ForeignKey(CobrosxFacturas, on_delete=models.CASCADE, db_column = 'IDCobroxFactura')
-    IDFactura = models.ForeignKey(FacturasxCliente, on_delete=models.CASCADE, db_column = 'IDFactura')
-    IDUsuarioAlta = models.IntegerField(default=0)
+class NotaCreditoxFacturas(models.Model):
+    IDNotaCreditoxFactura = models.AutoField(primary_key=True)
+    FechaAlta = models.DateTimeField()
+    Total = models.DecimalField(max_digits=30, decimal_places=5)
 
     class Meta:
-        db_table="RelacionCobrosFacturasxCliente"
+        db_table = "NotaCreditoxFacturas"
+
+
+
+class RelacionCobrosFacturasxCliente(models.Model):
+    IDRelacionCobroFacturasxCliente = models.AutoField(primary_key=True)
+    IDCobro = models.ForeignKey(CobrosxCliente, on_delete=models.CASCADE, db_column='IDCobro')
+    IDCobroxFactura = models.ForeignKey(CobrosxFacturas, on_delete=models.CASCADE, db_column='IDCobroxFactura')
+    IDFactura = models.ForeignKey(FacturasxCliente, on_delete=models.CASCADE, db_column='IDFactura')
+    IDUsuarioAlta = models.IntegerField(default=0)
+    IDNotaCredito = models.ForeignKey(NotasCredito, on_delete=models.CASCADE, db_column='IDNotaCredito')
+    IDNotaCreditoxFactura = models.ForeignKey(NotaCreditoxFacturas, on_delete=models.CASCADE, db_column='IDNotaCreditoxFactura')
+
+    class Meta:
+        db_table = "RelacionCobrosFacturasxCliente"

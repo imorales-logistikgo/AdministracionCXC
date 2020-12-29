@@ -158,6 +158,35 @@ kt-menu__item--active
 							<li class="nav-item">
 								<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Complementos</a>
 							</li>
+
+							<div class="form-group row justify-content-center">
+								<div class="waitMe_content horizontal" id="selectNota" style="display:none;">
+									<div class="col-2">
+										<select id="selectNC">
+											<!--																					<option value="null" selected>Selecciona una nota de credito</option>-->
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group row justify-content-end" id="DivNotaCredito">
+								<label class="col-7 col-form-label kt-badge kt-badge--warning kt-badge--inline kt-badge--pill kt-badge--rounded">Nota
+									Credito</label>
+								<div class="col-3">
+									<span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">
+										<label>
+											<input type="checkbox"
+												   name="NotaCredito"
+												   id="NotaCredito">
+											<span></span>
+										</label>
+									</span>
+								</div>
+							</div>
+
+
+
+
 						</ul>
 						<div class="tab-content" id="myTabContent">
 							<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -309,6 +338,168 @@ kt-menu__item--active
 		</div>
 	</div>
 {% endblock %}
+
+
+
+<div class="modal fade" id="RecalculoCXC" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-md" role="document" id="ModaWait">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title text-dark" id="exampleModalLabel">Recalculo</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="divRecalculo">
+				<div class="container">
+					<div class="row">
+
+<!--						Total Viaje-->
+						<div class="col-6">
+							<button class="btn btn-primary btn-elevate btn-pill btn-sm">Accesorios</button>
+						</div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-4">
+								<p><strong>Total Viaje:</strong></p>
+								</div>
+								<div class="col-8">
+									<input type="number" class="form-control" id="TotalViaje" placeholder="Total Viaje" min="1" pattern="^[0-9]+">
+								</div>
+							</div>
+						</div>
+
+<!--						Recoleccion-->
+						<div class="col-6">
+							<button class="btn btn-primary btn-elevate btn-pill btn-sm">Repartos</button>
+						</div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-4">
+									<p><strong>Total Recoleccion:</strong></p>
+								</div>
+								<div class="col-8">
+									<input type="number" class="form-control" id="TotalRecoleccion" placeholder="Total Recolecciones" min="1" pattern="^[0-9]+" disabled>
+								</div>
+							</div>
+						</div>
+
+<!--						Accesorios-->
+						<div class="col-6">
+							<label class="kt-checkbox kt-checkbox--success">
+								<input type="checkbox" checked> IVA
+								<span></span>
+							</label>
+						</div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-4">
+									<p><strong>Total Accesorios:</strong></p>
+								</div>
+								<div class="col-8">
+									<input class="form-control" id="TotalAccesoriosPrecio" placeholder="Total Accesorios" min="1" pattern="^[0-9]+" disabled>
+								</div>
+							</div>
+						</div>
+
+<!--						Repartos-->
+						<div class="col-6">
+							<label class="kt-checkbox kt-checkbox--success">
+								<input type="checkbox" checked> Retencion
+								<span></span>
+							</label>
+						</div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-4">
+									<p><strong>Total Repartos:</strong></p>
+								</div>
+								<div class="col-8">
+									<input class="form-control" id="TotalRepartosPrecio" placeholder="Total Repartos" min="1" pattern="^[0-9]+" disabled>
+								</div>
+							</div>
+						</div>
+
+<!--						Subtotal-->
+						<div class="col-6"></div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-4">
+									<p><strong>Precio Subtotal:</strong></p>
+								</div>
+								<div class="col-8">
+									<input class="form-control" id="SubtotalPrecio" placeholder="Subtotal" min="1" pattern="^[0-9]+" disabled>
+								</div>
+							</div>
+						</div>
+
+<!--						IVA-->
+						<div class="col-6"></div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-4">
+									<p><strong>Precio IVA:</strong></p>
+								</div>
+								<div class="col-8">
+									<input class="form-control" id="IVAPrecio" placeholder="IVA" min="1" pattern="^[0-9]+" disabled>
+								</div>
+							</div>
+						</div>
+						<span></span>
+<!--						Retencion-->
+						<div class="col-6"></div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-4">
+									<p><strong>Precio Retencion:</strong></p>
+								</div>
+								<div class="col-8">
+									<input class="form-control" id="RetencionPrecio" placeholder="Retencion" min="1" pattern="^[0-9]+" disabled>
+								</div>
+							</div>
+						</div>
+
+<!--						Total-->
+						<div class="col-6">
+							<div class="row">
+								<div class="col-4">
+									<p><strong>Total Cliente:</strong></p>
+								</div>
+								<div class="col-8">
+									<input class="form-control" id="TotalCliente" placeholder="Total" min="1" pattern="^[0-9]+" disabled style="background: red">
+								</div>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-4">
+									<p><strong>Precio Total:</strong></p>
+								</div>
+								<div class="col-8">
+									<input class="form-control" id="TotalPrecio" placeholder="Total" min="1" pattern="^[0-9]+" disabled>
+								</div>
+							</div>
+						</div>
+
+						<br><div class="col-12">
+							<p><strong>Comentarios:</strong></p>
+						</div>
+						<div class="col-12">
+							<input class="form-control" id="ComentariosRecalculo" placeholder="Comentarios" type="text">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success btn-elevate" id="btnSaveRecalculo">Guardar</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
 
 {% endblock %}
 

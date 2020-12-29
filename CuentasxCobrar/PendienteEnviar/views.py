@@ -1,5 +1,10 @@
+import urllib
+from xml.dom import minidom
+
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+
+from NotasCredito.models import NotasCredito
 from PendienteEnviar.models import View_PendientesEnviarCxC, FacturasxCliente, Partida, RelacionFacturaxPartidas, PendientesEnviar, Ext_PendienteEnviar_Precio, RelacionConceptoxProyecto
 from usersadmon.models import Cliente, AdmonUsuarios
 from bkg_viajes.models import Bro_Viajes
@@ -18,12 +23,15 @@ import hashlib
 
 
 def GetPendientesEnviar(request):
-	#PendingToSend = View_PendientesEnviarCxC.objects.raw("SELECT * FROM View_PendientesEnviarCxC WHERE Status = %s AND IsEvidenciaDigital = 1 AND IsEvidenciaFisica = 1 AND IsFacturaCliente = 0 AND Moneda = %s", ['FINALIZADO','MXN'])
-	PendingToSend = View_PendientesEnviarCxC.objects.filter(IsEvidenciaDigital = True, IsEvidenciaFisica__in = (True, False), IsFacturaCliente = False, Status__in = ["FINALIZADO", "COMPLETO", "ENTREGADO"], FechaDescarga__month = datetime.datetime.now().month, FechaDescarga__year = datetime.datetime.now().year)
-	ContadorTodos, ContadorPendientes, ContadorFinalizados, ContadorConEvidencias, ContadorSinEvidencias = GetContadores()
-	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
-	return render(request, 'PendienteEnviar.html', {'pendientes':PendingToSend,'Clientes': Clientes, 'contadorPendientes': ContadorPendientes, 'contadorFinalizados': ContadorFinalizados, 'contadorConEvidencias': ContadorConEvidencias, 'contadorSinEvidencias': ContadorSinEvidencias})
-
+	if request.user.roles == 'CXC' or request.user.is_superuser or request.user.username == 'jcastillo@logistikgo':
+		PendingToSend = View_PendientesEnviarCxC.objects.filter(IsEvidenciaDigital = True, IsEvidenciaFisica__in = (True, False), IsFacturaCliente = False, Status__in = ["FINALIZADO", "COMPLETO", "ENTREGADO"], FechaDescarga__month = datetime.datetime.now().month, FechaDescarga__year = datetime.datetime.now().year)
+		ContadorTodos, ContadorPendientes, ContadorFinalizados, ContadorConEvidencias, ContadorSinEvidencias = GetContadores()
+		Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
+		return render(request, 'PendienteEnviar.html', {'pendientes':PendingToSend,'Clientes': Clientes, 'contadorPendientes': ContadorPendientes, 'contadorFinalizados': ContadorFinalizados, 'contadorConEvidencias': ContadorConEvidencias, 'contadorSinEvidencias': ContadorSinEvidencias})
+	elif request.user.username == 'cxp1@logistikgo' or request.user.username == 'fmartinez@logistikgo':
+		return redirect('EstadosdeCuenta')
+	else:
+		return redirect('/Usuario/logout')
 
 def truncate(n, decimals=0):
     multiplier = 10 ** decimals
@@ -87,6 +95,7 @@ def SaveFactura(request):
 	newFactura.IsFragmentada = jParams["IsFragmentada"]
 	newFactura.IDUsuarioAlta = AdmonUsuarios.objects.get(idusuario = request.user.idusuario)
 	newFactura.Reajuste = jParams["Reajuste"]
+	newFactura.TotalXML = GetTotalFromXML(jParams["RutaXML"])
 	newFactura.save()
 	return HttpResponse(newFactura.IDFactura)
 
@@ -228,6 +237,26 @@ def CheckHasFactura(request):
 		Resp = False
 	return JsonResponse({'Resp': Resp})
 
+
+def GetTotalFromXML(file):
+	rutaxml = urllib.request.urlopen(file)
+	openXML = minidom.parse(rutaxml)
+	TagComrpobante = openXML.getElementsByTagName('cfdi:Comprobante')[0]
+	GetTotal = TagComrpobante.attributes['Total'].value
+	print(GetTotal)
+	return GetTotal
+
+
+
+
+
+
+
+
+
+
+
+
 def UpdatePartidas(request):
 	h = hashlib.new("sha512", b"Lgk123456*$")
 	string = h.hexdigest()
@@ -247,3 +276,7 @@ def UpdatePartidas(request):
 #			Partida_.Total = PendientesEnviar_.ServiciosTotal
 #			Partida_.save()
 	return HttpResponse("")
+
+
+
+
