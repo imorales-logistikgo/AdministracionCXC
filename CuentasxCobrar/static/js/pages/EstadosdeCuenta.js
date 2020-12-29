@@ -15,6 +15,18 @@ $(document).ready(function()
 
 formatDataTableFacturas();
 
+$('#selectNC').select2({
+  placeholder: 'Selecciona una nota de credito'
+});
+
+$('#NotaCredito').on('click', function(){
+    $('#NotaCredito').is(':checked') ? ($("#selectNota").css('display', 'block'), GetNotasCredito(idcliente)) : ($("#selectNota").css('display', 'none'), CleanNotaCredito())
+});
+
+$('#selectNC').on('change', function(){
+   this.options[this.selectedIndex] != undefined ? $("#FolioCobro").val(this.options[this.selectedIndex].text) : ($("#FolioCobro").val(''), $("#FolioCobro").attr('disabled', false))
+});
+
 $(document).on('click', '.btnDetalleCobro', fnGetDetalleCobro);
 //ejecuta varias funciones cada que el checkbox es seleccionado en la tabla estados de cuenta
 $(document).on( 'change', 'input[name="checkEC"]', function () {
@@ -31,6 +43,13 @@ $(document).on( 'change', 'input[name="checkEC"]', function () {
     Getdatos();
     ContadorCheck(input, btnSubir);
   }
+});
+
+$('#btnRecalculo').click(function(){
+  var tab =  $('#TableEstadosdeCuenta').DataTable();
+  var folio = tab.row($(this).parents('tr')).data()[1]
+  GetCantidadesRecalculo($(this).data('idfactu'))
+  console.log(folio)
 });
 
 $('#BtnAplicarFiltro').on('click', fnGetFacturas);
@@ -69,8 +88,6 @@ $(document).on( 'click', '.BtnEliminarFactura', function () {
       'success'
       )
   }
-  //else
-  //  alertToastError("Error al eliminar la factura");
 })
 });
 
@@ -125,9 +142,15 @@ $('input[name="FiltroFechaCobros"]').on('apply.daterangepicker', function(ev, pi
 
 // cerrar modal de subir facturas
 $('#modalSubirCobro').on('hidden.bs.modal', function(){
- CleanModal()
- KTUppy.init()
+ CleanModal();
+ CleanNotaCredito();
+ KTUppy.init();
 });
+
+$('#RecalculoCXC').on('hidden.bs.modal', function(){
+CleanModalRecalculo();
+});
+
 
 //muestra los datos para la tabla del modal subir cobros al hacer click en el boton de  subir cobro
 $(document).on('click', '#BtnSubirCobros',showDatosObtenidos);
@@ -604,6 +627,13 @@ function formatDataTableFacturas(){
       "mRender": function (data, type, full) {
        return (fragmentada != 'True' &&  full[10] == 'pendiente'.toUpperCase() ? '<button type ="button" class="BtnEliminarFactura btn btn-danger btn-elevate btn-pill btn-sm" data-idfact="'+idfac+'"><i class="flaticon-delete"></i></button>':'');
    }//mrender
+   },
+   {
+      "width": "3%",
+      "targets": 15,
+      "mRender": function (data, type, full){
+        return (full[7] != full[15] && full[15] != "None" ? '<button type="button" class="btn btn-dark btn-elevate btn-pill btn-sm" title="Editar" data-keyboard="false" data-backdrop="static" data-toggle="modal" data-target="#RecalculoCXC" id="btnRecalculo" data-idfactu="'+idfac+'"><i class="fa fa-edit"></i></button>' : "");
+      }
    }
    ]
  });
@@ -636,6 +666,12 @@ function getDetalleFactura()
 
 function saveCobroxCliente()  {
   WaitMe_Show('#waiteSubirCobro');
+   var arrCobros = [];
+  $('.valCobro').each(function() {
+    IDFactura = $(this).data('idfact');
+    Total = $(this).val()/$('#TipoCambioCobro').val();
+    arrCobros.push({'Total': Total, 'IDFactura': IDFactura});
+  });
   jParams = {
     Folio: $('#FolioCobro').val(),
     Total:$('#AddCosto').val()/$('#TipoCambioCobro').val(),
@@ -646,59 +682,12 @@ function saveCobroxCliente()  {
     RutaPDF: $('#ComplementosCobros').data("rutaarchivoPDF"),
     Cliente: cliente,
     IDCliente: idcliente,
+    IDNotaCreditoSelect: $('#NotaCredito').is(':checked') ? $("#selectNC").val() : null,
+    IsNotaCredito: $('#NotaCredito').is(':checked'),
+    arrCobros: arrCobros
   }
 
   fetch("/EstadosdeCuenta/SaveCobroxCliente", {
-    method: "POST",
-    credentials: "same-origin",
-    headers: {
-      "X-CSRFToken": getCookie("csrftoken"),
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(jParams)
-  }).then(function(response){
-
-    if(response.status == 200)
-    {
-      return response.clone().json();
-    }
-    else if(response.status == 500)
-    {
-      Swal.fire({
-        type: 'error',
-        title: 'El folio indicado ya existe en el sistema',
-        showConfirmButton: false,
-        timer: 2500
-      })
-      WaitMe_Hide('#waiteSubirCobro');
-      return;
-     // $("#modalSubirCobro").modal('hide');
-    }
-
-  }).then(function(IDCobro){
-    SaveCobroxFactura(IDCobro);
-  }).catch(function(ex){
-    console.log("no success!");
-  });
-}
-
-function SaveCobroxFactura(IDCobro)
-{
-  WaitMe_Show('#waiteSubirCobro');
-  var arrCobros = [];
-  $('.valCobro').each(function() {
-    IDFactura = $(this).data('idfact');
-    Total = $(this).val()/$('#TipoCambioCobro').val();
-    arrCobros.push({'Total': Total, 'IDFactura': IDFactura});
-  });
-
-  jParams = {
-    IDCobro: IDCobro,
-    arrCobros: arrCobros,
-  }
-
-  fetch("/EstadosdeCuenta/SaveCobroxFactura", {
     method: "POST",
     credentials: "same-origin",
     headers: {
@@ -717,7 +706,6 @@ function SaveCobroxFactura(IDCobro)
         showConfirmButton: false,
         timer: 2500
       })
-
 
        var rowID=[];
        var table = $('#TableEstadosdeCuenta').DataTable();
@@ -740,13 +728,79 @@ function SaveCobroxFactura(IDCobro)
       })
       WaitMe_Hide('#waiteSubirCobro');
       return;
-      $("#modalSubirCobro").modal('hide');
+     // $("#modalSubirCobro").modal('hide');
     }
 
   }).catch(function(ex){
     console.log(ex);
+    alertToastError("Ocurrio un error");
   });
 }
+
+//function SaveCobroxFactura(IDCobro)
+//{
+//  WaitMe_Show('#waiteSubirCobro');
+//  var arrCobros = [];
+//  $('.valCobro').each(function() {
+//    IDFactura = $(this).data('idfact');
+//    Total = $(this).val()/$('#TipoCambioCobro').val();
+//    arrCobros.push({'Total': Total, 'IDFactura': IDFactura});
+//  });
+//
+//  jParams = {
+//    IDCobro: IDCobro,
+//    arrCobros: arrCobros,
+//  }
+//
+//  fetch("/EstadosdeCuenta/SaveCobroxFactura", {
+//    method: "POST",
+//    credentials: "same-origin",
+//    headers: {
+//      "X-CSRFToken": getCookie("csrftoken"),
+//      "Accept": "application/json",
+//      "Content-Type": "application/json"
+//    },
+//    body: JSON.stringify(jParams)
+//  }).then(function(response){
+//
+//    if(response.status == 200)
+//    {
+//      Swal.fire({
+//        type: 'success',
+//        title: 'El cobro fue guardado correctamente',
+//        showConfirmButton: false,
+//        timer: 2500
+//      })
+//
+//
+//       var rowID=[];
+//       var table = $('#TableEstadosdeCuenta').DataTable();
+//      $("input[name=checkEC]:checked").each(function (value) {
+//        //rowID.push($(this).closest('tr').index());
+//        rowID.push(table.row($(this).parents('tr')).index());
+//      });
+//        table.rows(rowID).remove().draw();
+//      $('#BtnSubirCobros').prop('disabled', true);
+//      WaitMe_Hide('#waiteSubirCobro');
+//      $("#modalSubirCobro").modal('hide');
+//    }
+//    else if(response.status == 500)
+//    {
+//      Swal.fire({
+//        type: 'error',
+//        title: 'El folio indicado ya existe en el sistema',
+//        showConfirmButton: false,
+//        timer: 2500
+//      })
+//      WaitMe_Hide('#waiteSubirCobro');
+//      return;
+//      $("#modalSubirCobro").modal('hide');
+//    }
+//
+//  }).catch(function(ex){
+//    console.log(ex);
+//  });
+//}
 
 var fnGetDetalleCobro = function () {
   var IDFactura = $(this).parents('tr').data('idfactura');
@@ -767,4 +821,85 @@ var fnGetDetalleCobro = function () {
   }).catch(function(ex){
     console.log("no success!");
   });
+}
+
+
+
+var GetNotasCredito = function(CLiente){
+  WaitMe_ShowInput('#selectNota');
+  fetch(`/EstadosdeCuenta/GetNotaCreditoByCliente?IDCliente=${CLiente}`, {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    return response.clone().json();
+  }).then(function(data){
+  var newOption = new Option('Selecciona una nota de credito', null, false, false);
+  $('#selectNC').append(newOption).trigger('change');
+    $.each(data.GetNotas, function (i, item) {
+        var newOption = new Option(item.Folio, item.IDNotaCredito, false, false);
+        $('#selectNC').append(newOption).trigger('change');
+    });
+  $('#FolioCobro').attr('disabled', true);
+  $('#FolioCobro').val('');
+    WaitMe_HideInput('#selectNota');
+  }).catch(function(ex){
+    console.log(ex);
+  });
+}
+//}
+
+function CleanNotaCredito (){
+  $('#selectNC').empty().trigger('change');
+  $('#FolioCobro').attr('disabled', false);
+  $('#FolioCobro').val('');
+  $('#NotaCredito').prop("checked",false);
+  $("#selectNota").css('display', 'none');
+}
+
+var GetCantidadesRecalculo = function(factura){
+    WaitMe_Show('#ModaWait');
+    fetch("/EstadosdeCuenta/GetDatosReajuste?IDFactura=" + factura, {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    return response.clone().json();
+  }).then(function(data){
+    $("#TotalViaje").val(data.data[0].Precio);
+    $("#TotalRecoleccion").val(data.data[0].PrecioRecoleccion);
+    $("#TotalAccesoriosPrecio").val(data.data[0].PrecioAccesorios);
+    $("#TotalRepartosPrecio").val(data.data[0].PrecioRepartos);
+    $("#SubtotalPrecio").val(data.data[0].PrecioSubtotal);
+    $("#IVAPrecio").val(data.data[0].PrecioIVA);
+    $("#RetencionPrecio").val(data.data[0].PrecioRetencion);
+    $("#TotalPrecio").val(data.data[0].PrecioTotal);
+    $("#TotalCliente").val(data.data[0].TotalCliente);
+
+    WaitMe_Hide('#ModaWait');
+  }).catch(function(ex){
+    alertToastError("Ocurrio un error");
+    $("#RecalculoCXC").modal('hide');
+    console.log(ex);
+    WaitMe_Hide('#ModaWait');
+  });
+}
+
+
+var CleanModalRecalculo = function(){
+    $("#TotalViaje").val('');
+    $("#TotalRecoleccion").val('');
+    $("#TotalAccesoriosPrecio").val('');
+    $("#TotalRepartosPrecio").val('');
+    $("#SubtotalPrecio").val('');
+    $("#IVAPrecio").val('');
+    $("#RetencionPrecio").val('');
+    $("#TotalPrecio").val('');
+    $("#ComentariosRecalculo").val('');
 }

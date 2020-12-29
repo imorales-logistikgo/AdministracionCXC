@@ -1,0 +1,42 @@
+{% load humanize %}
+{% load static %}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+	<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+		<div class="kt-portlet kt-portlet--fit kt-portlet--head-noborder">
+            <div class="kt-subheader__wrapper">
+                <button type="button" name="button" class="btn btn-primary btn-elevate btn-pill btn-elevate-air" id="reportTotal_" style="position:relative; float:right;"
+                        data-toggle="modal" data-target="#ModalNotaCredito"> Crear Nota Credito
+                </button>
+            </div></br>
+            <table class="table table-striped table-bordered" id="TablaNotasCredito">
+                <thead>
+                    <th>Folio</th>
+                    <th>Cliente</th>
+                    <th>Subtotal</th>
+                    <th>IVA</th>
+                    <th>Retencion</th>
+                    <th>Total</th>
+                    <th>Estatus</th>
+                    <th>Fecha Alta</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                {% for NotaCredito in GetNotasCredito %}
+                    <tr>
+                        <td>{{NotaCredito.Folio}}</td>
+                        <td>{{NotaCredito.IDClienteFiscal.RazonSocial}}</td>
+                        <td>{{NotaCredito.Subtotal}}</td>
+                        <td>{{NotaCredito.IVA}}</td>
+                        <td>{{NotaCredito.Retencion}}</td>
+                        <td>{{NotaCredito.Total}}</td>
+                        <td>{{NotaCredito.Status}}</td>
+                        <td>{{NotaCredito.FechaAlta|date:'Y/m/d'}}</td>
+                        <td>{% if NotaCredito.RutaXML is not None %} <a href="{{NotaCredito.RutaXML}}" class="btn btn-success btn-elevate btn-pill btn-sm" target="_blank"><i class="fas fa-file"></i></a> {% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -198,6 +198,25 @@ function WaitMe_HideBtn(idForm) {
         $(idForm).waitMe('hide');
 };
 
+function WaitMe_ShowInput(idForm){
+     $(idForm).waitMe({
+        effect : 'bounce',
+        text : '',
+        bg : 'rgba(255,255,255,0.7)',
+        color : '#000',
+        maxSize : '',
+//        waitTime : -1,
+        textPos : 'horizontal',
+        fontSize : '',
+        source : '',
+    });
+}
+
+function WaitMe_HideInput(idForm) {
+        $(idForm).waitMe('hide');
+};
+
+
 function alertToastError(msj)
 {
   toastr.options = {
