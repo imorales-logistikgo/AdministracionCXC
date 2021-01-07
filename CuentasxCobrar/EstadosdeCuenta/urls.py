@@ -10,5 +10,10 @@ urlpatterns = [
     path('SaveCobroxFactura', views.SaveCobroxFactura, name='SaveCobroxFactura'),
     path('GetDetallesCobro', views.GetDetallesCobro, name='GetDetallesCobro'),
     path('GetDatosReajuste', views.GetDatosReajuste, name='GetDatosReajuste'),
-    path("GetNotaCreditoByCliente", views.GetNotaCreditoByCliente, name='GetNotaCreditoByCliente')
+    path("GetNotaCreditoByCliente", views.GetNotaCreditoByCliente, name='GetNotaCreditoByCliente'),
+    path("GetRepartosPrecio", views.GetRepartosPrecio, name='GetRepartosPrecio'),
+    path("GetAccesoriosPrecio", views.GetAccesoriosPrecio, name='GetAccesoriosPrecio'),
+    path("DatosTemporales", views.DatosTemporales, name='DatosTemporales'),
+    path("RemoveFile", views.RemoveFile, name='RemoveFile')
+
 ]

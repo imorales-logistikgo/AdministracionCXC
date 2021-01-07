@@ -356,7 +356,7 @@ kt-menu__item--active
 
 <!--						Total Viaje-->
 						<div class="col-6">
-							<button class="btn btn-primary btn-elevate btn-pill btn-sm">Accesorios</button>
+							<button class="btn btn-primary btn-elevate btn-pill btn-sm" id="BtnAccesorios" >Accesorios</button>
 						</div>
 						<div class="col-6">
 							<div class="row">
@@ -371,7 +371,7 @@ kt-menu__item--active
 
 <!--						Recoleccion-->
 						<div class="col-6">
-							<button class="btn btn-primary btn-elevate btn-pill btn-sm">Repartos</button>
+							<button class="btn btn-primary btn-elevate btn-pill btn-sm" id="BtnRepartos">Repartos</button>
 						</div>
 						<div class="col-6">
 							<div class="row">
@@ -491,7 +491,7 @@ kt-menu__item--active
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success btn-elevate" id="btnSaveRecalculo">Guardar</button>
+				<button type="button" class="btn btn-success btn-elevate" id="btnSaveRecalculo" disabled>Guardar</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
@@ -499,6 +499,68 @@ kt-menu__item--active
 </div>
 
 
+<div class="modal fade" id="RepartosPrecio" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-md" role="document" id="WaitRepartos">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title text-dark">Repartos</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="TablaRepartos">
+													<div class="kt-portlet">
+										<div class="kt-portlet__head">
+											<div class="kt-portlet__head-label">
+												<h3 class="kt-portlet__head-title">
+													Repartos
+												</h3>
+											</div>
+										</div>
+										<div class="kt-portlet__body">
+											<div class="kt-notification kt-notification--fit" id="EachReparto">
+											</div>
+											<div class="kt-separator kt-separator--space-lg kt-separator--border-dashed"></div>
+
+											<div class="dropdown">
+												<button class="btn btn-success">
+													+
+												</button>
+											</div>
+
+											<!--end::Dropdown-->
+										</div>
+									</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success btn-elevate" id="btnSaveRepartos" disabled>Guardar</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="ModalAccesoriosCXC" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title text-dark">Accesorios</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="divAccesorios">
+				<div class="kt-notification kt-notification--fit" id="EachAccesorio">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success btn-elevate" id="btnSaveAccesorios" disabled>Guardar</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 {% endblock %}

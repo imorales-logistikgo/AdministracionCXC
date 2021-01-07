@@ -32,6 +32,14 @@ $(document).ready(function() {
 
 formatDataTable();
 
+$('#selectNC').select2({
+  placeholder: 'Selecciona una nota de credito'
+});
+
+$('#NotaCredito').on('click', function(){
+    $('#NotaCredito').is(':checked') ? ($("#selectNota").css('display', 'block'), GetNotasCredito(idcliente)) : ($("#selectNota").css('display', 'none'), CleanNotaCredito())
+});
+
 //obtener datos para el modal de reajustar cantidades viaje y servicios
 //$(document).on('click', '#folioReajuste', getDatosModalreajuste);
 
@@ -418,6 +426,9 @@ function LimpiarModalSF()
   diferenciaRejusteServ = 0;
   $('.check').prop('disabled',false);
   arrSe=[];
+  $('#selectNC').empty().trigger('change');
+  $('#NotaCredito').prop("checked",false);
+  $("#selectNota").css('display', 'none');
 
 }
 
@@ -495,71 +506,65 @@ function LimpiarModalSF()
 
          uppyDashboard.use(Dashboard, options);
          uppyDashboard.use(XHRUpload, { endpoint: 'https://api-bgk-debug.logistikgo.com/api/Viaje/SaveevidenciaTest', method: 'post'});
-				//uppyDashboard.use(XHRUpload, { endpoint: 'http://localhost:63510/api/Viaje/SaveevidenciaTest', method: 'post'});
-				uppyDashboard.use(GoogleDrive, { target: Dashboard, companionUrl: 'https://companion.uppy.io' });
-        uppyDashboard.on('upload-success', (file, response) => {
+		 uppyDashboard.use(GoogleDrive, { target: Dashboard, companionUrl: 'https://companion.uppy.io' });
+         uppyDashboard.on('upload-success', (file, response) => {
           const fileName = file.name
           if (file.extension === 'pdf')
           {
-           const urlPDF = response.body
-           $('#kt_uppy_1').data("rutaarchivoPDF", urlPDF)
-           document.querySelector('.uploaded-files').innerHTML +=
-           `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaPDF">${fileName}</a></li></ol>`
-                 //  console.log($('#kt_uppy_1').data("rutaarchivoPDF"))
-               }
-               else
-               {
+               const urlPDF = response.body
+               $('#kt_uppy_1').data("rutaarchivoPDF", urlPDF)
+               document.querySelector('.uploaded-files').innerHTML +=
+               `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaPDF">${fileName}</a></li></ol>`
+
+          }
+          else
+          {
                  const urlXMLCheck = response.body
                  var to = leerxml(urlXMLCheck)
                  //Tservicios
                  if($('input[name="Fragmentada"]').is(':checked'))
                  {
-                   if(to != viaje.toFixed(2))
-                   {
-                     $("#btnGuardarFactura").prop("disabled", true)
-                     alertToastError("El total de la factura no coincide con el total calculado del sistema")
-                      //uppyDashboard.reset()
-                      uppyDashboard.cancelAll()
-                        $('.uploaded-files ol').remove();
+                       if(to != viaje.toFixed(2))
+                       {
+                             $("#btnGuardarFactura").prop("disabled", true)
+                             alertToastError("El total de la factura no coincide con el total calculado del sistema")
+                             uppyDashboard.cancelAll()
+                             $('.uploaded-files ol').remove();
 
-                    }
-                    else
-                    {
-                     $("#btnGuardarFactura").prop("disabled", false)
-                     const urlPDF = response.body
-                     $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
-                     document.querySelector('.uploaded-files').innerHTML +=
-                     `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
-                     $('#chkFragmentada').prop('disabled', true);
-                    }
-                   }
-                   else
-                   {
-                     if(to != total.toFixed(2))
-                     {
-                       $("#btnGuardarFactura").prop("disabled", true)
-                       alertToastError("El total de la factura no coincide con el total calculado del sistema")
-                        //uppyDashboard.reset()
-                        uppyDashboard.cancelAll()
-
-                      }
-                      else
-                      {
-                       $("#btnGuardarFactura").prop("disabled", false)
-                       const urlPDF = response.body
-                       $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
-                       document.querySelector('.uploaded-files').innerHTML +=
-                       `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
-                        $('#chkFragmentada').prop('disabled', true);
-                        $('.check').prop('disabled',true);
-                        $(".cfParcial").prop('disabled',true);
-                      }
-                   }
-                   //console.log($('#kt_uppy_1').data("rutaarchivoXML"))
+                        }
+                        else
+                        {
+                             $("#btnGuardarFactura").prop("disabled", false)
+                             const urlPDF = response.body
+                             $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
+                             document.querySelector('.uploaded-files').innerHTML +=
+                             `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+                             $('#chkFragmentada').prop('disabled', true);
+                        }
                  }
-                 //$("#btnGuardarFactura").prop("disabled", false)
-                 //const url = response.body
-   // `<embed src="${url}">`
+                 else
+                 {
+                     if(to < total.toFixed(2))
+                     {
+                           $("#btnGuardarFactura").prop("disabled", true)
+                           alertToastError("El total de la factura no coincide con el total calculado del sistema")
+                           uppyDashboard.cancelAll()
+                     }
+                     else
+                     {
+                           $("#btnGuardarFactura").prop("disabled", false)
+                           const urlPDF = response.body
+                           $('#kt_uppy_1').data("rutaarchivoXML", urlPDF)
+                           document.querySelector('.uploaded-files').innerHTML +=
+                           `<ol><li id="listaArchivos"><a href="${urlPDF}" target="_blank" name="url" id="RutaXML">${fileName}</a></li></ol>`
+                           $('#chkFragmentada').prop('disabled', true);
+                           $('.check').prop('disabled',true);
+                           $(".cfParcial").prop('disabled',true);
+                     }
+                 }
+
+          }
+
  });
 
       }
@@ -966,7 +971,7 @@ function getDatos(){
       Comentarios: Comentarios,
       IsFragmentada: $('#chkFragmentada').is(':checked'),
       IDCliente: idcliente,
-      Reajuste: Reajuste,
+      Reajuste: Reajuste
     }
     fetch("/PendientesEnviar/SaveFactura", {
       method: "POST",
@@ -1019,7 +1024,7 @@ function SavePartidasxFactura(IDFactura, IsFacturaServicios) {
     arrPendientes: arrPendientes,
     IDFolioReajuste: idFolioReajuste == undefined ? 0 : idFolioReajuste,
     IsFacturaServicios: IsFacturaServicios,
-    arrParcial:arrSe
+    arrParcial:arrSe,
   }
 
   fetch("/PendientesEnviar/SavePartidasxFactura", {
@@ -1403,4 +1408,36 @@ var tipoCambio=+$("#txtTipoCambio").val();
 
 
 
+}
+
+var GetNotasCredito = function(CLiente){
+  WaitMe_ShowInput('#selectNota');
+  fetch(`/PendientesEnviar/GetNotaCreditoByCliente?IDCliente=${CLiente}`, {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    return response.clone().json();
+  }).then(function(data){
+  var newOption = new Option('Selecciona una nota de credito', 'null', false, false);
+  $('#selectNC').append(newOption).trigger('change');
+    $.each(data.GetNotas, function (i, item) {
+        var newOption = new Option(item.Folio, item.IDNotaCredito, false, false);
+        $('#selectNC').append(newOption).trigger('change');
+    });
+
+    WaitMe_HideInput('#selectNota');
+  }).catch(function(ex){
+    console.log(ex);
+  });
+}
+//}
+
+function CleanNotaCredito (){
+  $('#selectNC').empty().trigger('change');
+  $('#NotaCredito').prop("checked",false);
+  $("#selectNota").css('display', 'none');
 }
