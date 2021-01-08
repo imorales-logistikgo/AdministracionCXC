@@ -110,41 +110,41 @@ function formatTableCobros() {
         text: '<i class="fas fa-file-excel fa-lg"></i>',
       }
     ],
-    columnDefs: [
-    {
-      "targets": [0],
-      "width": "10px",
-      "className": "dt-head-center dt-body-center"
-    },
-
-    {
-      "targets": [1,2],
-      "width": "15px",
-      "className": "dt-head-center dt-body-center"
-    },
-
-    {
-      "targets": [3,4],
-      "width": "12px",
-      "className": "dt-head-center dt-body-right"
-    },
-    {
-      "targets": 5,
-      "width": "5px",
-      "mRender": function (data, type, full) {
-        if(UserRol!="Contabilidad"){
-        idCobro = $('input[name="IDCobro"]').data("cobroid");
-        return (full[6] != 'CANCELADA' ? `<button type ="button" class="btnEliminarCobro btn btn-danger btn-elevate btn-pill btn-sm" data-idcobro="${idCobro}" title="Eliminar"><i class="flaticon-delete"></i></button>`:'');
-      }else{
-        return""
-      }
-    }
-    },
-    {
-      "targets": 6,
-      "visible" : false
-    }
-    ]
+//    columnDefs: [
+//    {
+//      "targets": [0],
+//      "width": "10px",
+//      "className": "dt-head-center dt-body-center"
+//    },
+//
+//    {
+//      "targets": [1,2],
+//      "width": "15px",
+//      "className": "dt-head-center dt-body-center"
+//    },
+//
+//    {
+//      "targets": [3,4],
+//      "width": "12px",
+//      "className": "dt-head-center dt-body-right"
+//    },
+//    {
+//      "targets": 5,
+//      "width": "5px",
+//      "mRender": function (data, type, full) {
+//        if(UserRol!="Contabilidad"){
+//        idCobro = $('input[name="IDCobro"]').data("cobroid");
+//        return (full[6] != 'CANCELADA' ? `<button type ="button" class="btnEliminarCobro btn btn-danger btn-elevate btn-pill btn-sm" data-idcobro="${idCobro}" title="Eliminar"><i class="flaticon-delete"></i></button>`:'');
+//      }else{
+//        return""
+//      }
+//    }
+//    },
+//    {
+//      "targets": 6,
+//      "visible" : false
+//    }
+//    ]
   });
 }
 

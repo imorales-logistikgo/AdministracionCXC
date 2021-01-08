@@ -10,7 +10,7 @@ from django.db import transaction
 @login_required
 
 def ReporteCobros(request):
-	Cobros = CobrosxCliente.objects.all()
+	Cobros = CobrosxCliente.objects.filter(FechaCobro__month=datetime.datetime.now().month, FechaCobro__year=datetime.datetime.now().year).exclude(Status='CANCELADA')
 	Folios = list()
 	for Cobro in Cobros:
 		FoliosFactura = ""
@@ -19,7 +19,7 @@ def ReporteCobros(request):
 		FoliosFactura = FoliosFactura[:-2]
 		Folios.append(FoliosFactura)
 	Clientes = Cliente.objects.filter(isFiscal = True).exclude(Q(NombreCorto = "") | Q(StatusProceso = "BAJA"))
-	return render(request, 'ReporteCobros.html', {'Cobros': Cobros, 'Clientes': Clientes, "Folios": Folios,'Rol':request.user.roles})
+	return render(request, 'ReporteCobros.html', {'Cobros': Cobros, 'Clientes': Clientes, "Folios": Folios})
 
 
 
@@ -31,7 +31,7 @@ def GetCobrosByFilters(request):
 		Cobros = CobrosxCliente.objects.all()
 	else:
 		Cobros = CobrosxCliente.objects.filter(IDCliente__in = Clientes)
-	Cobros = Cobros.filter(FechaCobro__range = [datetime.datetime.strptime(FechaCobroDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaCobroHasta,'%m/%d/%Y')])
+	Cobros = Cobros.filter(FechaCobro__range=[datetime.datetime.strptime(FechaCobroDesde,'%m/%d/%Y'), datetime.datetime.strptime(FechaCobroHasta,'%m/%d/%Y')])
 	Folios = list()
 	for Cobro in Cobros:
 		FoliosFactura = ""
@@ -39,8 +39,8 @@ def GetCobrosByFilters(request):
 			FoliosFactura += Factura.IDFactura.Folio + ", "
 		FoliosFactura = FoliosFactura[:-2]
 		Folios.append(FoliosFactura)
-	htmlRes = render_to_string('TablaReporteCobros.html', {'Cobros':Cobros, "Folios": Folios}, request = request,)
-	return JsonResponse({'htmlRes' : htmlRes})
+	htmlRes = render_to_string('TablaReporteCobros.html', {'Cobros':Cobros, "Folios": Folios}, request=request,)
+	return JsonResponse({'htmlRes': htmlRes})
 
 
 
@@ -58,7 +58,7 @@ def CancelarCobro(request):
 				Factura.IDFactura.save()
 			Cobro = CobrosxCliente.objects.get(IDCobro = IDCobro)
 			Cobro.Status = "CANCELADA"
-			Cobro.IDUsuarioBaja =  request.user.idusuario
+			Cobro.IDUsuarioBaja = request.user.idusuario
 			Cobro.FechaBaja = datetime.datetime.now()
 			Cobro.MotivoEliminacion = Motivo
 			Cobro.save()
